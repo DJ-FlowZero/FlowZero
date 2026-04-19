@@ -62,14 +62,18 @@ function App() {
 
   return (
     <div>
-      <h1>{FZ_title}</h1>
-      <ul>
-        {FZ_profile_ary.map((FZ_line, FZ_index) => (
-          <li key={FZ_index}>
-            <strong>{FZ_line.label}:</strong> {FZ_line.value}
-          </li>
-        ))}
-      </ul>
+      <div className="fz_container">
+        <h1>{FZ_title}</h1>
+        <div style={{width: '100%', textAlign: 'left', display: 'block', alignSelf: 'flex-start'}}>
+          <ul className="fz_profile_list">
+            {FZ_profile_ary.map((FZ_line, FZ_index) => (
+              <li key={FZ_index}>
+                <strong>{FZ_line.label}:</strong> {FZ_line.value}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   )
 }
