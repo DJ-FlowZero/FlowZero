@@ -1,0 +1,26 @@
+[
+  {
+    "realName": "Chris Example",
+    "profileId": "P001",
+    "description": "Main profile for Chris, default settings.",
+    "fileName": "fz0000.json",
+    "type": "person",
+    "subtype": "family and friends"
+  },
+  {
+    "realName": "Alex Sample",
+    "profileId": "P002",
+    "description": "Alex's work profile.",
+    "fileName": "fz0001.json",
+    "type": "person",
+    "subtype": "family and friends"
+  },
+  {
+    "realName": "Osteria",
+    "profileId": "P9999",
+    "description": "Favorite Italian restaurant.",
+    "fileName": "fz9999.json",
+    "type": "restaurant",
+    "subtype": "Italian"
+  }
+]

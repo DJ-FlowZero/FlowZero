@@ -1,0 +1,19 @@
+{
+  "profile": [
+    {
+      "label": "Name",
+      "value": "Osteria",
+      "flag": "public"
+    },
+    {
+      "label": "Type",
+      "value": "restaurant",
+      "flag": "public"
+    },
+    {
+      "label": "Subtype",
+      "value": "Italian",
+      "flag": "public"
+    }
+  ]
+}

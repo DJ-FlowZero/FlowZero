@@ -2,28 +2,28 @@
   "profile": [
     {
       "label": "Real Name",
-      "value": "Chris Brenzelbrupp",
+      "value": "Pia",
       "flag": "secret"
     },
     {
       "label": "User Name",
-      "value": "Choirshark",
-      "flag": "Public"
+      "value": "Marie",
+      "flag": "Secret"
     },
     {
       "label": "Hobby",
-      "value": "Coding in React",
+      "value": "Cooking",
       "flag": "who knows"
     },
     {
       "label": "Hobby",
-      "value": "Playing Guitar in the Silocats",
-      "flag": "schlock"
+      "value": "Netflix and Chill",
+      "flag": "bingo"
     },
     {
       "label": "Other",
       "value": "TBD",
-      "flag": "jedimaster"
+      "flag": "jedi"
     },
     {
       "label": "Other",

@@ -1,3 +1,4 @@
+import Jedit from "./Jedit";
 // ===============================
 // CONFIG / CONSTANTS
 // ===============================
@@ -31,6 +32,7 @@ function FZ_ConfigLoadFault(FZ_cfg, FZ_key, FZ_default_text) {
 function App() {
   const [FZ_cfg_obj, FZ_set_cfg_obj] = useState({})
   const [FZ_profile_ary, FZ_set_profile_ary] = useState([])
+  const [showJedit, setShowJedit] = useState(false)
 
   useEffect(() => {
     fetch("/config.json")
@@ -69,10 +71,30 @@ function App() {
             {FZ_profile_ary.map((FZ_line, FZ_index) => (
               <li key={FZ_index}>
                 <strong>{FZ_line.label}:</strong> {FZ_line.value}
+                {FZ_line.flag && (
+                  <span style={{ marginLeft: '1em', fontSize: '0.9em', color: '#888' }}>
+                    [{FZ_line.flag}]
+                  </span>
+                )}
               </li>
             ))}
           </ul>
         </div>
+      </div>
+      <div style={{marginTop: 40}}>
+        {!showJedit && (
+          <button onClick={() => setShowJedit(true)} style={{padding: '8px 18px', fontSize: '1em'}}>
+            Profile Edit
+          </button>
+        )}
+        {showJedit && (
+          <div>
+            <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+              <button onClick={() => setShowJedit(false)} style={{marginBottom: 8, padding: '4px 12px'}}>Close</button>
+            </div>
+            <Jedit />
+          </div>
+        )}
       </div>
     </div>
   )

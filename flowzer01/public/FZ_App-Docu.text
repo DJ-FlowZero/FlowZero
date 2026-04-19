@@ -1,0 +1,57 @@
+
+FlowZero Baseline App Documentation
+==================================
+
+
+Overview:
+---------
+This React-based FlowZero baseline app provides a clean, reusable structure for managing user profiles and configuration data using external JSON files. It features:
+
+- A profile index (fz_profile_index.json) for easy selection and editing of user profiles.
+- Support for multiple profile types (e.g., person, restaurant) and subtypes (e.g., family and friends, Italian).
+- Each profile data file (fz0000.json, fz0001.json, fz9999.json, etc.) uses the format: { "profile": [ ... ] } for compatibility with the Profile Edit component.
+- A Profile Edit interface for selecting, viewing, and editing profiles, with validation to prevent editing the index file itself.
+- Modular CSS for a clean, left-aligned layout and easy extension.
+
+
+Features:
+---------
+1. Loads configuration from /config.json and supports multiple user profiles, each stored in files like /fz0000.json, /fz0001.json, /fz9999.json, etc. (all in the public directory).
+2. Uses /fz_profile_index.json to map real names, profile IDs, types, subtypes, and descriptions to their corresponding profile files.
+3. The main interface displays a title (from config) and a profile list (from the selected profile file).
+4. Includes a "Profile Edit" button to open a dedicated editor for profile files. Users can select a profile from the index or open a file manually.
+5. The editor prevents editing the profile index file itself and only allows editing of actual profile data files.
+6. Supports profiles for people (family and friends) and places (e.g., restaurants like Osteria, subtype Italian).
+7. Uses modular CSS for a clean, left-aligned layout and easy extension.
+8. Handles missing or failed config/profile loads gracefully, showing fallback text and logging warnings.
+
+
+File Structure:
+--------------
+- src/App.jsx: Main React component. Handles config/profile loading, rendering, and editor integration.
+- src/Jedit.jsx: Profile editor component. Loads the profile index, allows profile selection, and editing of profile data files.
+- src/userIndexUtil.js: Utility for loading the profile index.
+- src/App.css: Minimal, modular CSS for layout and profile list styling.
+- src/index.css: Baseline global styles and resets for predictable rendering.
+- public/config.json: App configuration (e.g., title).
+- public/fz_profile_index.json: Profile index (array of realName, profileId, type, subtype, description, fileName).
+- public/fz0000.json, public/fz0001.json, public/fz9999.json, ...: Profile data files (object with key "profile" mapping to an array of label/value/flag objects).
+
+
+How it works:
+-------------
+- On mount, the app fetches config and the profile index.
+- The title is displayed in an <h1>.
+- The user can open the Profile Edit interface, select a profile by Profile ID and Description, and edit the corresponding profile data file.
+- The profile array is rendered as a left-aligned list, with labels and values clearly separated.
+- All layout and alignment is handled by scoped CSS, with no global centering or flexbox traps.
+
+
+Customization:
+--------------
+- Add or update profiles in fz_profile_index.json to manage available profiles, types, and subtypes.
+- Add more profile fields to fz0000.json, fz0001.json, fz9999.json, etc. (inside the "profile" array) to display additional data.
+- Adjust max-width or label alignment in App.css for different layouts.
+- Extend App.jsx or Jedit.jsx for more advanced features as needed.
+
+This baseline is intended for rapid, reliable FlowZero prototyping and can be safely reused for new projects.
