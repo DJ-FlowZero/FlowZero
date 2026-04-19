@@ -4,18 +4,37 @@ FlowZero Baseline App Documentation
 
 
 Overview:
----------
 This React-based FlowZero baseline app provides a clean, reusable structure for managing user profiles and configuration data using external JSON files. It features:
 
-- A profile index (fz_profile_index.json) for easy selection and editing of user profiles.
-- Support for multiple profile types (e.g., person, restaurant) and subtypes (e.g., family and friends, Italian).
+
+Overview:
+---------
+This React-based FlowZero baseline app provides a clean, reusable structure for managing profile objects and configuration data using external JSON files. It features:
+
+- A profile index (fz_profile_index.json) for easy selection and editing of profile objects.
+- Support for multiple profile types (e.g., PUCK for people, Entity Profiles for restaurants) and subtypes (e.g., family and friends, Italian).
 - Each profile data file (fz0000.json, fz0001.json, fz9999.json, etc.) uses the format: { "profile": [ ... ] } for compatibility with the Profile Edit component.
 - A Profile Edit interface for selecting, viewing, and editing profiles, with validation to prevent editing the index file itself.
 - Modular CSS for a clean, left-aligned layout and easy extension.
 
+Conceptual Model:
+-----------------
+FlowZero distinguishes between:
+
+- PUCK (Personalized User Configuration Knowledge):
+	Attribute-based profiles representing people and their preferences.
+
+- Entity Profiles:
+	Attribute-based profiles representing external objects (e.g., restaurants, locations).
+
+Both PUCK and Entity profiles share the same underlying structure
+(label/value/flag arrays) and are classified via the profile index.
+
+Future evolution will allow combining multiple PUCK profiles into
+constraint sets (CSETs) for decision support (e.g., selecting a
+restaurant that fits a group’s needs).
 
 Features:
----------
 1. Loads configuration from /config.json and supports multiple user profiles, each stored in files like /fz0000.json, /fz0001.json, /fz9999.json, etc. (all in the public directory).
 2. Uses /fz_profile_index.json to map real names, profile IDs, types, subtypes, and descriptions to their corresponding profile files.
 3. The main interface displays a title (from config) and a profile list (from the selected profile file).
@@ -25,6 +44,18 @@ Features:
 7. Uses modular CSS for a clean, left-aligned layout and easy extension.
 8. Handles missing or failed config/profile loads gracefully, showing fallback text and logging warnings.
 
+Features:
+---------
+1. Loads configuration from /config.json and supports multiple profile objects, each stored in files like /fz0000.json, /fz0001.json, /fz9999.json, etc. (all in the public directory).
+2. Uses /fz_profile_index.json to map display names, profile IDs, types, subtypes, and descriptions to their corresponding profile files.
+3. The main interface displays a title (from config) and a profile list (from the selected profile file).
+4. Includes a "Profile Edit" button to open a dedicated editor for profile files. Users can select a profile from the index or open a file manually.
+5. The editor prevents editing the profile index file itself and only allows editing of actual profile data files.
+6. Supports PUCK profiles (people, family and friends) and Entity Profiles (e.g., restaurants like Osteria, subtype Italian).
+7. Uses modular CSS for a clean, left-aligned layout and easy extension.
+8. Handles missing or failed config/profile loads gracefully, showing fallback text and logging warnings.
+
+File Structure:
 
 File Structure:
 --------------
@@ -34,9 +65,10 @@ File Structure:
 - src/App.css: Minimal, modular CSS for layout and profile list styling.
 - src/index.css: Baseline global styles and resets for predictable rendering.
 - public/config.json: App configuration (e.g., title).
-- public/fz_profile_index.json: Profile index (array of realName, profileId, type, subtype, description, fileName).
+- public/fz_profile_index.json: Profile index (array of displayName, profileId, type, subtype, description, fileName).
 - public/fz0000.json, public/fz0001.json, public/fz9999.json, ...: Profile data files (object with key "profile" mapping to an array of label/value/flag objects).
 
+All profile files share the same structure regardless of type.
 
 How it works:
 -------------
