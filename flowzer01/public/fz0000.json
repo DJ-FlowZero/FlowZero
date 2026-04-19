@@ -1,0 +1,8 @@
+{
+  "fz0000_profile": [
+    { "label": "Real Name", "value": "Chris", "flag": "secret" },
+    { "label": "User Name", "value": "Choirshark", "flag": "public" },
+    { "label": "Item 1", "value": "TBD", "flag": "public" },
+    { "label": "Item 2", "value": "TBD", "flag": "public" }
+  ]
+}
