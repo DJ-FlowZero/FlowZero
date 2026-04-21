@@ -8,6 +8,7 @@ export default function Jedit() {
   const [error, setError] = useState("");
   const [userIndex, setUserIndex] = useState([]);
   const [loadingIndex, setLoadingIndex] = useState(true);
+  const [saveStatus, setSaveStatus] = useState("");
 
   // Load user index on mount
   useEffect(() => {
@@ -94,7 +95,8 @@ export default function Jedit() {
     });
   }, []);
 
-  // Save as JSON file
+  // Save as JSON file and backup to backend (no local download)
+  // Save as JSON file (download)
   const handleSaveAs = () => {
     const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: "application/json" });
     const a = document.createElement("a");
@@ -102,6 +104,26 @@ export default function Jedit() {
     a.download = filename || "edited.json";
     a.click();
     URL.revokeObjectURL(a.href);
+  };
+
+  // Refresh (publish) profile to public directory
+  const handleRefreshProfile = async () => {
+    setSaveStatus("Refreshing to public...");
+    try {
+      const res = await fetch("/api/refresh-profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: filename || "edited.json" })
+      });
+      const result = await res.json();
+      if (res.ok) {
+        setSaveStatus("Profile refreshed to public.");
+      } else {
+        setSaveStatus("Refresh failed: " + (result.message || "Unknown error"));
+      }
+    } catch (err) {
+      setSaveStatus("Refresh error: " + err.message);
+    }
   };
 
   if (error) return <div style={{ color: "red" }}>{error}</div>;
@@ -139,6 +161,7 @@ export default function Jedit() {
 
   return (
     <div style={{ border: "1px solid #ccc", padding: 16, borderRadius: 8, maxWidth: 700 }}>
+      {saveStatus && <div style={{ color: saveStatus.startsWith("Saved") ? "green" : "#b00", marginBottom: 8 }}>{saveStatus}</div>}
       <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 16 }}>
         <label style={{ margin: 0 }}>
           <input type="file" accept=".json,application/json" onChange={handleOpen} style={{ marginRight: 8 }} />

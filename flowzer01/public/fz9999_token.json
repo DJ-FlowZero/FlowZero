@@ -4,6 +4,16 @@
       "Token": "Bruschetta",
       "Meaning": "3 Pieces of bread with tomato, onion and garlic",
       "Usage": "Lets order bruschetta online"
+    },
+    {
+      "Token": "Dunkles",
+      "Meaning": "Dark Wheat beer in tall glass",
+      "Usage": "Ein Dunkles Bitte"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
     }
   ],
   "1": "",

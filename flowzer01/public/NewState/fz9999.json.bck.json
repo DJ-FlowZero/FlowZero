@@ -20,7 +20,7 @@
     },
     {
       "label": "LLM",
-      "value": "Open AI Chat GPT 99",
+      "value": "Open AI Chat GPT",
       "flag": "secret",
       "todo": "Get the profile info out into flat file"
     }

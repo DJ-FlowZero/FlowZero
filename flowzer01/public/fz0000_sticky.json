@@ -14,6 +14,16 @@
       "stickytype": "Flow",
       "note": "Tea in the Morning, then Pills, then Walk",
       "links": "Herzogpark Schwabing"
+    },
+    {
+      "stickytype": "Flow",
+      "note": "Develop Code Plan, then code",
+      "links": "MS Visual Studio Code"
+    },
+    {
+      "stickytype": "",
+      "note": "",
+      "links": ""
     }
   ]
 }

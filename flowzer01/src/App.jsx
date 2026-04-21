@@ -1,6 +1,7 @@
 import Jedit from "./Jedit";
 import TokenEdit from "./TokenEdit";
 import StickyEdit from "./StickyEdit";
+import TextFileBackandSave from "./TextFileBackandSave";
 // ===============================
 // CONFIG / CONSTANTS
 // ===============================
@@ -126,6 +127,11 @@ function App() {
           <StickyEdit />
         </div>
       )}
+
+      {/* Demo for text file edit/save/refresh */}
+      <div style={{marginTop: 40}}>
+        <TextFileBackandSave />
+      </div>
     </div>
   )
 }
