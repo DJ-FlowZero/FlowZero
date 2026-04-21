@@ -1,0 +1,78 @@
+
+
+FlowZero Baseline App Documentation
+==================================
+
+# FlowZero Application Documentation (FZ_Appdocu)
+
+## Overview
+FlowZero is a zero-resistance workflow tool for managing and editing user configuration profiles (PUCKs), sticky notes, and personal tag tokens. The application is built with React and Vite, and operates on local JSON files for privacy and portability.
+
+### Key Concepts
+- **PUCK (Portable User Configuration Knowledge):** Local user profile JSON files, e.g., `fz0000.json`.
+- **Sticky Notes:** Per-profile sticky note arrays, e.g., `fz0000_sticky.json`.
+- **Tokens:** Per-profile tag tokens, e.g., `fz0000_token.json`.
+- **User Index:** `fz_profile_index.json` and `fz_user_index.json` provide metadata and lookup for all profiles.
+
+## File Structure
+- `src/Jedit.jsx`: Profile (PUCK) JSON editor.
+- `src/StickyEdit.jsx`: Sticky note editor for a selected profile.
+- `src/TokenEdit.jsx`: Token/tag editor for a selected profile.
+- `src/userIndexUtil.js`: Utility for loading user index.
+- `public/`: Contains all user data files (JSON), config, and documentation.
+
+## Main Components
+### Jedit.jsx
+- Loads user index and allows selection of a profile JSON file.
+- Edits array of objects (fields: label, value, flag, todo) in the profile.
+- Supports manual file open and save.
+
+### StickyEdit.jsx
+- Loads user index and allows selection of a profile's sticky note file.
+- Edits array of sticky notes (fields: stickytype, note, links).
+- Supports manual file open and save.
+
+### TokenEdit.jsx
+- Loads user index and allows selection of a profile's token file.
+- Edits array of tokens (fields: Token, Meaning, Usage).
+- No manual file open; always associated with a profile.
+
+## Data Model
+- Each profile file is a JSON object with a single key (profileId or similar) mapping to an array of entries.
+- Sticky and token files follow the same pattern, with different field names.
+
+## User Flow
+1. User selects a profile from a dropdown (populated from user index).
+2. The relevant file (profile, sticky, or token) is loaded and displayed in a form.
+3. User can edit, add, or remove entries.
+4. User can save changes as a new JSON file.
+
+## File Naming Conventions
+- Profile: `fzXXXX.json`
+- Sticky: `fzXXXX_sticky.json`
+- Token: `fzXXXX_token.json`
+- User index: `fz_user_index.json`, `fz_profile_index.json`
+
+## How to Rebuild
+1. Install dependencies: `npm install`
+2. Start dev server: `npm run dev`
+3. Build for production: `npm run build`
+4. Lint code: `npm run lint`
+
+## Regeneration Guidance for AI
+- Recreate the three main editors (Jedit, StickyEdit, TokenEdit) as React components.
+- Each editor loads a user index, allows profile selection, and loads/edits the corresponding JSON file.
+- Use controlled form inputs for editing arrays of objects.
+- Provide file save (download) and, where appropriate, file open (upload) functionality.
+- All user data is stored in the `public/` directory for local privacy.
+- See this file and the codebase for field names and UI structure.
+
+## Glossary
+- **PUCK:** Portable User Configuration Knowledge (profile JSON)
+- **Sticky:** Per-profile sticky notes
+- **Token:** Per-profile tag tokens
+- **User Index:** List of all profiles
+
+---
+This documentation is sufficient for an AI (e.g., Codex, Claude) to regenerate the application structure, data model, and main UI flows from scratch.
+- The title is displayed in an <h1>.

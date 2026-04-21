@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import { fetchUserIndex } from "./userIndexUtil";
 
 // Jedit: JSON Editor Component
-export default function Jedit({ initialFile = "/fz0000.json" }) {
+export default function Jedit() {
   const [jsonData, setJsonData] = useState(null);
   const [filename, setFilename] = useState("");
   const [error, setError] = useState("");
   const [userIndex, setUserIndex] = useState([]);
-  const [selectedProfile, setSelectedProfile] = useState(null);
   const [loadingIndex, setLoadingIndex] = useState(true);
 
   // Load user index on mount
@@ -42,7 +41,7 @@ export default function Jedit({ initialFile = "/fz0000.json" }) {
       const text = await file.text();
       setJsonData(JSON.parse(text));
       setError("");
-    } catch (err) {
+    } catch {
       setError("Invalid JSON file.");
     }
   };
@@ -52,7 +51,6 @@ export default function Jedit({ initialFile = "/fz0000.json" }) {
     const idx = e.target.value;
     if (idx === "") return;
     const profile = userIndex[idx];
-    setSelectedProfile(profile);
     setFilename(profile.fileName);
     try {
       const res = await fetch(`/${profile.fileName}`);
@@ -60,7 +58,7 @@ export default function Jedit({ initialFile = "/fz0000.json" }) {
       const data = await res.json();
       setJsonData(data);
       setError("");
-    } catch (err) {
+    } catch {
       setError("Failed to load or parse profile file.");
       setJsonData(null);
     }
@@ -77,6 +75,24 @@ export default function Jedit({ initialFile = "/fz0000.json" }) {
       return newData;
     });
   };
+
+
+  // Add new profile item
+  const handleAddItem = React.useCallback(() => {
+    setJsonData(prev => {
+      if (!prev) return prev;
+      const newData = { ...prev };
+      const profileKey = Object.keys(newData)[0];
+      // Defensive: clone the array to avoid mutation
+      newData[profileKey] = Array.isArray(newData[profileKey]) ? [...newData[profileKey]] : [];
+      newData[profileKey].push({
+        label: "new label",
+        value: "",
+        flag: ""
+      });
+      return newData;
+    });
+  }, []);
 
   // Save as JSON file
   const handleSaveAs = () => {
@@ -158,9 +174,19 @@ export default function Jedit({ initialFile = "/fz0000.json" }) {
               style={{ width: 80 }}
               placeholder="flag"
             />
+            <input
+              type="text"
+              value={entry.todo || ""}
+              onChange={(e) => handleFieldChange(idx, "todo", e.target.value)}
+              style={{ width: 200 }}
+              placeholder="Todo"
+            />
           </div>
         ))}
-        <button type="button" onClick={handleSaveAs} style={{ marginTop: 8 }}>
+        <button type="button" onClick={handleAddItem} style={{ marginTop: 8, marginRight: 8 }}>
+          Add Item
+        </button>
+        <button type="button" onClick={handleSaveAs} style={{ marginTop: 8, marginLeft: 8 }}>
           Save As
         </button>
       </form>

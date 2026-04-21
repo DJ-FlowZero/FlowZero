@@ -2,38 +2,57 @@
   "profile": [
     {
       "label": "Real Name",
-      "value": "Chris Brenzelbrupp",
-      "flag": "secret"
+      "value": "Chris Eitsch",
+      "flag": "secret",
+      "todo": "never reveal real last name"
     },
     {
       "label": "User Name",
       "value": "Choirshark",
-      "flag": "Public"
+      "flag": "Public",
+      "todo": "make sure to use this username on all platforms"
     },
     {
       "label": "Hobby",
       "value": "Coding in React",
-      "flag": "who knows"
+      "flag": "Private",
+      "todo": "do not forget to back up and amend the Appdocumentation"
     },
     {
       "label": "Hobby",
       "value": "Playing Guitar in the Silocats",
-      "flag": "schlock"
+      "flag": "Public",
+      "todo": "Focus the next practice on the set for May"
     },
     {
-      "label": "Other",
-      "value": "TBD",
-      "flag": "jedimaster"
+      "label": "Food",
+      "value": "Vegetarian preferred",
+      "flag": "public",
+      "todo": "never forget that Pia does not bear Cilantro or Red Peppers"
     },
     {
-      "label": "Other",
-      "value": "TBD",
-      "flag": "yesterday"
+      "label": "Breakfast",
+      "value": "Omlette or egg dish",
+      "flag": "secret",
+      "todo": "best to skip the extra bread."
     },
     {
-      "label": "Other",
-      "value": "TBD",
-      "flag": "public"
+      "label": "Guitar",
+      "value": "Fender Telecaster [Mitch]",
+      "flag": "public",
+      "todo": "do not sell, make sure the strings are fresh.  "
+    },
+    {
+      "label": "Guitar",
+      "value": "Gibson L5 Candy Apple Red",
+      "flag": "Secret",
+      "todo": "do not sell, make sure the strings are fresh.  "
+    },
+    {
+      "label": "[Tax Advisor]",
+      "value": "Alexander Rohrmus, Steuerberater",
+      "flag": "Private",
+      "todo": "contact latest in June to prepare the tax declaration for 2023"
     }
   ]
 }

@@ -1,19 +1,28 @@
 {
   "profile": [
     {
-      "label": "Name",
-      "value": "Osteria",
-      "flag": "public"
+      "label": "Local Italian",
+      "value": "Osteria Elisabethstrasse, München",
+      "flag": "public",
+      "todo": "Next door to Zentner, do not order the salad"
     },
     {
-      "label": "Type",
-      "value": "restaurant",
-      "flag": "public"
+      "label": "[Tax Advisor]",
+      "value": "Alexander Rohrmus",
+      "flag": "public",
+      "todo": " contact before July every year."
     },
     {
-      "label": "Subtype",
-      "value": "Italian",
-      "flag": "public"
+      "label": "Bass Guitar String  type",
+      "value": "Elixir 6 String Bass Strings, Nickel Plated Steel, Light Gauge",
+      "flag": "public",
+      "todo": "Last changed 2004"
+    },
+    {
+      "label": "LLM",
+      "value": "Open AI Chat GPT",
+      "flag": "secret",
+      "todo": "Get the profile info out into flat file"
     }
   ]
 }

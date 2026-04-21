@@ -1,0 +1,45 @@
+{
+  "FZ_Tokens": [
+    {
+      "Token": "[Skinny Thing]",
+      "Meaning": "Hallway Shelf by the door, with 4 drawers, holding sun glasses",
+      "Usage": "Remember to put the glasses back into the Skinny Thing"
+    },
+    {
+      "Token": "[Mitch]",
+      "Meaning": "Fender Telecaster Honduras Mahagony, stored in office, hanging by the bed",
+      "Usage": "Need to take Mitch to the Silocats practice"
+    },
+    {
+      "Token": "[Silocats]",
+      "Meaning": "SiloCats Band, practicing at the [Kulturprojekt], Allach",
+      "Usage": "Need to go to Silocats practice"
+    },
+    {
+      "label": "[new_label]",
+      "value": "",
+      "flag": "",
+      "Token": "[Kulturprojekt]",
+      "Meaning": "The Collection of Containers in Allach, converted to Band Practice Rooms",
+      "Usage": "I left Mitch at the Kulturprojekt"
+    },
+    {
+      "label": "[new_label]",
+      "value": "",
+      "flag": "",
+      "Token": "[Ondej]",
+      "Meaning": "Ondrej Zadak, Drummer of the [Silocats], married to Luciana, son called Luka",
+      "Usage": "Need to ask Ondrej about joining for concert"
+    },
+    {
+      "Token": "[Kermit]",
+      "Meaning": "Toyota Corolla, E10 Gasoline, 5-seater",
+      "Usage": "Need to fill Kermit"
+    },
+    {
+      "Token": "[Allach]",
+      "Meaning": "Location of [Kulturprojekt]], North-West Munich",
+      "Usage": "I left [Mitch] in [Allach]"
+    }
+  ]
+}

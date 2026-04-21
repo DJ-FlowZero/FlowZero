@@ -3,37 +3,44 @@
     {
       "label": "Real Name",
       "value": "Pia",
-      "flag": "secret"
+      "flag": "secret",
+      "todo": ""
     },
     {
       "label": "User Name",
       "value": "Marie",
-      "flag": "Secret"
+      "flag": "Secret",
+      "todo": ""
     },
     {
       "label": "Hobby",
       "value": "Cooking",
-      "flag": "who knows"
+      "flag": "Public",
+      "todo": ""
     },
     {
       "label": "Hobby",
       "value": "Netflix and Chill",
-      "flag": "bingo"
+      "flag": "Private",
+      "todo": ""
     },
     {
-      "label": "Other",
-      "value": "TBD",
-      "flag": "jedi"
+      "label": "Best Friends",
+      "value": "Fiona",
+      "flag": "secret",
+      "todo": ""
     },
     {
-      "label": "Other",
-      "value": "TBD",
-      "flag": "yesterday"
+      "label": "Best Friends",
+      "value": "Sarah",
+      "flag": "secret",
+      "todo": ""
     },
     {
-      "label": "Other",
-      "value": "TBD",
-      "flag": "public"
+      "label": "Hobby",
+      "value": "Mahjong",
+      "flag": "public",
+      "todo": ""
     }
   ]
 }

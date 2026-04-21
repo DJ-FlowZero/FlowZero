@@ -1,16 +1,16 @@
 [
   {
-    "realName": "Chris Example",
-    "profileId": "P001",
+    "realName": "Chris Horak",
+    "profileId": "P0000",
     "description": "Main profile for Chris, default settings.",
     "fileName": "fz0000.json",
     "type": "person",
     "subtype": "family and friends"
   },
   {
-    "realName": "Alex Sample",
-    "profileId": "P002",
-    "description": "Alex's work profile.",
+    "realName": "Pia Hultqvist",
+    "profileId": "P0001",
+    "description": "Pia's main profile.",
     "fileName": "fz0001.json",
     "type": "person",
     "subtype": "family and friends"

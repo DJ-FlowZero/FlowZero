@@ -1,0 +1,19 @@
+{
+  "sticky": [
+    {
+      "stickytype": "Behavior",
+      "note": "Likes Flat White in morning",
+      "links": "[Standl20, CoffeeShop]"
+    },
+    {
+      "stickytype": "Habit",
+      "note": "Changes Strings on Guitars before Gigs",
+      "links": "Mitch, Jazz Box"
+    },
+    {
+      "stickytype": "Flow",
+      "note": "Tea in the Morning, then Pills, then Walk",
+      "links": "Herzogpark Schwabing"
+    }
+  ]
+}

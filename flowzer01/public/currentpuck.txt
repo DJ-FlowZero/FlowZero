@@ -1,0 +1,897 @@
+ 
+===== fz0000.json ===== 
+{
+  "profile": [
+    {
+      "label": "Real Name",
+      "value": "Chris Eitsch",
+      "flag": "secret",
+      "todo": "never reveal real last name"
+    },
+    {
+      "label": "User Name",
+      "value": "Choirshark",
+      "flag": "Public",
+      "todo": "make sure to use this username on all platforms"
+    },
+    {
+      "label": "Hobby",
+      "value": "Coding in React",
+      "flag": "Private",
+      "todo": "do not forget to back up and amend the Appdocumentation"
+    },
+    {
+      "label": "Hobby",
+      "value": "Playing Guitar in the Silocats",
+      "flag": "Public",
+      "todo": "Focus the next practice on the set for May"
+    },
+    {
+      "label": "Food",
+      "value": "Vegetarian preferred",
+      "flag": "public",
+      "todo": "never forget that Pia does not bear Cilantro or Red Peppers"
+    },
+    {
+      "label": "Breakfast",
+      "value": "Omlette or egg dish",
+      "flag": "secret",
+      "todo": "best to skip the extra bread."
+    },
+    {
+      "label": "Guitar",
+      "value": "Fender Telecaster [Mitch]",
+      "flag": "public",
+      "todo": "do not sell, make sure the strings are fresh.  "
+    },
+    {
+      "label": "Guitar",
+      "value": "Gibson L5 Candy Apple Red",
+      "flag": "Secret",
+      "todo": "do not sell, make sure the strings are fresh.  "
+    },
+    {
+      "label": "[Tax Advisor]",
+      "value": "Alexander Rohrmus, Steuerberater",
+      "flag": "Private",
+      "todo": "contact latest in June to prepare the tax declaration for 2023"
+    }
+  ]
+} 
+===== fz0000_sticky.json ===== 
+{
+  "sticky": [
+    {
+      "stickytype": "Behavior",
+      "note": "Likes Flat White in morning",
+      "links": "[Standl20, CoffeeShop]"
+    },
+    {
+      "stickytype": "Habit",
+      "note": "Changes Strings on Guitars before Gigs",
+      "links": "Mitch, Jazz Box"
+    },
+    {
+      "stickytype": "Flow",
+      "note": "Tea in the Morning, then Pills, then Walk",
+      "links": "Herzogpark Schwabing"
+    }
+  ]
+} 
+===== fz0000_token.json ===== 
+{
+  "FZ_Tokens": [
+    {
+      "Token": "[Skinny Thing]",
+      "Meaning": "Hallway Shelf by the door, with 4 drawers, holding sun glasses",
+      "Usage": "Remember to put the glasses back into the Skinny Thing"
+    },
+    {
+      "Token": "[Mitch]",
+      "Meaning": "Fender Telecaster Honduras Mahagony, stored in office, hanging by the bed",
+      "Usage": "Need to take Mitch to the Silocats practice"
+    },
+    {
+      "Token": "[Silocats]",
+      "Meaning": "SiloCats Band, practicing at the [Kulturprojekt], Allach",
+      "Usage": "Need to go to Silocats practice"
+    },
+    {
+      "label": "[new_label]",
+      "value": "",
+      "flag": "",
+      "Token": "[Kulturprojekt]",
+      "Meaning": "The Collection of Containers in Allach, converted to Band Practice Rooms",
+      "Usage": "I left Mitch at the Kulturprojekt"
+    },
+    {
+      "label": "[new_label]",
+      "value": "",
+      "flag": "",
+      "Token": "[Ondej]",
+      "Meaning": "Ondrej Zadak, Drummer of the [Silocats], married to Luciana, son called Luka",
+      "Usage": "Need to ask Ondrej about joining for concert"
+    },
+    {
+      "Token": "[Kermit]",
+      "Meaning": "Toyota Corolla, E10 Gasoline, 5-seater",
+      "Usage": "Need to fill Kermit"
+    },
+    {
+      "Token": "[Allach]",
+      "Meaning": "Location of [Kulturprojekt]], North-West Munich",
+      "Usage": "I left [Mitch] in [Allach]"
+    }
+  ]
+} 
+===== fz0001.json ===== 
+{
+  "profile": [
+    {
+      "label": "Real Name",
+      "value": "Pia",
+      "flag": "secret",
+      "todo": ""
+    },
+    {
+      "label": "User Name",
+      "value": "Marie",
+      "flag": "Secret",
+      "todo": ""
+    },
+    {
+      "label": "Hobby",
+      "value": "Cooking",
+      "flag": "Public",
+      "todo": ""
+    },
+    {
+      "label": "Hobby",
+      "value": "Netflix and Chill",
+      "flag": "Private",
+      "todo": ""
+    },
+    {
+      "label": "Best Friends",
+      "value": "Fiona",
+      "flag": "secret",
+      "todo": ""
+    },
+    {
+      "label": "Best Friends",
+      "value": "Sarah",
+      "flag": "secret",
+      "todo": ""
+    },
+    {
+      "label": "Hobby",
+      "value": "Mahjong",
+      "flag": "public",
+      "todo": ""
+    }
+  ]
+} 
+===== fz0001_sticky.json ===== 
+{
+  "sticky": [
+    {
+      "stickytype": "Cooking",
+      "note": "3 course meals preferred when cooking for guests",
+      "links": ""
+    }
+  ]
+} 
+===== fz0001_token.json ===== 
+{
+  "FZ_Tokens": [
+    {
+      "Token": "[Fadelopter]",
+      "Meaning": "Whatshallmacallit",
+      "Usage": "I forgot the name of that thing, but it's a fadelopter"
+    },
+    {
+      "Token": "[Tofu]",
+      "Meaning": "Demeter Tofu 250g, no flavor, available at Basic and All Natural",
+      "Usage": "Need to buy Tofu for dinner, maybe look for a nice recipe"
+    },
+    {
+      "Token": "[Sarah]",
+      "Meaning": "Best Friend Sarah, strict vegan, avid walker, husband Norm, scottish, plays Golf",
+      "Usage": "Need to call Sarah to catch up"
+    },
+    {
+      "Token": "[Fiona]",
+      "Meaning": "Best Friend Fiona, husband Ross, he rides bikes",
+      "Usage": "Fiona and Ross will never come to invitations together "
+    },
+    {
+      "Token": "[Ross]",
+      "Meaning": "Husband to [Fiona], is not social with Pia",
+      "Usage": "Invite Fiona, but assume Ross is not coming"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
+    }
+  ]
+} 
+===== fz9999.json ===== 
+{
+  "profile": [
+    {
+      "label": "Local Italian",
+      "value": "Osteria Elisabethstrasse, München",
+      "flag": "public",
+      "todo": "Next door to Zentner, do not order the salad"
+    },
+    {
+      "label": "[Tax Advisor]",
+      "value": "Alexander Rohrmus",
+      "flag": "public",
+      "todo": " contact before July every year."
+    },
+    {
+      "label": "Bass Guitar String  type",
+      "value": "Elixir 6 String Bass Strings, Nickel Plated Steel, Light Gauge",
+      "flag": "public",
+      "todo": "Last changed 2004"
+    },
+    {
+      "label": "LLM",
+      "value": "Open AI Chat GPT",
+      "flag": "secret",
+      "todo": "Get the profile info out into flat file"
+    }
+  ]
+} 
+===== fz9999_sticky.json ===== 
+{
+  "sticky": [
+    {
+      "stickytype": "Mixed Salad",
+      "note": "Do not order again it is wilted and not nice",
+      "links": "Osteria Elisbethstrasse"
+    }
+  ]
+} 
+===== fz9999_token.json ===== 
+{
+  "0": [
+    {
+      "Token": "Bruschetta",
+      "Meaning": "3 Pieces of bread with tomato, onion and garlic",
+      "Usage": "Lets order bruschetta online"
+    }
+  ],
+  "1": "",
+  "2": ""
+} 
+===== FZ_Appdocu.txt ===== 
+
+
+FlowZero Baseline App Documentation
+==================================
+
+# FlowZero Application Documentation (FZ_Appdocu)
+
+## Overview
+FlowZero is a zero-resistance workflow tool for managing and editing user configuration profiles (PUCKs), sticky notes, and personal tag tokens. The application is built with React and Vite, and operates on local JSON files for privacy and portability.
+
+### Key Concepts
+- **PUCK (Portable User Configuration Knowledge):** Local user profile JSON files, e.g., `fz0000.json`.
+- **Sticky Notes:** Per-profile sticky note arrays, e.g., `fz0000_sticky.json`.
+- **Tokens:** Per-profile tag tokens, e.g., `fz0000_token.json`.
+- **User Index:** `fz_profile_index.json` and `fz_user_index.json` provide metadata and lookup for all profiles.
+
+## File Structure
+- `src/Jedit.jsx`: Profile (PUCK) JSON editor.
+- `src/StickyEdit.jsx`: Sticky note editor for a selected profile.
+- `src/TokenEdit.jsx`: Token/tag editor for a selected profile.
+- `src/userIndexUtil.js`: Utility for loading user index.
+- `public/`: Contains all user data files (JSON), config, and documentation.
+
+## Main Components
+### Jedit.jsx
+- Loads user index and allows selection of a profile JSON file.
+- Edits array of objects (fields: label, value, flag, todo) in the profile.
+- Supports manual file open and save.
+
+### StickyEdit.jsx
+- Loads user index and allows selection of a profile's sticky note file.
+- Edits array of sticky notes (fields: stickytype, note, links).
+- Supports manual file open and save.
+
+### TokenEdit.jsx
+- Loads user index and allows selection of a profile's token file.
+- Edits array of tokens (fields: Token, Meaning, Usage).
+- No manual file open; always associated with a profile.
+
+## Data Model
+- Each profile file is a JSON object with a single key (profileId or similar) mapping to an array of entries.
+- Sticky and token files follow the same pattern, with different field names.
+
+## User Flow
+1. User selects a profile from a dropdown (populated from user index).
+2. The relevant file (profile, sticky, or token) is loaded and displayed in a form.
+3. User can edit, add, or remove entries.
+4. User can save changes as a new JSON file.
+
+## File Naming Conventions
+- Profile: `fzXXXX.json`
+- Sticky: `fzXXXX_sticky.json`
+- Token: `fzXXXX_token.json`
+- User index: `fz_user_index.json`, `fz_profile_index.json`
+
+## How to Rebuild
+1. Install dependencies: `npm install`
+2. Start dev server: `npm run dev`
+3. Build for production: `npm run build`
+4. Lint code: `npm run lint`
+
+## Regeneration Guidance for AI
+- Recreate the three main editors (Jedit, StickyEdit, TokenEdit) as React components.
+- Each editor loads a user index, allows profile selection, and loads/edits the corresponding JSON file.
+- Use controlled form inputs for editing arrays of objects.
+- Provide file save (download) and, where appropriate, file open (upload) functionality.
+- All user data is stored in the `public/` directory for local privacy.
+- See this file and the codebase for field names and UI structure.
+
+## Glossary
+- **PUCK:** Portable User Configuration Knowledge (profile JSON)
+- **Sticky:** Per-profile sticky notes
+- **Token:** Per-profile tag tokens
+- **User Index:** List of all profiles
+
+---
+This documentation is sufficient for an AI (e.g., Codex, Claude) to regenerate the application structure, data model, and main UI flows from scratch.
+- The title is displayed in an <h1>.
+ 
+===== FZ_How2UsePuck4LLM.txt ===== 
+===============================
+PATCH: PUCK LOAD PROTOCOL v0.1
+===============================
+
+PURPOSE
+-------
+Ensure the LLM correctly interprets the PUCK before using it.
+Make sure the content of previously loaded PUCKs is refreshed by the new upload.
+
+===============================
+PATCH: PUCK INGEST & TOKEN ECHO v0.1
+===============================
+
+PURPOSE
+-------
+Ensure that uploaded PUCK content is not only received but actively parsed and made visible.
+
+MANDATORY INGEST STEP
+---------------------
+After uploading the PUCK archive (puck_*.zip):
+
+1. Unpack the archive
+2. Read all fz_*.* files
+3. Extract token definitions from all *_token.json files
+
+TOKEN ECHO (REQUIRED)
+---------------------
+Display a concise list of active tokens and their meanings.
+
+Example:
+[Mitch] → Fender Telecaster
+[Sarah] → strict vegan
+[Fiona] → husband Ross
+
+This confirms that:
+- PUCK is accessible
+- tokens are correctly parsed
+- latest version is active
+
+FAILURE MODE
+------------
+If tokens are not displayed:
+→ PUCK is not properly ingested
+→ DO NOT proceed with reasoning
+
+PRINCIPLE
+---------
+Visibility before trust.
+
+ONE-LINER
+---------
+“If you can’t show the tokens, you can’t use the PUCK.”
+
+===============================
+END PATCH
+===============================
+
+LOAD ORDER (MANDATORY)
+----------------------
+1. Upload and process this instruction file (How2UsePuck4LLM.txt)
+2. Upload PUCK archive (puck_*.zip containing fz_*.* files)
+3. Display acknowledgement of PUCK upload and date.
+
+The instruction file defines how to interpret tokens and mappings.
+The PUCK provides the actual content.
+
+Do not reverse the order.
+
+VALIDATION STEP (REQUIRED)
+--------------------------
+This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse: personal tokens, preferences, routines, and shorthand mappings. Tokens (e.g. [Mitch], [Skinny Thing]) are compressed references that expand into specific objects, people, places, or actions. Interpret all bracketed terms via token files before reasoning. Do not assume generic meaning if a token exists. Combine tokens with context (time, routines like “usual Wednesday”) to reconstruct intent. Prefer expansion over guessing. Preserve user-specific semantics over global defaults. If ambiguity remains, ask for clarification or suggest likely expansions. Goal: align with the user’s language so communication is low-friction, accurate, and immediately actionable (“click”). 
+===== fz_profile_index.json ===== 
+[
+  {
+    "realName": "Chris Horak",
+    "profileId": "P0000",
+    "description": "Main profile for Chris, default settings.",
+    "fileName": "fz0000.json",
+    "type": "person",
+    "subtype": "family and friends"
+  },
+  {
+    "realName": "Pia Hultqvist",
+    "profileId": "P0001",
+    "description": "Pia's main profile.",
+    "fileName": "fz0001.json",
+    "type": "person",
+    "subtype": "family and friends"
+  },
+  {
+    "realName": "Osteria",
+    "profileId": "P9999",
+    "description": "Favorite Italian restaurant.",
+    "fileName": "fz9999.json",
+    "type": "restaurant",
+    "subtype": "Italian"
+  }
+]
+ 
+===== fz0000.json ===== 
+{
+  "profile": [
+    {
+      "label": "Real Name",
+      "value": "Chris Eitsch",
+      "flag": "secret",
+      "todo": "never reveal real last name"
+    },
+    {
+      "label": "User Name",
+      "value": "Choirshark",
+      "flag": "Public",
+      "todo": "make sure to use this username on all platforms"
+    },
+    {
+      "label": "Hobby",
+      "value": "Coding in React",
+      "flag": "Private",
+      "todo": "do not forget to back up and amend the Appdocumentation"
+    },
+    {
+      "label": "Hobby",
+      "value": "Playing Guitar in the Silocats",
+      "flag": "Public",
+      "todo": "Focus the next practice on the set for May"
+    },
+    {
+      "label": "Food",
+      "value": "Vegetarian preferred",
+      "flag": "public",
+      "todo": "never forget that Pia does not bear Cilantro or Red Peppers"
+    },
+    {
+      "label": "Breakfast",
+      "value": "Omlette or egg dish",
+      "flag": "secret",
+      "todo": "best to skip the extra bread."
+    },
+    {
+      "label": "Guitar",
+      "value": "Fender Telecaster [Mitch]",
+      "flag": "public",
+      "todo": "do not sell, make sure the strings are fresh.  "
+    },
+    {
+      "label": "Guitar",
+      "value": "Gibson L5 Candy Apple Red",
+      "flag": "Secret",
+      "todo": "do not sell, make sure the strings are fresh.  "
+    },
+    {
+      "label": "[Tax Advisor]",
+      "value": "Alexander Rohrmus, Steuerberater",
+      "flag": "Private",
+      "todo": "contact latest in June to prepare the tax declaration for 2023"
+    }
+  ]
+} 
+===== fz0000_sticky.json ===== 
+{
+  "sticky": [
+    {
+      "stickytype": "Behavior",
+      "note": "Likes Flat White in morning",
+      "links": "[Standl20, CoffeeShop]"
+    },
+    {
+      "stickytype": "Habit",
+      "note": "Changes Strings on Guitars before Gigs",
+      "links": "Mitch, Jazz Box"
+    },
+    {
+      "stickytype": "Flow",
+      "note": "Tea in the Morning, then Pills, then Walk",
+      "links": "Herzogpark Schwabing"
+    }
+  ]
+} 
+===== fz0000_token.json ===== 
+{
+  "FZ_Tokens": [
+    {
+      "Token": "[Skinny Thing]",
+      "Meaning": "Hallway Shelf by the door, with 4 drawers, holding sun glasses",
+      "Usage": "Remember to put the glasses back into the Skinny Thing"
+    },
+    {
+      "Token": "[Mitch]",
+      "Meaning": "Fender Telecaster Honduras Mahagony, stored in office, hanging by the bed",
+      "Usage": "Need to take Mitch to the Silocats practice"
+    },
+    {
+      "Token": "[Silocats]",
+      "Meaning": "SiloCats Band, practicing at the [Kulturprojekt], Allach",
+      "Usage": "Need to go to Silocats practice"
+    },
+    {
+      "label": "[new_label]",
+      "value": "",
+      "flag": "",
+      "Token": "[Kulturprojekt]",
+      "Meaning": "The Collection of Containers in Allach, converted to Band Practice Rooms",
+      "Usage": "I left Mitch at the Kulturprojekt"
+    },
+    {
+      "label": "[new_label]",
+      "value": "",
+      "flag": "",
+      "Token": "[Ondej]",
+      "Meaning": "Ondrej Zadak, Drummer of the [Silocats], married to Luciana, son called Luka",
+      "Usage": "Need to ask Ondrej about joining for concert"
+    },
+    {
+      "Token": "[Kermit]",
+      "Meaning": "Toyota Corolla, E10 Gasoline, 5-seater",
+      "Usage": "Need to fill Kermit"
+    },
+    {
+      "Token": "[Allach]",
+      "Meaning": "Location of [Kulturprojekt]], North-West Munich",
+      "Usage": "I left [Mitch] in [Allach]"
+    }
+  ]
+} 
+===== fz0001.json ===== 
+{
+  "profile": [
+    {
+      "label": "Real Name",
+      "value": "Pia",
+      "flag": "secret",
+      "todo": ""
+    },
+    {
+      "label": "User Name",
+      "value": "Marie",
+      "flag": "Secret",
+      "todo": ""
+    },
+    {
+      "label": "Hobby",
+      "value": "Cooking",
+      "flag": "Public",
+      "todo": ""
+    },
+    {
+      "label": "Hobby",
+      "value": "Netflix and Chill",
+      "flag": "Private",
+      "todo": ""
+    },
+    {
+      "label": "Best Friends",
+      "value": "Fiona",
+      "flag": "secret",
+      "todo": ""
+    },
+    {
+      "label": "Best Friends",
+      "value": "Sarah",
+      "flag": "secret",
+      "todo": ""
+    },
+    {
+      "label": "Hobby",
+      "value": "Mahjong",
+      "flag": "public",
+      "todo": ""
+    }
+  ]
+} 
+===== fz0001_sticky.json ===== 
+{
+  "sticky": [
+    {
+      "stickytype": "Cooking",
+      "note": "3 course meals preferred when cooking for guests",
+      "links": ""
+    }
+  ]
+} 
+===== fz0001_token.json ===== 
+{
+  "FZ_Tokens": [
+    {
+      "Token": "[Fadelopter]",
+      "Meaning": "Whatshallmacallit",
+      "Usage": "I forgot the name of that thing, but it's a fadelopter"
+    },
+    {
+      "Token": "[Tofu]",
+      "Meaning": "Demeter Tofu 250g, no flavor, available at Basic and All Natural",
+      "Usage": "Need to buy Tofu for dinner, maybe look for a nice recipe"
+    },
+    {
+      "Token": "[Sarah]",
+      "Meaning": "Best Friend Sarah, strict vegan, avid walker, husband Norm, scottish, plays Golf",
+      "Usage": "Need to call Sarah to catch up"
+    },
+    {
+      "Token": "[Fiona]",
+      "Meaning": "Best Friend Fiona, husband Ross, he rides bikes",
+      "Usage": "Fiona and Ross will never come to invitations together "
+    },
+    {
+      "Token": "[Ross]",
+      "Meaning": "Husband to [Fiona], is not social with Pia",
+      "Usage": "Invite Fiona, but assume Ross is not coming"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
+    }
+  ]
+} 
+===== fz9999.json ===== 
+{
+  "profile": [
+    {
+      "label": "Local Italian",
+      "value": "Osteria Elisabethstrasse, München",
+      "flag": "public",
+      "todo": "Next door to Zentner, do not order the salad"
+    },
+    {
+      "label": "[Tax Advisor]",
+      "value": "Alexander Rohrmus",
+      "flag": "public",
+      "todo": " contact before July every year."
+    },
+    {
+      "label": "Bass Guitar String  type",
+      "value": "Elixir 6 String Bass Strings, Nickel Plated Steel, Light Gauge",
+      "flag": "public",
+      "todo": "Last changed 2004"
+    },
+    {
+      "label": "LLM",
+      "value": "Open AI Chat GPT",
+      "flag": "secret",
+      "todo": "Get the profile info out into flat file"
+    }
+  ]
+} 
+===== fz9999_sticky.json ===== 
+{
+  "sticky": [
+    {
+      "stickytype": "Mixed Salad",
+      "note": "Do not order again it is wilted and not nice",
+      "links": "Osteria Elisbethstrasse"
+    }
+  ]
+} 
+===== fz9999_token.json ===== 
+{
+  "0": [
+    {
+      "Token": "Bruschetta",
+      "Meaning": "3 Pieces of bread with tomato, onion and garlic",
+      "Usage": "Lets order bruschetta online"
+    }
+  ],
+  "1": "",
+  "2": ""
+} 
+===== FZ_Appdocu.txt ===== 
+
+
+FlowZero Baseline App Documentation
+==================================
+
+# FlowZero Application Documentation (FZ_Appdocu)
+
+## Overview
+FlowZero is a zero-resistance workflow tool for managing and editing user configuration profiles (PUCKs), sticky notes, and personal tag tokens. The application is built with React and Vite, and operates on local JSON files for privacy and portability.
+
+### Key Concepts
+- **PUCK (Portable User Configuration Knowledge):** Local user profile JSON files, e.g., `fz0000.json`.
+- **Sticky Notes:** Per-profile sticky note arrays, e.g., `fz0000_sticky.json`.
+- **Tokens:** Per-profile tag tokens, e.g., `fz0000_token.json`.
+- **User Index:** `fz_profile_index.json` and `fz_user_index.json` provide metadata and lookup for all profiles.
+
+## File Structure
+- `src/Jedit.jsx`: Profile (PUCK) JSON editor.
+- `src/StickyEdit.jsx`: Sticky note editor for a selected profile.
+- `src/TokenEdit.jsx`: Token/tag editor for a selected profile.
+- `src/userIndexUtil.js`: Utility for loading user index.
+- `public/`: Contains all user data files (JSON), config, and documentation.
+
+## Main Components
+### Jedit.jsx
+- Loads user index and allows selection of a profile JSON file.
+- Edits array of objects (fields: label, value, flag, todo) in the profile.
+- Supports manual file open and save.
+
+### StickyEdit.jsx
+- Loads user index and allows selection of a profile's sticky note file.
+- Edits array of sticky notes (fields: stickytype, note, links).
+- Supports manual file open and save.
+
+### TokenEdit.jsx
+- Loads user index and allows selection of a profile's token file.
+- Edits array of tokens (fields: Token, Meaning, Usage).
+- No manual file open; always associated with a profile.
+
+## Data Model
+- Each profile file is a JSON object with a single key (profileId or similar) mapping to an array of entries.
+- Sticky and token files follow the same pattern, with different field names.
+
+## User Flow
+1. User selects a profile from a dropdown (populated from user index).
+2. The relevant file (profile, sticky, or token) is loaded and displayed in a form.
+3. User can edit, add, or remove entries.
+4. User can save changes as a new JSON file.
+
+## File Naming Conventions
+- Profile: `fzXXXX.json`
+- Sticky: `fzXXXX_sticky.json`
+- Token: `fzXXXX_token.json`
+- User index: `fz_user_index.json`, `fz_profile_index.json`
+
+## How to Rebuild
+1. Install dependencies: `npm install`
+2. Start dev server: `npm run dev`
+3. Build for production: `npm run build`
+4. Lint code: `npm run lint`
+
+## Regeneration Guidance for AI
+- Recreate the three main editors (Jedit, StickyEdit, TokenEdit) as React components.
+- Each editor loads a user index, allows profile selection, and loads/edits the corresponding JSON file.
+- Use controlled form inputs for editing arrays of objects.
+- Provide file save (download) and, where appropriate, file open (upload) functionality.
+- All user data is stored in the `public/` directory for local privacy.
+- See this file and the codebase for field names and UI structure.
+
+## Glossary
+- **PUCK:** Portable User Configuration Knowledge (profile JSON)
+- **Sticky:** Per-profile sticky notes
+- **Token:** Per-profile tag tokens
+- **User Index:** List of all profiles
+
+---
+This documentation is sufficient for an AI (e.g., Codex, Claude) to regenerate the application structure, data model, and main UI flows from scratch.
+- The title is displayed in an <h1>.
+ 
+===== FZ_How2UsePuck4LLM.txt ===== 
+===============================
+PATCH: PUCK LOAD PROTOCOL v0.1
+===============================
+
+PURPOSE
+-------
+Ensure the LLM correctly interprets the PUCK before using it.
+Make sure the content of previously loaded PUCKs is refreshed by the new upload.
+
+===============================
+PATCH: PUCK INGEST & TOKEN ECHO v0.1
+===============================
+
+PURPOSE
+-------
+Ensure that uploaded PUCK content is not only received but actively parsed and made visible.
+
+MANDATORY INGEST STEP
+---------------------
+After uploading the PUCK archive (puck_*.zip):
+
+1. Unpack the archive
+2. Read all fz_*.* files
+3. Extract token definitions from all *_token.json files
+
+TOKEN ECHO (REQUIRED)
+---------------------
+Display a concise list of active tokens and their meanings.
+
+Example:
+[Mitch] → Fender Telecaster
+[Sarah] → strict vegan
+[Fiona] → husband Ross
+
+This confirms that:
+- PUCK is accessible
+- tokens are correctly parsed
+- latest version is active
+
+FAILURE MODE
+------------
+If tokens are not displayed:
+→ PUCK is not properly ingested
+→ DO NOT proceed with reasoning
+
+PRINCIPLE
+---------
+Visibility before trust.
+
+ONE-LINER
+---------
+“If you can’t show the tokens, you can’t use the PUCK.”
+
+===============================
+END PATCH
+===============================
+
+LOAD ORDER (MANDATORY)
+----------------------
+1. Upload and process this instruction file (How2UsePuck4LLM.txt)
+2. Upload PUCK archive (puck_*.zip containing fz_*.* files)
+3. Display acknowledgement of PUCK upload and date.
+
+The instruction file defines how to interpret tokens and mappings.
+The PUCK provides the actual content.
+
+Do not reverse the order.
+
+VALIDATION STEP (REQUIRED)
+--------------------------
+This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse: personal tokens, preferences, routines, and shorthand mappings. Tokens (e.g. [Mitch], [Skinny Thing]) are compressed references that expand into specific objects, people, places, or actions. Interpret all bracketed terms via token files before reasoning. Do not assume generic meaning if a token exists. Combine tokens with context (time, routines like “usual Wednesday”) to reconstruct intent. Prefer expansion over guessing. Preserve user-specific semantics over global defaults. If ambiguity remains, ask for clarification or suggest likely expansions. Goal: align with the user’s language so communication is low-friction, accurate, and immediately actionable (“click”). 
+===== fz_profile_index.json ===== 
+[
+  {
+    "realName": "Chris Horak",
+    "profileId": "P0000",
+    "description": "Main profile for Chris, default settings.",
+    "fileName": "fz0000.json",
+    "type": "person",
+    "subtype": "family and friends"
+  },
+  {
+    "realName": "Pia Hultqvist",
+    "profileId": "P0001",
+    "description": "Pia's main profile.",
+    "fileName": "fz0001.json",
+    "type": "person",
+    "subtype": "family and friends"
+  },
+  {
+    "realName": "Osteria",
+    "profileId": "P9999",
+    "description": "Favorite Italian restaurant.",
+    "fileName": "fz9999.json",
+    "type": "restaurant",
+    "subtype": "Italian"
+  }
+]
+ 

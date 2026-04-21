@@ -1,0 +1,34 @@
+{
+  "FZ_Tokens": [
+    {
+      "Token": "[Fadelopter]",
+      "Meaning": "Whatshallmacallit",
+      "Usage": "I forgot the name of that thing, but it's a fadelopter"
+    },
+    {
+      "Token": "[Tofu]",
+      "Meaning": "Demeter Tofu 250g, no flavor, available at Basic and All Natural",
+      "Usage": "Need to buy Tofu for dinner, maybe look for a nice recipe"
+    },
+    {
+      "Token": "[Sarah]",
+      "Meaning": "Best Friend Sarah, strict vegan, avid walker, husband Norm, scottish, plays Golf",
+      "Usage": "Need to call Sarah to catch up"
+    },
+    {
+      "Token": "[Fiona]",
+      "Meaning": "Best Friend Fiona, husband Ross, he rides bikes",
+      "Usage": "Fiona and Ross will never come to invitations together "
+    },
+    {
+      "Token": "[Ross]",
+      "Meaning": "Husband to [Fiona], is not social with Pia",
+      "Usage": "Invite Fiona, but assume Ross is not coming"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
+    }
+  ]
+}

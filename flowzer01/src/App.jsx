@@ -1,4 +1,6 @@
 import Jedit from "./Jedit";
+import TokenEdit from "./TokenEdit";
+import StickyEdit from "./StickyEdit";
 // ===============================
 // CONFIG / CONSTANTS
 // ===============================
@@ -33,6 +35,8 @@ function App() {
   const [FZ_cfg_obj, FZ_set_cfg_obj] = useState({})
   const [FZ_profile_ary, FZ_set_profile_ary] = useState([])
   const [showJedit, setShowJedit] = useState(false)
+  const [showTokenEdit, setShowTokenEdit] = useState(false)
+  const [showStickyEdit, setShowStickyEdit] = useState(false)
 
   useEffect(() => {
     fetch("/config.json")
@@ -81,21 +85,47 @@ function App() {
           </ul>
         </div>
       </div>
-      <div style={{marginTop: 40}}>
+      <div style={{marginTop: 40, display: 'flex', gap: 16}}>
         {!showJedit && (
           <button onClick={() => setShowJedit(true)} style={{padding: '8px 18px', fontSize: '1em'}}>
             Profile Edit
           </button>
         )}
-        {showJedit && (
-          <div>
-            <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-              <button onClick={() => setShowJedit(false)} style={{marginBottom: 8, padding: '4px 12px'}}>Close</button>
-            </div>
-            <Jedit />
-          </div>
+        {!showTokenEdit && (
+          <button onClick={() => setShowTokenEdit(true)} style={{padding: '8px 18px', fontSize: '1em'}}>
+            Token Edit
+          </button>
+        )}
+        {!showStickyEdit && (
+          <button onClick={() => setShowStickyEdit(true)} style={{padding: '8px 18px', fontSize: '1em'}}>
+            Sticky Edit
+          </button>
         )}
       </div>
+      {showJedit && (
+        <div>
+          <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+            <button onClick={() => setShowJedit(false)} style={{marginBottom: 8, padding: '4px 12px'}}>Close</button>
+          </div>
+          <Jedit />
+        </div>
+      )}
+      {showTokenEdit && (
+        <div>
+          <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+            <button onClick={() => setShowTokenEdit(false)} style={{marginBottom: 8, padding: '4px 12px'}}>Close</button>
+          </div>
+          <TokenEdit />
+        </div>
+      )}
+      {showStickyEdit && (
+        <div>
+          <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+            <button onClick={() => setShowStickyEdit(false)} style={{marginBottom: 8, padding: '4px 12px'}}>Close</button>
+          </div>
+          <StickyEdit />
+        </div>
+      )}
     </div>
   )
 }
