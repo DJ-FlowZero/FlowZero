@@ -2,18 +2,15 @@
 
 ## Profile/Group Creation, Staging, and Publishing (2026-04)
 
-### New Features & Learnings
-- The Index Edit window now supports creating a new group (profile set) with a single click ([Create Group]).
-- When [Create Group] is clicked, the app:
-	- Determines the next available profile number (e.g., fz0004.json if fz0003.json exists).
-	- Creates three new files in `public/NewState/`: `fzXXXX.json` (profile), `fzXXXX_token.json` (tokens), and `fzXXXX_sticky.json` (sticky notes), all with minimal valid structure.
-	- Adds a new entry to `fz_profile_index.json` in memory (user must still download or publish the updated index).
-- A [Publish Group Files] button appears after group creation. When clicked, it copies the new files from `public/NewState/` to `public/` using the backend API.
-- File naming is always incremented automatically based on the highest existing number in the index.
-- All file creation and publishing is handled via backend endpoints:
-	- `/api/save-text` (POST): Accepts `{ filename, content }` and writes to `public/NewState/`. Supports both `.json` and `.txt` files. Validates filename.
-	- `/api/refresh-text` (POST): Accepts `{ filename }` and copies from `public/NewState/` to `public/`. Validates filename.
-- This workflow ensures all new or edited files are staged before being published, supporting safe review and rollback.
+### New Features & Learnings (2026-04-22)
+- The Index Edit window now acts as a directory of all groups (profiles) and allows safe creation and publishing of new groups.
+- The Add Entry and Download buttons have been removed to prevent accidental or incomplete additions.
+- Only the [Create Group] and [Publish Group Files] buttons can add new groups, ensuring all associated files (profile, token, sticky) are created together.
+- The profileId and fileName fields in the directory are now read-only to protect directory integrity; only description and extra fields are editable.
+- A new [Save Changes] button allows you to persist edits to descriptions/comments in `fz_profile_index.json` by downloading/overwriting the file.
+- All changes to the index are reflected in selectors and other UI components immediately after saving/publishing.
+- UI improvements: clearer modal/box titles, increased spacing, and consistent button styling for a more user-friendly admin workbench.
+- The workflow is now robust against accidental data loss or corruption and is ready for further user-facing UI development.
 
 #### Example Group Creation & Publishing Workflow
 1. Click [Create Group] in Index Edit. Three new files are created in `public/NewState/` with the next available number.

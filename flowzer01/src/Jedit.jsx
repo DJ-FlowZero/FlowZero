@@ -8,7 +8,7 @@ export default function Jedit() {
   const [error, setError] = useState("");
   const [userIndex, setUserIndex] = useState([]);
   const [loadingIndex, setLoadingIndex] = useState(true);
-  const [saveStatus, setSaveStatus] = useState("");
+  const [saveStatus] = useState("");
 
   // Load user index on mount
   useEffect(() => {
@@ -108,25 +108,6 @@ export default function Jedit() {
     URL.revokeObjectURL(a.href);
   };
 
-  // Refresh (publish) profile to public directory
-  const handleRefreshProfile = async () => {
-    setSaveStatus("Refreshing to public...");
-    try {
-      const res = await fetch("/api/refresh-profile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: filename || "edited.json" })
-      });
-      const result = await res.json();
-      if (res.ok) {
-        setSaveStatus("Profile refreshed to public.");
-      } else {
-        setSaveStatus("Refresh failed: " + (result.message || "Unknown error"));
-      }
-    } catch (err) {
-      setSaveStatus("Refresh error: " + err.message);
-    }
-  };
 
   if (error) return <div style={{ color: "red" }}>{error}</div>;
   if (!jsonData) {

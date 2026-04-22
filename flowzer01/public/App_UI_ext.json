@@ -1,0 +1,22 @@
+{
+  "appUIext": [
+    {
+      "label": "fz_00_blank",
+      "value": "",
+      "flag": "",
+      "notes": "Blank template object."
+    },
+    {
+      "label": "fz_01_footer_headline",
+      "value": "FlowZero Systematik",
+      "flag": "visible",
+      "notes": "Footer headline for the app UI."
+    },
+    {
+      "label": "fz_02_footer_date",
+      "value": "Current Date:",
+      "flag": "visible",
+      "notes": "Footer date for the app UI."
+    }
+  ]
+}

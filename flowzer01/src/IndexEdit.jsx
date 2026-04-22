@@ -51,24 +51,7 @@ export default function IndexEdit() {
     });
   };
 
-  // Add new index entry
-  const handleAddEntry = () => {
-    setIndexData((prev) => [
-      ...prev,
-      { profileId: "new_id", fileName: "fz0000.json", description: "", extra: "" }
-    ]);
-  };
 
-  // Download as JSON
-  const handleDownload = () => {
-    const blob = new Blob([JSON.stringify(indexData, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "fz_profile_index.json";
-    a.click();
-    URL.revokeObjectURL(a.href);
-    setSaveStatus("Downloaded new index file.");
-  };
 
   // Find next available profile number (e.g., 0004 if fz0003.json exists)
   const getNextProfileNum = () => {
@@ -83,7 +66,16 @@ export default function IndexEdit() {
     return (nums.length ? Math.max(...nums) + 1 : 0).toString().padStart(4, '0');
   };
 
-  // Handler for Create Group
+  // Save changes to fz_profile_index.json
+  const handleSaveChanges = () => {
+    const blob = new Blob([JSON.stringify(indexData, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "fz_profile_index.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    setSaveStatus("Saved changes to fz_profile_index.json.");
+  };
   const [lastCreatedNum, setLastCreatedNum] = useState(null);
   const handleCreateGroup = async () => {
     const nextNum = getNextProfileNum();
@@ -112,7 +104,7 @@ export default function IndexEdit() {
       ]);
       setLastCreatedNum(nextNum);
       setSaveStatus(`Created group: ${fileName}, ${tokenFile}, ${stickyFile}`);
-    } catch (e) {
+    } catch {
       setSaveStatus("Error creating group files");
     }
   };
@@ -127,7 +119,7 @@ export default function IndexEdit() {
     try {
       await publishGroupFiles(lastCreatedNum);
       setSaveStatus("Group files published to public.");
-    } catch (e) {
+    } catch {
       setSaveStatus("Error publishing group files");
     }
   };
@@ -145,27 +137,24 @@ export default function IndexEdit() {
       <button type="button" onClick={handlePublishGroup} style={{ marginBottom: 16, background: '#d0ffd0', padding: '6px 18px', borderRadius: 6, marginLeft: 12 }}>
         [Publish Group Files]
       </button>
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          handleDownload();
-        }}
-      >
+      <form onSubmit={e => e.preventDefault()}>
         {indexData.map((entry, idx) => (
           <div key={idx} style={{ marginBottom: 10, display: "flex", gap: 8 }}>
             <input
               type="text"
               value={entry.profileId || ""}
-              onChange={e => handleFieldChange(idx, "profileId", e.target.value)}
-              style={{ width: 120 }}
+              readOnly
+              style={{ width: 120, background: '#f5f5f5', color: '#888' }}
               placeholder="profileId"
+              title="Profile ID is read-only."
             />
             <input
               type="text"
               value={entry.fileName || ""}
-              onChange={e => handleFieldChange(idx, "fileName", e.target.value)}
-              style={{ width: 180 }}
+              readOnly
+              style={{ width: 180, background: '#f5f5f5', color: '#888' }}
               placeholder="fileName"
+              title="File name is read-only."
             />
             <input
               type="text"
@@ -183,11 +172,9 @@ export default function IndexEdit() {
             />
           </div>
         ))}
-        <button type="button" onClick={handleAddEntry} style={{ marginTop: 8, marginRight: 8 }}>
-          Add Entry
-        </button>
-        <button type="button" onClick={handleDownload} style={{ marginTop: 8, marginLeft: 8 }}>
-          Download
+        {/* Add Entry button removed: new entries must be created via Create Group and Publish Group */}
+        <button type="button" onClick={handleSaveChanges} style={{ marginTop: 8, marginRight: 8, background: '#ffe0b2', borderRadius: 6 }}>
+          Save Changes
         </button>
       </form>
     </div>

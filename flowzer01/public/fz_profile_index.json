@@ -2,7 +2,7 @@
   {
     "realName": "Chris Horak",
     "profileId": "P0000",
-    "description": "Main profile for Chris, default settings.",
+    "description": "Main profile for Choirshark",
     "fileName": "fz0000.json",
     "type": "person",
     "subtype": "family and friends",
@@ -29,28 +29,28 @@
   {
     "realName": "Dachau MyPlace",
     "profileId": "P0002",
-    "description": "Storage Room In Dachau",
+    "description": "Storage Room In Dachau / Surplus",
     "fileName": "fz0002.json",
     "type": "location",
     "subtype": "storage room",
-    "extra": "Surplus stuff"
+    "extra": "Real Estate"
   },
   {
-    "realName":"Practice Room Allach",
+    "realName": "Practice Room Allach",
     "profileId": "P0003",
     "fileName": "fz0003.json",
-    "description": "Practice Room Allach",
+    "description": "Practice Room Allach / Music Gear",
     "type": "location",
     "subtype": "storage room",
-    "extra": "Music Gear"
+    "extra": "Real Estate"
   },
   {
     "realName": "Saporta Basement",
     "profileId": "P10000",
     "fileName": "fz10000.json",
-    "description": "Saporta Basement",
+    "description": "Saporta Basement / Appartment",
     "type": "location",
     "subtype": "storage room",
-    "extra": "Appartment Stuff"
+    "extra": "Real Estate"
   }
 ]
