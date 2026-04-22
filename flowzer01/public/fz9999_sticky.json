@@ -2,7 +2,7 @@
   "sticky": [
     {
       "stickytype": "Mixed Salad",
-      "note": "Do not order again it is wilted and not nice",
+      "note": "Do not order again! It is wilted and not nice",
       "links": "Osteria Elisbethstrasse"
     },
     {
@@ -11,8 +11,8 @@
       "links": "Recommend to others"
     },
     {
-      "stickytype": "",
-      "note": "",
+      "stickytype": "Beer",
+      "note": "No dark beer available any longer, order Franziskaner Dunkel",
       "links": ""
     }
   ]

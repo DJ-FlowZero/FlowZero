@@ -90,9 +90,8 @@ export default function Jedit() {
         label: "new label",
         value: "",
         flag: "",
-        type: "",
-        substype: "",
-        realname: ""
+        todo: "",
+        comment: ""
       });
       return newData;
     });
@@ -202,31 +201,17 @@ export default function Jedit() {
             />
             <input
               type="text"
-              value={entry.type || ""}
-              onChange={(e) => handleFieldChange(idx, "type", e.target.value)}
-              style={{ width: 80 }}
-              placeholder="type"
-            />
-            <input
-              type="text"
-              value={entry.substype || ""}
-              onChange={(e) => handleFieldChange(idx, "substype", e.target.value)}
-              style={{ width: 80 }}
-              placeholder="substype"
-            />
-            <input
-              type="text"
-              value={entry.realname || ""}
-              onChange={(e) => handleFieldChange(idx, "realname", e.target.value)}
-              style={{ width: 100 }}
-              placeholder="realname"
-            />
-            <input
-              type="text"
               value={entry.todo || ""}
               onChange={(e) => handleFieldChange(idx, "todo", e.target.value)}
               style={{ width: 120 }}
-              placeholder="Todo"
+              placeholder="todo"
+            />
+            <input
+              type="text"
+              value={entry.comment || ""}
+              onChange={(e) => handleFieldChange(idx, "comment", e.target.value)}
+              style={{ width: 120 }}
+              placeholder="comment"
             />
           </div>
         ))}

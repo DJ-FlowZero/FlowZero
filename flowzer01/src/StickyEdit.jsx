@@ -105,11 +105,7 @@ export default function StickyEdit() {
       const newData = { ...prev };
       const stickyKey = Object.keys(newData)[0];
       if (!newData[stickyKey]) newData[stickyKey] = [];
-      newData[stickyKey].push({
-        stickytype: "",
-        note: "",
-        links: ""
-      });
+      newData[stickyKey].push({ stickytype: "", note: "", links: "" });
       return newData;
     });
   };

@@ -1,8 +1,8 @@
 {
   "profile": [
     {
-      "label": "Real Name",
-      "value": "Chris Eitsch H Zentner",
+      "label": "Genghis Khan",
+      "value": "Chris Eitsch ",
       "flag": "secret",
       "todo": "never reveal real last name"
     },
@@ -53,6 +53,20 @@
       "value": "Alexander Rohrmus, Steuerberater",
       "flag": "Private",
       "todo": "contact latest in June to prepare the tax declaration for 2023"
+    },
+    {
+      "label": "Guitar",
+      "value": "Suhr Guthrie Govan",
+      "flag": "secret",
+      "todo": "Add new strings soon",
+      "comment": "Govan no longer plays Suhr but has switched to Charvel, reducing the value"
+    },
+    {
+      "label": "Guitar",
+      "value": "Suhr Modern Cloudburst",
+      "flag": "secret",
+      "todo": "Add new strings",
+      "comment": "Jazz Box alternative"
     }
   ]
 }

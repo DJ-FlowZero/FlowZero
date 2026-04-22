@@ -4,7 +4,8 @@
       "label": "Add Label",
       "value": "Add description",
       "flag": "public",
-      "todo": "Add todo or links"
+      "todo": "Add todo or links",
+      "comments": "Add comments or notes"
     }
     ]
 }
