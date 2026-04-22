@@ -89,7 +89,10 @@ export default function Jedit() {
       newData[profileKey].push({
         label: "new label",
         value: "",
-        flag: ""
+        flag: "",
+        type: "",
+        substype: "",
+        realname: ""
       });
       return newData;
     });
@@ -175,33 +178,54 @@ export default function Jedit() {
         }}
       >
         {profileArr.map((entry, idx) => (
-          <div key={idx} style={{ marginBottom: 10, display: "flex", gap: 8 }}>
+          <div key={idx} style={{ marginBottom: 10, display: "flex", gap: 8, flexWrap: 'wrap' }}>
             <input
               type="text"
               value={entry.label}
               onChange={(e) => handleFieldChange(idx, "label", e.target.value)}
-              style={{ width: 120 }}
+              style={{ width: 100 }}
               placeholder="label"
             />
             <input
               type="text"
               value={entry.value}
               onChange={(e) => handleFieldChange(idx, "value", e.target.value)}
-              style={{ width: 180 }}
+              style={{ width: 100 }}
               placeholder="value"
             />
             <input
               type="text"
               value={entry.flag || ""}
               onChange={(e) => handleFieldChange(idx, "flag", e.target.value)}
-              style={{ width: 80 }}
+              style={{ width: 70 }}
               placeholder="flag"
+            />
+            <input
+              type="text"
+              value={entry.type || ""}
+              onChange={(e) => handleFieldChange(idx, "type", e.target.value)}
+              style={{ width: 80 }}
+              placeholder="type"
+            />
+            <input
+              type="text"
+              value={entry.substype || ""}
+              onChange={(e) => handleFieldChange(idx, "substype", e.target.value)}
+              style={{ width: 80 }}
+              placeholder="substype"
+            />
+            <input
+              type="text"
+              value={entry.realname || ""}
+              onChange={(e) => handleFieldChange(idx, "realname", e.target.value)}
+              style={{ width: 100 }}
+              placeholder="realname"
             />
             <input
               type="text"
               value={entry.todo || ""}
               onChange={(e) => handleFieldChange(idx, "todo", e.target.value)}
-              style={{ width: 200 }}
+              style={{ width: 120 }}
               placeholder="Todo"
             />
           </div>

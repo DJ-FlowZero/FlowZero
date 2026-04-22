@@ -1,0 +1,1 @@
+This is like a clip board for notes and cut and paste during the development

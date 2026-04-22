@@ -1,0 +1,21 @@
+{
+  "profile": [
+    {
+      "label": "Dachau",
+      "value": "Storage Room",
+      "flag": "public",
+      "todo": "Check it out",
+      "type": "Location",
+      "substype": "Storage",
+      "realname": "Extra Gear"
+    },
+    {
+      "label": "Dachau",
+      "value": "Storage Rooms",
+      "flag": "publis",
+      "type": "Location",
+      "substype": "Guitar Cases",
+      "realname": "Govan Case"
+    }
+  ]
+}

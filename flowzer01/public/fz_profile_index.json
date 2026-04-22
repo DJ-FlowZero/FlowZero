@@ -5,7 +5,8 @@
     "description": "Main profile for Chris, default settings.",
     "fileName": "fz0000.json",
     "type": "person",
-    "subtype": "family and friends"
+    "subtype": "family and friends",
+    "extra": "Person"
   },
   {
     "realName": "Pia Hultqvist",
@@ -13,7 +14,8 @@
     "description": "Pia's main profile.",
     "fileName": "fz0001.json",
     "type": "person",
-    "subtype": "family and friends"
+    "subtype": "family and friends",
+    "extra": "Person"
   },
   {
     "realName": "Osteria",
@@ -21,6 +23,34 @@
     "description": "Favorite Italian restaurant.",
     "fileName": "fz9999.json",
     "type": "restaurant",
-    "subtype": "Italian"
+    "subtype": "Italian",
+    "extra": "Location"
+  },
+  {
+    "realName": "Dachau MyPlace",
+    "profileId": "P0002",
+    "description": "Storage Room In Dachau",
+    "fileName": "fz0002.json",
+    "type": "location",
+    "subtype": "storage room",
+    "extra": "Surplus stuff"
+  },
+  {
+    "realName":"Practice Room Allach",
+    "profileId": "P0003",
+    "fileName": "fz0003.json",
+    "description": "Practice Room Allach",
+    "type": "location",
+    "subtype": "storage room",
+    "extra": "Music Gear"
+  },
+  {
+    "realName": "Saporta Basement",
+    "profileId": "P10000",
+    "fileName": "fz10000.json",
+    "description": "Saporta Basement",
+    "type": "location",
+    "subtype": "storage room",
+    "extra": "Appartment Stuff"
   }
 ]

@@ -2,6 +2,7 @@ import Jedit from "./Jedit";
 import TokenEdit from "./TokenEdit";
 import StickyEdit from "./StickyEdit";
 import TextFileBackandSave from "./TextFileBackandSave";
+import IndexEdit from "./IndexEdit";
 // ===============================
 // CONFIG / CONSTANTS
 // ===============================
@@ -38,6 +39,8 @@ function App() {
   const [showJedit, setShowJedit] = useState(false)
   const [showTokenEdit, setShowTokenEdit] = useState(false)
   const [showStickyEdit, setShowStickyEdit] = useState(false)
+  const [showTextFileBackandSave, setShowTextFileBackandSave] = useState(false)
+  const [showIndexEdit, setShowIndexEdit] = useState(false)
 
   useEffect(() => {
     fetch("/config.json")
@@ -86,7 +89,7 @@ function App() {
           </ul>
         </div>
       </div>
-      <div style={{marginTop: 40, display: 'flex', gap: 16}}>
+      <div style={{marginTop: 40, display: 'flex', gap: 16, flexWrap: 'wrap'}}>
         {!showJedit && (
           <button onClick={() => setShowJedit(true)} style={{padding: '8px 18px', fontSize: '1em'}}>
             Profile Edit
@@ -102,6 +105,25 @@ function App() {
             Sticky Edit
           </button>
         )}
+        {!showTextFileBackandSave && (
+          <button onClick={() => setShowTextFileBackandSave(true)} style={{padding: '8px 18px', fontSize: '1em'}}>
+            Text File Edit
+          </button>
+        )}
+        {!showIndexEdit && (
+          <button onClick={() => setShowIndexEdit(true)} style={{padding: '8px 18px', fontSize: '1em'}}>
+            Index Edit
+          </button>
+        )}
+            {/* Toggleable IndexEdit (now below buttons) */}
+            {showIndexEdit && (
+              <div style={{marginTop: 24}}>
+                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                  <button onClick={() => setShowIndexEdit(false)} style={{marginBottom: 8, padding: '4px 12px'}}>Close</button>
+                </div>
+                <IndexEdit />
+              </div>
+            )}
       </div>
       {showJedit && (
         <div>
@@ -128,10 +150,15 @@ function App() {
         </div>
       )}
 
-      {/* Demo for text file edit/save/refresh */}
-      <div style={{marginTop: 40}}>
-        <TextFileBackandSave />
-      </div>
+      {/* Toggleable TextFileBackandSave */}
+      {showTextFileBackandSave && (
+        <div style={{marginTop: 40}}>
+          <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+            <button onClick={() => setShowTextFileBackandSave(false)} style={{marginBottom: 8, padding: '4px 12px'}}>Close</button>
+          </div>
+          <TextFileBackandSave />
+        </div>
+      )}
     </div>
   )
 }

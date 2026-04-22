@@ -2,7 +2,7 @@
   "profile": [
     {
       "label": "Real Name",
-      "value": "Chris Eitsch mmm",
+      "value": "Chris Eitsch H Zentner",
       "flag": "secret",
       "todo": "never reveal real last name"
     },
@@ -49,7 +49,7 @@
       "todo": "do not sell, make sure the strings are fresh.  "
     },
     {
-      "label": "[Tax Advisor]",
+      "label": "Tax Advisor",
       "value": "Alexander Rohrmus, Steuerberater",
       "flag": "Private",
       "todo": "contact latest in June to prepare the tax declaration for 2023"

@@ -1,0 +1,24 @@
+{
+  "FZ_Tokens": [
+    {
+      "Token": "Jackson Case",
+      "Meaning": "Hard Shell Case for Toby Guitar Jackson Soloist",
+      "Usage": "Where is the Jackson Case"
+    },
+    {
+      "Token": "Bachand Case",
+      "Meaning": "Hard Shell Case for Ibanez Matt Bachand Shadow Falls guitar",
+      "Usage": "Where is the Bachand Case"
+    },
+    {
+      "Token": "Govan Case",
+      "Meaning": "Hard Shell Case for Suhr Guthrie Govan Signature",
+      "Usage": "Where is the Govan Case"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
+    }
+  ]
+}

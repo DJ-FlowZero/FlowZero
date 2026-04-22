@@ -4,7 +4,66 @@
   "profile": [
     {
       "label": "Real Name",
-      "value": "Chris Eitsch",
+      "value": "Chris Eitsch H Zentner",
+      "flag": "secret",
+      "todo": "never reveal real last name"
+    },
+    {
+      "label": "User Name",
+      "value": "Choirshark",
+      "flag": "Public",
+      "todo": "make sure to use this username on all platforms"
+    },
+    {
+      "label": "Hobby",
+      "value": "Coding in React",
+      "flag": "Private",
+      "todo": "do not forget to back up and amend the Appdocumentation"
+    },
+    {
+      "label": "Hobby",
+      "value": "Playing Guitar in the Silocats",
+      "flag": "Public",
+      "todo": "Focus the next practice on the set for May"
+    },
+    {
+      "label": "Food",
+      "value": "Vegetarian preferred",
+      "flag": "public",
+      "todo": "never forget that Pia does not bear Cilantro or Red Peppers"
+    },
+    {
+      "label": "Breakfast",
+      "value": "Omlette or egg dish",
+      "flag": "secret",
+      "todo": "best to skip the extra bread."
+    },
+    {
+      "label": "Guitar",
+      "value": "Fender Telecaster [Mitch]",
+      "flag": "public",
+      "todo": "do not sell, make sure the strings are fresh.  "
+    },
+    {
+      "label": "Guitar",
+      "value": "Gibson L5 Candy Apple Red",
+      "flag": "Secret",
+      "todo": "do not sell, make sure the strings are fresh.  "
+    },
+    {
+      "label": "Tax Advisor",
+      "value": "Alexander Rohrmus, Steuerberater",
+      "flag": "Private",
+      "todo": "contact latest in June to prepare the tax declaration for 2023"
+    }
+  ]
+} 
+===== fz0000.json.bck ===== 
+{
+  "profile": [
+    {
+      "label": "Real Name",
+      "value": "Chris Eitsch kkk",
       "flag": "secret",
       "todo": "never reveal real last name"
     },
@@ -75,6 +134,16 @@
       "stickytype": "Flow",
       "note": "Tea in the Morning, then Pills, then Walk",
       "links": "Herzogpark Schwabing"
+    },
+    {
+      "stickytype": "Flow",
+      "note": "Develop Code Plan, then code",
+      "links": "MS Visual Studio Code"
+    },
+    {
+      "stickytype": "Behavior",
+      "note": "The [JazzBox] can come to gigs in safe places, where the stage is not accessible by the public",
+      "links": "JazzBox, Gibson L5"
     }
   ]
 } 
@@ -121,6 +190,16 @@
       "Token": "[Allach]",
       "Meaning": "Location of [Kulturprojekt]], North-West Munich",
       "Usage": "I left [Mitch] in [Allach]"
+    },
+    {
+      "Token": "[JazzBox]",
+      "Meaning": "Gibson L5 Cherry Red",
+      "Usage": "Main Semi-Acoustic, not for live gigs, too valuable"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
     }
   ]
 } 
@@ -216,6 +295,177 @@
     }
   ]
 } 
+===== fz0002.json ===== 
+{
+  "profile": [
+    {
+      "label": "Dachau",
+      "value": "Storage Room",
+      "flag": "public",
+      "todo": "Check it out",
+      "type": "Location",
+      "substype": "Storage",
+      "realname": "Extra Gear"
+    },
+    {
+      "label": "Dachau",
+      "value": "Storage Rooms",
+      "flag": "publis",
+      "type": "Location",
+      "substype": "Guitar Cases",
+      "realname": "Govan Case"
+    }
+  ]
+} 
+===== fz0002_sticky.json ===== 
+{
+  "sticky": [
+    {
+      "stickytype": "Content",
+      "note": "Guthrie Govan Case",
+      "links": "Guitar Case"
+    },
+    {
+      "stickytype": "Content",
+      "note": "Mitch Telecaster Case",
+      "links": "Mitch Case"
+    },
+    {
+      "stickytype": "Content",
+      "note": "Extra Matress",
+      "links": "Tempura 160 cm"
+    },
+    {
+      "stickytype": "Content",
+      "note": "Jeanny Oil Painting from Hans-Bernd Dreis",
+      "links": "Oil Painting"
+    },
+    {
+      "stickytype": "Content",
+      "note": "Lego and Toy Overflow from Toby",
+      "links": "Paraphernalia to sell or donate"
+    }
+  ]
+} 
+===== fz0002_token.json ===== 
+{
+  "FZ_Tokens": [
+    {
+      "Token": "[Skinny Thing]",
+      "Meaning": "Hallway Shelf by the door, with 4 drawers, holding sun glasses",
+      "Usage": "Remember to put the glasses back into the Skinny Thing"
+    },
+    {
+      "Token": "[Mitch]",
+      "Meaning": "Fender Telecaster Honduras Mahagony, stored in office, hanging by the bed",
+      "Usage": "Need to take Mitch to the Silocats practice"
+    },
+    {
+      "Token": "[Silocats]",
+      "Meaning": "SiloCats Band, practicing at the [Kulturprojekt], Allach",
+      "Usage": "Need to go to Silocats practice"
+    },
+    {
+      "label": "[new_label]",
+      "value": "",
+      "flag": "",
+      "Token": "[Kulturprojekt]",
+      "Meaning": "The Collection of Containers in Allach, converted to Band Practice Rooms",
+      "Usage": "I left Mitch at the Kulturprojekt"
+    },
+    {
+      "label": "[new_label]",
+      "value": "",
+      "flag": "",
+      "Token": "[Ondej]",
+      "Meaning": "Ondrej Zadak, Drummer of the [Silocats], married to Luciana, son called Luka",
+      "Usage": "Need to ask Ondrej about joining for concert"
+    },
+    {
+      "Token": "[Kermit]",
+      "Meaning": "Toyota Corolla, E10 Gasoline, 5-seater",
+      "Usage": "Need to fill Kermit"
+    },
+    {
+      "Token": "[Allach]",
+      "Meaning": "Location of [Kulturprojekt]], North-West Munich",
+      "Usage": "I left [Mitch] in [Allach]"
+    },
+    {
+      "Token": "[JazzBox]",
+      "Meaning": "Gibson L5 Cherry Red",
+      "Usage": "Main Semi-Acoustic, not for live gigs, too valuable"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
+    }
+  ]
+} 
+===== fz10000.json ===== 
+{
+  "profile": [
+    {
+      "label": "Saporta Basement",
+      "value": "Saporta Street 10",
+      "flag": "private",
+      "todo": "clean out toby stuff",
+      "type": "basement",
+      "substype": "appartment",
+      "realname": "main home"
+    },
+    {
+      "label": "Saporta Basement",
+      "value": "Toby's old stuff",
+      "flag": "Private",
+      "todo": "Decide if we need to keep it or if we can get rid of it",
+      "type": "basement",
+      "substype": "appartment",
+      "realname": "main home"
+    }
+  ]
+} 
+===== fz10000_sticky.json ===== 
+{
+  "sticky": [
+    {
+      "stickytype": "Shelf One",
+      "note": "This will be for food items",
+      "links": "Mostly canned beans"
+    },
+    {
+      "stickytype": "Shelf Two",
+      "note": "This will be tools",
+      "links": "Mostly power tools"
+    }
+  ]
+} 
+===== fz10000_token.json ===== 
+{
+  "FZ_Tokens": [
+    {
+      "Token": "Jackson Case",
+      "Meaning": "Hard Shell Case for Toby Guitar Jackson Soloist",
+      "Usage": "Where is the Jackson Case"
+    },
+    {
+      "Token": "Bachand Case",
+      "Meaning": "Hard Shell Case for Ibanez Matt Bachand Shadow Falls guitar",
+      "Usage": "Where is the Bachand Case"
+    },
+    {
+      "Token": "Govan Case",
+      "Meaning": "Hard Shell Case for Suhr Guthrie Govan Signature",
+      "Usage": "Where is the Govan Case"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
+    }
+  ]
+} 
 ===== fz9999.json ===== 
 {
   "profile": [
@@ -227,7 +477,7 @@
     },
     {
       "label": "[Tax Advisor]",
-      "value": "Alexander Rohrmus",
+      "value": "Alexander Rohrmus Wiesbaden",
       "flag": "public",
       "todo": " contact before July every year."
     },
@@ -239,7 +489,7 @@
     },
     {
       "label": "LLM",
-      "value": "Open AI Chat GPT",
+      "value": "Open AI Chat GPT 99",
       "flag": "secret",
       "todo": "Get the profile info out into flat file"
     }
@@ -252,6 +502,16 @@
       "stickytype": "Mixed Salad",
       "note": "Do not order again it is wilted and not nice",
       "links": "Osteria Elisbethstrasse"
+    },
+    {
+      "stickytype": "Bruschettta",
+      "note": "Three Pieces, actually very good for sharing",
+      "links": "Recommend to others"
+    },
+    {
+      "stickytype": "",
+      "note": "",
+      "links": ""
     }
   ]
 } 
@@ -262,12 +522,63 @@
       "Token": "Bruschetta",
       "Meaning": "3 Pieces of bread with tomato, onion and garlic",
       "Usage": "Lets order bruschetta online"
+    },
+    {
+      "Token": "Dunkles",
+      "Meaning": "Dark Wheat beer in tall glass",
+      "Usage": "Ein Dunkles Bitte"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
     }
   ],
   "1": "",
   "2": ""
 } 
 ===== FZ_Appdocu.txt ===== 
+#
+
+## Profile/Group Creation, Staging, and Publishing (2026-04)
+
+### New Features & Learnings
+- The Index Edit window now supports creating a new group (profile set) with a single click ([Create Group]).
+- When [Create Group] is clicked, the app:
+	- Determines the next available profile number (e.g., fz0004.json if fz0003.json exists).
+	- Creates three new files in `public/NewState/`: `fzXXXX.json` (profile), `fzXXXX_token.json` (tokens), and `fzXXXX_sticky.json` (sticky notes), all with minimal valid structure.
+	- Adds a new entry to `fz_profile_index.json` in memory (user must still download or publish the updated index).
+- A [Publish Group Files] button appears after group creation. When clicked, it copies the new files from `public/NewState/` to `public/` using the backend API.
+- File naming is always incremented automatically based on the highest existing number in the index.
+- All file creation and publishing is handled via backend endpoints:
+	- `/api/save-text` (POST): Accepts `{ filename, content }` and writes to `public/NewState/`. Supports both `.json` and `.txt` files. Validates filename.
+	- `/api/refresh-text` (POST): Accepts `{ filename }` and copies from `public/NewState/` to `public/`. Validates filename.
+- This workflow ensures all new or edited files are staged before being published, supporting safe review and rollback.
+
+#### Example Group Creation & Publishing Workflow
+1. Click [Create Group] in Index Edit. Three new files are created in `public/NewState/` with the next available number.
+2. Edit the new group/profile as needed.
+3. Click [Publish Group Files] to copy the staged files to `public/`.
+4. Download and/or publish the updated `fz_profile_index.json` as needed.
+
+---
+
+### New Features & Learnings
+- The text file editor (TextFileBackandSave.jsx) now supports editing and saving any `.txt` file by name.
+- When saving, the filename is always taken from the React state (input field or file picker), so any valid `.txt` file can be created or updated in `public/NewState/`.
+- When saving, if the file already exists, a backup is created with the `.bck` extension in the same folder.
+- The refresh-to-public operation also supports any filename and creates a backup of the public file before overwriting (e.g., `public/text_2_test.txt.bck`).
+- This means you can always roll back to the previous version by restoring the `.bck` file.
+- The backend endpoints `/api/save-text` and `/api/refresh-text` now both accept a `filename` property in the POST body, defaulting to `text_text.txt` if not provided.
+- This logic is robust for multi-file workflows and safe editing/publishing.
+
+#### Example Workflow
+1. Enter or pick a filename in the editor UI.
+2. Edit and save: file is written to `public/NewState/` and backup is created if needed.
+3. Refresh: file is copied to `public/` and backup is created if needed.
+4. If a mistake is made, restore from the `.bck` file in either location.
+
+---
 
 
 FlowZero Baseline App Documentation
@@ -347,6 +658,17 @@ FlowZero is a zero-resistance workflow tool for managing and editing user config
 This documentation is sufficient for an AI (e.g., Codex, Claude) to regenerate the application structure, data model, and main UI flows from scratch.
 - The title is displayed in an <h1>.
  
+===== fz_blank_profile.json ===== 
+{
+  "profile": [
+    {
+      "label": "Add Label",
+      "value": "Add description",
+      "flag": "public",
+      "todo": "Add todo or links"
+    }
+    ]
+} 
 ===== FZ_How2UsePuck4LLM.txt ===== 
 ===============================
 PATCH: PUCK LOAD PROTOCOL v0.1
@@ -427,7 +749,8 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     "description": "Main profile for Chris, default settings.",
     "fileName": "fz0000.json",
     "type": "person",
-    "subtype": "family and friends"
+    "subtype": "family and friends",
+    "extra": "Person"
   },
   {
     "realName": "Pia Hultqvist",
@@ -435,7 +758,8 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     "description": "Pia's main profile.",
     "fileName": "fz0001.json",
     "type": "person",
-    "subtype": "family and friends"
+    "subtype": "family and friends",
+    "extra": "Person"
   },
   {
     "realName": "Osteria",
@@ -443,16 +767,111 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     "description": "Favorite Italian restaurant.",
     "fileName": "fz9999.json",
     "type": "restaurant",
-    "subtype": "Italian"
+    "subtype": "Italian",
+    "extra": "Location"
+  },
+  {
+    "realName": "Dachau MyPlace",
+    "profileId": "P0002",
+    "description": "Storage Room In Dachau",
+    "fileName": "fz0002.json",
+    "type": "location",
+    "subtype": "storage room",
+    "extra": "Surplus stuff"
+  },
+  {
+    "realName":"Practice Room Allach",
+    "profileId": "P0003",
+    "fileName": "fz0003.json",
+    "description": "Practice Room Allach",
+    "type": "location",
+    "subtype": "storage room",
+    "extra": "Music Gear"
+  },
+  {
+    "realName": "Saporta Basement",
+    "profileId": "P10000",
+    "fileName": "fz10000.json",
+    "description": "Saporta Basement",
+    "type": "location",
+    "subtype": "storage room",
+    "extra": "Appartment Stuff"
   }
-]
+] 
+===== fz_text_3working.txt ===== 
+I now have a batchfile called meup.bat
+the command in the terminal at the beginning is
+
+start meup
+ 
+===== fz_text_3working.txt.bck ===== 
+This is like a clip board for notes and cut and paste during the development
  
 ===== fz0000.json ===== 
 {
   "profile": [
     {
       "label": "Real Name",
-      "value": "Chris Eitsch",
+      "value": "Chris Eitsch H Zentner",
+      "flag": "secret",
+      "todo": "never reveal real last name"
+    },
+    {
+      "label": "User Name",
+      "value": "Choirshark",
+      "flag": "Public",
+      "todo": "make sure to use this username on all platforms"
+    },
+    {
+      "label": "Hobby",
+      "value": "Coding in React",
+      "flag": "Private",
+      "todo": "do not forget to back up and amend the Appdocumentation"
+    },
+    {
+      "label": "Hobby",
+      "value": "Playing Guitar in the Silocats",
+      "flag": "Public",
+      "todo": "Focus the next practice on the set for May"
+    },
+    {
+      "label": "Food",
+      "value": "Vegetarian preferred",
+      "flag": "public",
+      "todo": "never forget that Pia does not bear Cilantro or Red Peppers"
+    },
+    {
+      "label": "Breakfast",
+      "value": "Omlette or egg dish",
+      "flag": "secret",
+      "todo": "best to skip the extra bread."
+    },
+    {
+      "label": "Guitar",
+      "value": "Fender Telecaster [Mitch]",
+      "flag": "public",
+      "todo": "do not sell, make sure the strings are fresh.  "
+    },
+    {
+      "label": "Guitar",
+      "value": "Gibson L5 Candy Apple Red",
+      "flag": "Secret",
+      "todo": "do not sell, make sure the strings are fresh.  "
+    },
+    {
+      "label": "Tax Advisor",
+      "value": "Alexander Rohrmus, Steuerberater",
+      "flag": "Private",
+      "todo": "contact latest in June to prepare the tax declaration for 2023"
+    }
+  ]
+} 
+===== fz0000.json.bck ===== 
+{
+  "profile": [
+    {
+      "label": "Real Name",
+      "value": "Chris Eitsch kkk",
       "flag": "secret",
       "todo": "never reveal real last name"
     },
@@ -523,6 +942,16 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
       "stickytype": "Flow",
       "note": "Tea in the Morning, then Pills, then Walk",
       "links": "Herzogpark Schwabing"
+    },
+    {
+      "stickytype": "Flow",
+      "note": "Develop Code Plan, then code",
+      "links": "MS Visual Studio Code"
+    },
+    {
+      "stickytype": "Behavior",
+      "note": "The [JazzBox] can come to gigs in safe places, where the stage is not accessible by the public",
+      "links": "JazzBox, Gibson L5"
     }
   ]
 } 
@@ -569,6 +998,16 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
       "Token": "[Allach]",
       "Meaning": "Location of [Kulturprojekt]], North-West Munich",
       "Usage": "I left [Mitch] in [Allach]"
+    },
+    {
+      "Token": "[JazzBox]",
+      "Meaning": "Gibson L5 Cherry Red",
+      "Usage": "Main Semi-Acoustic, not for live gigs, too valuable"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
     }
   ]
 } 
@@ -664,6 +1103,177 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     }
   ]
 } 
+===== fz0002.json ===== 
+{
+  "profile": [
+    {
+      "label": "Dachau",
+      "value": "Storage Room",
+      "flag": "public",
+      "todo": "Check it out",
+      "type": "Location",
+      "substype": "Storage",
+      "realname": "Extra Gear"
+    },
+    {
+      "label": "Dachau",
+      "value": "Storage Rooms",
+      "flag": "publis",
+      "type": "Location",
+      "substype": "Guitar Cases",
+      "realname": "Govan Case"
+    }
+  ]
+} 
+===== fz0002_sticky.json ===== 
+{
+  "sticky": [
+    {
+      "stickytype": "Content",
+      "note": "Guthrie Govan Case",
+      "links": "Guitar Case"
+    },
+    {
+      "stickytype": "Content",
+      "note": "Mitch Telecaster Case",
+      "links": "Mitch Case"
+    },
+    {
+      "stickytype": "Content",
+      "note": "Extra Matress",
+      "links": "Tempura 160 cm"
+    },
+    {
+      "stickytype": "Content",
+      "note": "Jeanny Oil Painting from Hans-Bernd Dreis",
+      "links": "Oil Painting"
+    },
+    {
+      "stickytype": "Content",
+      "note": "Lego and Toy Overflow from Toby",
+      "links": "Paraphernalia to sell or donate"
+    }
+  ]
+} 
+===== fz0002_token.json ===== 
+{
+  "FZ_Tokens": [
+    {
+      "Token": "[Skinny Thing]",
+      "Meaning": "Hallway Shelf by the door, with 4 drawers, holding sun glasses",
+      "Usage": "Remember to put the glasses back into the Skinny Thing"
+    },
+    {
+      "Token": "[Mitch]",
+      "Meaning": "Fender Telecaster Honduras Mahagony, stored in office, hanging by the bed",
+      "Usage": "Need to take Mitch to the Silocats practice"
+    },
+    {
+      "Token": "[Silocats]",
+      "Meaning": "SiloCats Band, practicing at the [Kulturprojekt], Allach",
+      "Usage": "Need to go to Silocats practice"
+    },
+    {
+      "label": "[new_label]",
+      "value": "",
+      "flag": "",
+      "Token": "[Kulturprojekt]",
+      "Meaning": "The Collection of Containers in Allach, converted to Band Practice Rooms",
+      "Usage": "I left Mitch at the Kulturprojekt"
+    },
+    {
+      "label": "[new_label]",
+      "value": "",
+      "flag": "",
+      "Token": "[Ondej]",
+      "Meaning": "Ondrej Zadak, Drummer of the [Silocats], married to Luciana, son called Luka",
+      "Usage": "Need to ask Ondrej about joining for concert"
+    },
+    {
+      "Token": "[Kermit]",
+      "Meaning": "Toyota Corolla, E10 Gasoline, 5-seater",
+      "Usage": "Need to fill Kermit"
+    },
+    {
+      "Token": "[Allach]",
+      "Meaning": "Location of [Kulturprojekt]], North-West Munich",
+      "Usage": "I left [Mitch] in [Allach]"
+    },
+    {
+      "Token": "[JazzBox]",
+      "Meaning": "Gibson L5 Cherry Red",
+      "Usage": "Main Semi-Acoustic, not for live gigs, too valuable"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
+    }
+  ]
+} 
+===== fz10000.json ===== 
+{
+  "profile": [
+    {
+      "label": "Saporta Basement",
+      "value": "Saporta Street 10",
+      "flag": "private",
+      "todo": "clean out toby stuff",
+      "type": "basement",
+      "substype": "appartment",
+      "realname": "main home"
+    },
+    {
+      "label": "Saporta Basement",
+      "value": "Toby's old stuff",
+      "flag": "Private",
+      "todo": "Decide if we need to keep it or if we can get rid of it",
+      "type": "basement",
+      "substype": "appartment",
+      "realname": "main home"
+    }
+  ]
+} 
+===== fz10000_sticky.json ===== 
+{
+  "sticky": [
+    {
+      "stickytype": "Shelf One",
+      "note": "This will be for food items",
+      "links": "Mostly canned beans"
+    },
+    {
+      "stickytype": "Shelf Two",
+      "note": "This will be tools",
+      "links": "Mostly power tools"
+    }
+  ]
+} 
+===== fz10000_token.json ===== 
+{
+  "FZ_Tokens": [
+    {
+      "Token": "Jackson Case",
+      "Meaning": "Hard Shell Case for Toby Guitar Jackson Soloist",
+      "Usage": "Where is the Jackson Case"
+    },
+    {
+      "Token": "Bachand Case",
+      "Meaning": "Hard Shell Case for Ibanez Matt Bachand Shadow Falls guitar",
+      "Usage": "Where is the Bachand Case"
+    },
+    {
+      "Token": "Govan Case",
+      "Meaning": "Hard Shell Case for Suhr Guthrie Govan Signature",
+      "Usage": "Where is the Govan Case"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
+    }
+  ]
+} 
 ===== fz9999.json ===== 
 {
   "profile": [
@@ -675,7 +1285,7 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     },
     {
       "label": "[Tax Advisor]",
-      "value": "Alexander Rohrmus",
+      "value": "Alexander Rohrmus Wiesbaden",
       "flag": "public",
       "todo": " contact before July every year."
     },
@@ -687,7 +1297,7 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     },
     {
       "label": "LLM",
-      "value": "Open AI Chat GPT",
+      "value": "Open AI Chat GPT 99",
       "flag": "secret",
       "todo": "Get the profile info out into flat file"
     }
@@ -700,6 +1310,16 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
       "stickytype": "Mixed Salad",
       "note": "Do not order again it is wilted and not nice",
       "links": "Osteria Elisbethstrasse"
+    },
+    {
+      "stickytype": "Bruschettta",
+      "note": "Three Pieces, actually very good for sharing",
+      "links": "Recommend to others"
+    },
+    {
+      "stickytype": "",
+      "note": "",
+      "links": ""
     }
   ]
 } 
@@ -710,12 +1330,63 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
       "Token": "Bruschetta",
       "Meaning": "3 Pieces of bread with tomato, onion and garlic",
       "Usage": "Lets order bruschetta online"
+    },
+    {
+      "Token": "Dunkles",
+      "Meaning": "Dark Wheat beer in tall glass",
+      "Usage": "Ein Dunkles Bitte"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
     }
   ],
   "1": "",
   "2": ""
 } 
 ===== FZ_Appdocu.txt ===== 
+#
+
+## Profile/Group Creation, Staging, and Publishing (2026-04)
+
+### New Features & Learnings
+- The Index Edit window now supports creating a new group (profile set) with a single click ([Create Group]).
+- When [Create Group] is clicked, the app:
+	- Determines the next available profile number (e.g., fz0004.json if fz0003.json exists).
+	- Creates three new files in `public/NewState/`: `fzXXXX.json` (profile), `fzXXXX_token.json` (tokens), and `fzXXXX_sticky.json` (sticky notes), all with minimal valid structure.
+	- Adds a new entry to `fz_profile_index.json` in memory (user must still download or publish the updated index).
+- A [Publish Group Files] button appears after group creation. When clicked, it copies the new files from `public/NewState/` to `public/` using the backend API.
+- File naming is always incremented automatically based on the highest existing number in the index.
+- All file creation and publishing is handled via backend endpoints:
+	- `/api/save-text` (POST): Accepts `{ filename, content }` and writes to `public/NewState/`. Supports both `.json` and `.txt` files. Validates filename.
+	- `/api/refresh-text` (POST): Accepts `{ filename }` and copies from `public/NewState/` to `public/`. Validates filename.
+- This workflow ensures all new or edited files are staged before being published, supporting safe review and rollback.
+
+#### Example Group Creation & Publishing Workflow
+1. Click [Create Group] in Index Edit. Three new files are created in `public/NewState/` with the next available number.
+2. Edit the new group/profile as needed.
+3. Click [Publish Group Files] to copy the staged files to `public/`.
+4. Download and/or publish the updated `fz_profile_index.json` as needed.
+
+---
+
+### New Features & Learnings
+- The text file editor (TextFileBackandSave.jsx) now supports editing and saving any `.txt` file by name.
+- When saving, the filename is always taken from the React state (input field or file picker), so any valid `.txt` file can be created or updated in `public/NewState/`.
+- When saving, if the file already exists, a backup is created with the `.bck` extension in the same folder.
+- The refresh-to-public operation also supports any filename and creates a backup of the public file before overwriting (e.g., `public/text_2_test.txt.bck`).
+- This means you can always roll back to the previous version by restoring the `.bck` file.
+- The backend endpoints `/api/save-text` and `/api/refresh-text` now both accept a `filename` property in the POST body, defaulting to `text_text.txt` if not provided.
+- This logic is robust for multi-file workflows and safe editing/publishing.
+
+#### Example Workflow
+1. Enter or pick a filename in the editor UI.
+2. Edit and save: file is written to `public/NewState/` and backup is created if needed.
+3. Refresh: file is copied to `public/` and backup is created if needed.
+4. If a mistake is made, restore from the `.bck` file in either location.
+
+---
 
 
 FlowZero Baseline App Documentation
@@ -795,6 +1466,17 @@ FlowZero is a zero-resistance workflow tool for managing and editing user config
 This documentation is sufficient for an AI (e.g., Codex, Claude) to regenerate the application structure, data model, and main UI flows from scratch.
 - The title is displayed in an <h1>.
  
+===== fz_blank_profile.json ===== 
+{
+  "profile": [
+    {
+      "label": "Add Label",
+      "value": "Add description",
+      "flag": "public",
+      "todo": "Add todo or links"
+    }
+    ]
+} 
 ===== FZ_How2UsePuck4LLM.txt ===== 
 ===============================
 PATCH: PUCK LOAD PROTOCOL v0.1
@@ -875,7 +1557,8 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     "description": "Main profile for Chris, default settings.",
     "fileName": "fz0000.json",
     "type": "person",
-    "subtype": "family and friends"
+    "subtype": "family and friends",
+    "extra": "Person"
   },
   {
     "realName": "Pia Hultqvist",
@@ -883,7 +1566,8 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     "description": "Pia's main profile.",
     "fileName": "fz0001.json",
     "type": "person",
-    "subtype": "family and friends"
+    "subtype": "family and friends",
+    "extra": "Person"
   },
   {
     "realName": "Osteria",
@@ -891,7 +1575,43 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     "description": "Favorite Italian restaurant.",
     "fileName": "fz9999.json",
     "type": "restaurant",
-    "subtype": "Italian"
+    "subtype": "Italian",
+    "extra": "Location"
+  },
+  {
+    "realName": "Dachau MyPlace",
+    "profileId": "P0002",
+    "description": "Storage Room In Dachau",
+    "fileName": "fz0002.json",
+    "type": "location",
+    "subtype": "storage room",
+    "extra": "Surplus stuff"
+  },
+  {
+    "realName":"Practice Room Allach",
+    "profileId": "P0003",
+    "fileName": "fz0003.json",
+    "description": "Practice Room Allach",
+    "type": "location",
+    "subtype": "storage room",
+    "extra": "Music Gear"
+  },
+  {
+    "realName": "Saporta Basement",
+    "profileId": "P10000",
+    "fileName": "fz10000.json",
+    "description": "Saporta Basement",
+    "type": "location",
+    "subtype": "storage room",
+    "extra": "Appartment Stuff"
   }
-]
+] 
+===== fz_text_3working.txt ===== 
+I now have a batchfile called meup.bat
+the command in the terminal at the beginning is
+
+start meup
+ 
+===== fz_text_3working.txt.bck ===== 
+This is like a clip board for notes and cut and paste during the development
  

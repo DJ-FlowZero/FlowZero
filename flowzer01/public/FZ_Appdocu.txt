@@ -1,3 +1,44 @@
+#
+
+## Profile/Group Creation, Staging, and Publishing (2026-04)
+
+### New Features & Learnings
+- The Index Edit window now supports creating a new group (profile set) with a single click ([Create Group]).
+- When [Create Group] is clicked, the app:
+	- Determines the next available profile number (e.g., fz0004.json if fz0003.json exists).
+	- Creates three new files in `public/NewState/`: `fzXXXX.json` (profile), `fzXXXX_token.json` (tokens), and `fzXXXX_sticky.json` (sticky notes), all with minimal valid structure.
+	- Adds a new entry to `fz_profile_index.json` in memory (user must still download or publish the updated index).
+- A [Publish Group Files] button appears after group creation. When clicked, it copies the new files from `public/NewState/` to `public/` using the backend API.
+- File naming is always incremented automatically based on the highest existing number in the index.
+- All file creation and publishing is handled via backend endpoints:
+	- `/api/save-text` (POST): Accepts `{ filename, content }` and writes to `public/NewState/`. Supports both `.json` and `.txt` files. Validates filename.
+	- `/api/refresh-text` (POST): Accepts `{ filename }` and copies from `public/NewState/` to `public/`. Validates filename.
+- This workflow ensures all new or edited files are staged before being published, supporting safe review and rollback.
+
+#### Example Group Creation & Publishing Workflow
+1. Click [Create Group] in Index Edit. Three new files are created in `public/NewState/` with the next available number.
+2. Edit the new group/profile as needed.
+3. Click [Publish Group Files] to copy the staged files to `public/`.
+4. Download and/or publish the updated `fz_profile_index.json` as needed.
+
+---
+
+### New Features & Learnings
+- The text file editor (TextFileBackandSave.jsx) now supports editing and saving any `.txt` file by name.
+- When saving, the filename is always taken from the React state (input field or file picker), so any valid `.txt` file can be created or updated in `public/NewState/`.
+- When saving, if the file already exists, a backup is created with the `.bck` extension in the same folder.
+- The refresh-to-public operation also supports any filename and creates a backup of the public file before overwriting (e.g., `public/text_2_test.txt.bck`).
+- This means you can always roll back to the previous version by restoring the `.bck` file.
+- The backend endpoints `/api/save-text` and `/api/refresh-text` now both accept a `filename` property in the POST body, defaulting to `text_text.txt` if not provided.
+- This logic is robust for multi-file workflows and safe editing/publishing.
+
+#### Example Workflow
+1. Enter or pick a filename in the editor UI.
+2. Edit and save: file is written to `public/NewState/` and backup is created if needed.
+3. Refresh: file is copied to `public/` and backup is created if needed.
+4. If a mistake is made, restore from the `.bck` file in either location.
+
+---
 
 
 FlowZero Baseline App Documentation

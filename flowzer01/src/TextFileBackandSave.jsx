@@ -98,7 +98,7 @@ export default function TextFileBackandSave() {
             value={text}
             onChange={e => setText(e.target.value)}
             rows={18}
-            style={{ width: '98vw', maxWidth: '100%', minWidth: 400, marginBottom: 12, fontSize: '1.1em' }}
+            style={{ width: '98vw', maxWidth: '100%', minWidth: 400, marginBottom: 12, fontSize: '0.9em', lineHeight: '1.4' }}
           />
           <button onClick={saveToNewState} style={{ marginRight: 12 }}>Save to NewState</button>
           <button onClick={() => setEditing(false)}>Cancel</button>

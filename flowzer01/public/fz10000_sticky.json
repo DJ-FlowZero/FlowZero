@@ -1,0 +1,14 @@
+{
+  "sticky": [
+    {
+      "stickytype": "Shelf One",
+      "note": "This will be for food items",
+      "links": "Mostly canned beans"
+    },
+    {
+      "stickytype": "Shelf Two",
+      "note": "This will be tools",
+      "links": "Mostly power tools"
+    }
+  ]
+}
