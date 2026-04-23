@@ -59,19 +59,22 @@ FlowZero is a zero-resistance workflow tool for managing and editing user config
 - **User Index:** `fz_profile_index.json` and `fz_user_index.json` provide metadata and lookup for all profiles.
 
 
+
 ## Application UI and Capabilities
 
-The FlowZero App UI is designed as a modular, user-friendly admin workbench for managing all aspects of user configuration profiles (PUCKs), sticky notes, and tokens. The UI is composed of several main components, each accessible via clearly labeled buttons:
+The FlowZero App UI is a modular, user-friendly admin workbench for managing all aspects of user configuration profiles (PUCKs), sticky notes, and tokens. The UI is organized around the core FlowZero loop: **Gestalt → Prune → PUCK → Prime → Prompt → Loop/Live**. Main features and components include:
 
-- **Profile Edit:** Opens the profile (PUCK) editor, allowing you to view and edit the array of fields for any selected profile. You can add, modify, or remove profile entries, and save changes as a new JSON file.
-- **Token Edit:** Opens the token/tag editor for the selected profile. This lets you manage personal tag tokens (PTAGs), including their meanings and usage notes, always associated with a specific profile.
-- **Sticky Edit:** Opens the sticky note editor for the selected profile, enabling you to add, edit, or remove sticky notes (contextual notes, links, or reminders) for each user profile.
-- **Text File Edit:** Provides a general-purpose text file editor for any `.txt` file in the system. Supports backup and safe publishing workflows, with automatic backup creation before overwriting files.
-- **Index Edit:** Allows you to view and edit the profile index (`fz_profile_index.json`). You can update descriptions and extra fields, and safely create new groups/profiles using the [Create Group] button, which ensures unique file numbering and prevents overwrites. The [Publish Group Files] button safely moves staged files to the public directory.
-- **Gestalt Viewer:** A modal window that displays a combined, read-only summary of the selected profile's main data (profile fields, tokens, sticky notes) for quick review.
+- **Profile Edit:** Edit the array of fields for any selected profile (PUCK). Add, modify, or remove entries, and save changes as a new JSON file.
+- **Token Edit:** Manage personal tag tokens (PTAGs) for the selected profile, including meanings and usage notes.
+- **Sticky Edit:** Edit sticky notes (contextual notes, links, reminders) for each user profile.
+- **Text File Edit:** Edit any `.txt` file in the system, with backup and safe publishing workflows (automatic backup before overwrite).
+- **Index Edit:** View and edit the profile index (`fz_profile_index.json`).
+	- **Create Puck:** The [Create Group] button safely creates a new PUCK (profile/group) with unique numbering, ensuring no overwrites. Associated token and sticky files are created together in `public/NewState/`.
+	- **Publish Group Files:** The [Publish Group Files] button moves staged files to the public directory, always preventing overwrites.
+- **Gestalt Viewer (Show Gestalt):** A modal window that displays a combined, read-only summary of the selected profile's main data (profile fields, tokens, sticky notes)—the full context field (Gestalt) before pruning to a PUCK. This supports the workflow: start with Gestalt, prune to relevant context, and package as a PUCK.
 
 ### UI Modes
-The app supports three UI modes—Public, Private, and Secret—selectable from a dropdown. UI elements and messages are shown or hidden based on the current mode, supporting different levels of visibility for sensitive information.
+Three UI modes—Public, Private, and Secret—are selectable from a dropdown. UI elements and messages are shown or hidden based on the current mode, supporting different levels of visibility for sensitive information.
 
 ### Visual Features
 - **Traffic Light Indicator:** Shows the current UI mode (green/yellow/red) in the top right corner.
@@ -83,7 +86,7 @@ The app supports three UI modes—Public, Private, and Secret—selectable from 
 - The UI always reflects the latest state of the profile index and available files after changes.
 
 ### Extensibility
-The UI is modular and ready for further user-facing development, with clear separation between profile, token, sticky, and text file management.
+The UI is modular and ready for further user-facing development, with clear separation between profile, token, sticky, and text file management. The Gestalt/PUCK workflow is now explicit in the UI, supporting advanced context management and portable configuration.
 
 ---
 
