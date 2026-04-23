@@ -18,13 +18,13 @@
     "extra": "Person"
   },
   {
-    "realName": "Osteria",
+    "realName": "CatchAll Basket",
     "profileId": "P9999",
-    "description": "Favorite Italian restaurant.",
+    "description": "Generic Locations",
     "fileName": "fz9999.json",
-    "type": "restaurant",
-    "subtype": "Italian",
-    "extra": "Location"
+    "type": "CatchAll",
+    "subtype": "Generic",
+    "extra": "CatchAll"
   },
   {
     "realName": "Dachau MyPlace",

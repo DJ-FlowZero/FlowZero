@@ -1,19 +1,19 @@
 {
   "sticky": [
     {
-      "stickytype": "Mixed Salad",
-      "note": "Do not order again! It is wilted and not nice",
+      "stickytype": "Osteria",
+      "note": "Do not order salad again! Wilted and not nice",
       "links": "Osteria Elisbethstrasse"
     },
     {
-      "stickytype": "Bruschettta",
-      "note": "Three Pieces, actually very good for sharing",
+      "stickytype": "Tax Advisor",
+      "note": "Good person, highly recommended",
       "links": "Recommend to others"
     },
     {
-      "stickytype": "Beer",
+      "stickytype": "Osteria",
       "note": "No dark beer available any longer, order Franziskaner Dunkel",
-      "links": ""
+      "links": "Osteria Elisbethstrasse"
     }
   ]
 }

@@ -12,7 +12,7 @@
     {
       "label": "Saporta Basement",
       "value": "Toby's old stuff",
-      "flag": "Private",
+      "flag": "private",
       "todo": "Decide if we need to keep it or if we can get rid of it",
       "type": "basement",
       "substype": "appartment",

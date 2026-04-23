@@ -1,3 +1,109 @@
+import React, { useState, useEffect } from "react";
+import { fetchUserIndex } from "./userIndexUtil"
+// Styled button for Gestalt (white on blue)
+function GestaltButton({ children, onClick, ...props }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        padding: '8px 18px',
+        fontSize: '1em',
+        border: '3px solid #15396a',
+        background: '#15396a',
+        color: '#fff',
+        borderRadius: 8,
+        fontWeight: 'bold',
+        boxShadow: '0 2px 8px rgba(21,57,106,0.08)',
+        transition: 'background 0.2s, color 0.2s',
+        cursor: 'pointer',
+        marginLeft: 8
+      }}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}
+
+// Gestalt Viewer Modal
+function GestaltModal({ open, onClose, gestaltText, profileOptions, selectedProfile, setSelectedProfile, onProfileChange }) {
+  if (!open) return null;
+  return (
+    <div style={{
+      position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+      background: 'rgba(0,0,0,0.25)', zIndex: 3000, display: 'flex', alignItems: 'center', justifyContent: 'center'
+    }}>
+      <div style={{
+        background: '#fff',
+        borderRadius: 12,
+        padding: 32,
+        minWidth: 340,
+        width: 'min(90vw, 1100px)',
+        maxWidth: '98vw',
+        boxShadow: '0 4px 32px rgba(0,0,0,0.18)'
+      }}>
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16}}>
+          <span style={{fontWeight: 'bold', fontSize: '1.2em'}}>Gestalt Viewer</span>
+          <button onClick={onClose} style={{fontSize: '1.2em', background: 'none', border: 'none', cursor: 'pointer'}}>✕</button>
+        </div>
+        <div style={{marginBottom: 16}}>
+          <label htmlFor="profileSelect" style={{fontWeight: 'bold', marginRight: 8}}>Profile:</label>
+          <select id="profileSelect" value={selectedProfile} onChange={onProfileChange} style={{fontSize: '1em', padding: '4px 12px'}}>
+            {profileOptions.map(opt => (
+              <option key={opt.fileName} value={opt.fileName}>{opt.realName}</option>
+            ))}
+          </select>
+        </div>
+        <textarea
+          value={gestaltText}
+          readOnly
+          style={{
+            width: '100%',
+            minHeight: 320,
+            fontSize: '0.92em',
+            lineHeight: 1.35,
+            background: '#f4f8ff',
+            color: '#222',
+            border: '1px solid #15396a',
+            borderRadius: 8,
+            padding: 12,
+            resize: 'vertical',
+            fontFamily: 'Menlo, Monaco, Consolas, "Liberation Mono", monospace'
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+// TrafficLightIndicator: shows a colored circle for UI mode
+function TrafficLightIndicator({ mode }) {
+  let emoji = '🟢';
+  let title = 'Public mode';
+  if (mode === 'private') {
+    emoji = '🟡';
+    title = 'Private mode';
+  } else if (mode === 'secret') {
+    emoji = '🔴';
+    title = 'Secret mode';
+  }
+  return (
+    <div title={title} className="fz_traffic_light" style={{
+      fontSize: '2em',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'transparent',
+      border: 'none',
+      boxShadow: 'none',
+      width: 36,
+      height: 36,
+      top: 12,
+      right: 18
+    }}>
+      <span>{emoji}</span>
+    </div>
+  );
+}
 // Reusable button with FZ style
 function FzButton({ children, onClick, style = {}, ...props }) {
   const baseStyle = {
@@ -38,9 +144,10 @@ import IndexEdit from "./IndexEdit";
 // CONFIG / CONSTANTS
 // ===============================
 
-import { useState, useEffect } from "react"
+// ...existing code...
 // fz_UI: renders UI strings from App_UI_ext.json
-function FzUI({ label, as = 'div', style = {}, className = '', fallback = null }) {
+// FzUI now respects the current UI mode (public/private/secret)
+function FzUI({ label, as = 'div', style = {}, className = '', fallback = null, mode = 'public' }) {
   // Enforce fz_ prefix and allow only numbered labels
   const normalizedLabel = label.startsWith('fz_') ? label : `fz_${label}`;
   const [uiObj, setUiObj] = useState(undefined);
@@ -66,6 +173,13 @@ function FzUI({ label, as = 'div', style = {}, className = '', fallback = null }
   if (!uiObj.value || typeof uiObj.value !== 'string' || !uiObj.value.trim()) {
     return fallback || <Tag style={{color:'orange'}}>No value for {normalizedLabel}</Tag>;
   }
+  // Only show if flag is public, or matches/exceeds the current mode
+  // Hierarchy: public < private < secret
+  const flag = (uiObj.flag || '').toLowerCase();
+  const modeRank = { public: 1, private: 2, secret: 3 };
+  const flagRank = modeRank[flag] || 1;
+  const currentModeRank = modeRank[mode] || 1;
+  if (flagRank > currentModeRank) return null;
   return <Tag style={style} className={className}>{uiObj.value}</Tag>;
 }
 
@@ -94,16 +208,64 @@ function FZ_ConfigLoadFault(FZ_cfg, FZ_key, FZ_default_text) {
 
 
 function App() {
+    // Gestalt state
+    const [showGestalt, setShowGestalt] = useState(false);
+    const [gestaltText, setGestaltText] = useState('');
+    const [profileOptions, setProfileOptions] = useState([]);
+    const [selectedProfile, setSelectedProfile] = useState('');
+
+    // Load profile options for Gestalt
     useEffect(() => {
-      fetch("/config.json")
-        .then((res) => res.json())
-        .then((data) => {
-          FZ_set_cfg_obj(data)
-        })
-        .catch(() => {
-          console.warn("CONFIG LOAD FAILED")
-        })
-    }, [])
+      fetchUserIndex().then(data => {
+        setProfileOptions(data);
+        if (data.length > 0) setSelectedProfile(data[0].fileName);
+      }).catch(() => setProfileOptions([]));
+    }, []);
+
+    // Load gestalt when profile changes
+    useEffect(() => {
+      if (!selectedProfile) return;
+      // Fetch profile, token, sticky
+      const base = selectedProfile.replace('.json', '');
+      Promise.all([
+        fetch(`/${base}.json`).then(r => r.json()).catch(() => null),
+        fetch(`/${base}_token.json`).then(r => r.json()).catch(() => null),
+        fetch(`/${base}_sticky.json`).then(r => r.json()).catch(() => null)
+      ]).then(([profile, token, sticky]) => {
+        let gestalt = '';
+        if (profile && Array.isArray(profile.profile)) {
+          gestalt += 'PROFILE\n';
+          for (const item of profile.profile) {
+            gestalt += `- ${item.label || ''}: ${item.value || ''}\n`;
+          }
+          gestalt += '\n';
+        }
+        if (token && Array.isArray(token.FZ_Tokens)) {
+          gestalt += 'TOKENS\n';
+          for (const t of token.FZ_Tokens) {
+            gestalt += `- ${t.Token || t.label || ''}: ${t.Meaning || t.value || ''}\n`;
+          }
+          gestalt += '\n';
+        }
+        if (sticky && Array.isArray(sticky.sticky)) {
+          gestalt += 'STICKY\n';
+          for (const s of sticky.sticky) {
+            gestalt += `- ${s.stickytype || ''}: ${s.note || ''}\n`;
+          }
+        }
+        setGestaltText(gestalt.trim());
+      });
+    }, [selectedProfile, showGestalt]);
+  useEffect(() => {
+    fetch("/config.json")
+      .then((res) => res.json())
+      .then((data) => {
+        FZ_set_cfg_obj(data)
+      })
+      .catch(() => {
+        console.warn("CONFIG LOAD FAILED")
+      })
+  }, [])
   const [FZ_cfg_obj, FZ_set_cfg_obj] = useState({})
   const [FZ_profile_ary, FZ_set_profile_ary] = useState([])
   const [showJedit, setShowJedit] = useState(false)
@@ -111,6 +273,7 @@ function App() {
   const [showStickyEdit, setShowStickyEdit] = useState(false)
   const [showTextFileBackandSave, setShowTextFileBackandSave] = useState(false)
   const [showIndexEdit, setShowIndexEdit] = useState(false)
+  const [uiMode, setUiMode] = useState('public');
 
   // Restore the original title logic
   const FZ_title = FZ_ConfigLoadFault(
@@ -120,10 +283,23 @@ function App() {
   );
 
   return (
-    <div>
+    <div style={{position: 'relative', minHeight: 80}}>
+      {/* Traffic light indicator fixed in top right of viewport */}
+      <div style={{position: 'fixed', top: 16, right: 24, zIndex: 2000}}>
+        <TrafficLightIndicator mode={uiMode} />
+      </div>
       {/* Header/title section */}
       <div className="fz_container">
         <h1>{FZ_title}</h1>
+      </div>
+      {/* UI Mode Selector */}
+      <div style={{marginTop: 24, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 12}}>
+        <span style={{fontWeight: 'bold'}}>UI Mode:</span>
+        <select value={uiMode} onChange={e => setUiMode(e.target.value)} style={{fontSize: '1em', padding: '4px 12px'}}>
+          <option value="public">Public</option>
+          <option value="private">Private</option>
+          <option value="secret">Secret</option>
+        </select>
       </div>
       <div style={{marginTop: 40, display: 'flex', gap: 16, flexWrap: 'wrap'}}>
         {!showJedit && (
@@ -141,7 +317,17 @@ function App() {
         {!showIndexEdit && (
           <FzButton onClick={() => setShowIndexEdit(true)}>Index Edit</FzButton>
         )}
+        <GestaltButton onClick={() => setShowGestalt(true)}>Show Gestalt</GestaltButton>
       </div>
+      <GestaltModal
+        open={showGestalt}
+        onClose={() => setShowGestalt(false)}
+        gestaltText={gestaltText}
+        profileOptions={profileOptions}
+        selectedProfile={selectedProfile}
+        setSelectedProfile={setSelectedProfile}
+        onProfileChange={e => setSelectedProfile(e.target.value)}
+      />
       {/* Toggleable IndexEdit (now below buttons) */}
       {showIndexEdit && (
         <div style={{marginTop: 40, marginBottom: 32}}>
@@ -189,10 +375,16 @@ function App() {
           <TextFileBackandSave />
         </div>
       )}
+      {/* Demo: Show all three messages for current mode */}
+      <div style={{marginTop: 32, textAlign: 'center'}}>
+        <FzUI label="fz_05_public_message" as="div" mode={uiMode} style={{fontSize: '1.1em', margin: 8}} />
+        <FzUI label="fz_04_private_message" as="div" mode={uiMode} style={{fontSize: '1.1em', margin: 8}} />
+        <FzUI label="fz_03_secret_message" as="div" mode={uiMode} style={{fontSize: '1.1em', margin: 8}} />
+      </div>
       {/* Footer using FzUI for FlowZero Systematik headline */}
-      <FzUI label="fz_01_footer_headline" as="footer" style={{marginTop: 48, textAlign: 'center', fontWeight: 'bold', fontSize: '1.1em', color: '#444'}} />
+      <FzUI label="fz_01_footer_headline" as="footer" style={{marginTop: 48, textAlign: 'center', fontWeight: 'bold', fontSize: '1.1em', color: '#444'}} mode={uiMode} />
       <footer style={{marginTop: 4, textAlign: 'center', fontSize: '1em', color: '#888'}}>
-        <FzUI label="fz_02_footer_date" as="span" style={{marginRight: 8}} />
+        <FzUI label="fz_02_footer_date" as="span" style={{marginRight: 8}} mode={uiMode} />
         <FzDisplayDate style={{fontWeight: 'bold'}} />
       </footer>
     </div>

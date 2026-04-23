@@ -12,7 +12,7 @@
     {
       "label": "Dachau",
       "value": "Storage Rooms",
-      "flag": "publis",
+      "flag": "public",
       "type": "Location",
       "substype": "Guitar Cases",
       "realname": "Govan Case"

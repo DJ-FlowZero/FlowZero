@@ -9,13 +9,13 @@
     {
       "label": "User Name",
       "value": "Choirshark",
-      "flag": "Public",
+      "flag": "public",
       "todo": "make sure to use this username on all platforms"
     },
     {
       "label": "Hobby",
       "value": "Coding in React",
-      "flag": "Private",
+      "flag": "private",
       "todo": "do not forget to back up and amend the Appdocumentation"
     },
     {
@@ -45,7 +45,7 @@
     {
       "label": "Guitar",
       "value": "Gibson L5 Candy Apple Red",
-      "flag": "Secret",
+      "flag": "secret",
       "todo": "do not sell, make sure the strings are fresh.  "
     },
     {

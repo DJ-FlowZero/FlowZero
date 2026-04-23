@@ -4,19 +4,43 @@
       "label": "fz_00_blank",
       "value": "",
       "flag": "",
-      "notes": "Blank template object."
+      "notes": "Blank template object.",
+      "visible": "secret"
     },
     {
       "label": "fz_01_footer_headline",
       "value": "FlowZero Systematik",
       "flag": "visible",
-      "notes": "Footer headline for the app UI."
+      "notes": "Footer headline for the app UI.",
+      "visible": "secret"
     },
     {
       "label": "fz_02_footer_date",
       "value": "Current Date:",
       "flag": "visible",
-      "notes": "Footer date for the app UI."
+      "notes": "Footer date for the app UI.",
+      "visible": "secret"
+    },
+    {
+      "label": "fz_03_secret_message",
+      "value": "Secret messages are visible.",
+      "flag": "secret",
+      "notes": "A message only shown in secret mode.",
+      "visible": "secret"
+    },
+    {
+      "label": "fz_04_private_message",
+      "value": "Private messages are visible.",
+      "flag": "private",
+      "notes": "A message only shown in private or secret mode.",
+      "visible": "private"
+    },
+    {
+      "label": "fz_05_public_message",
+      "value": "Public messages are visible.",
+      "flag": "public",
+      "notes": "A message shown in public, private, or secret mode.",
+      "visible": "public"
     }
   ]
 }

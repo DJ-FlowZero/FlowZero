@@ -9,19 +9,19 @@
     {
       "label": "User Name",
       "value": "Marie",
-      "flag": "Secret",
+      "flag": "secret",
       "todo": ""
     },
     {
       "label": "Hobby",
       "value": "Cooking",
-      "flag": "Public",
+      "flag": "public",
       "todo": ""
     },
     {
       "label": "Hobby",
       "value": "Netflix and Chill",
-      "flag": "Private",
+      "flag": "private",
       "todo": ""
     },
     {
