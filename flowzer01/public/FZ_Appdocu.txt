@@ -2,8 +2,12 @@
 
 ## Profile/Group Creation, Staging, and Publishing (2026-04)
 
-### New Features & Learnings (2026-04-22)
-- The Index Edit window now acts as a directory of all groups (profiles) and allows safe creation and publishing of new groups.
+
+### New Features & Learnings (2026-04-23)
+- The Index Edit window now guarantees that new group/profile files will never overwrite existing files:
+	- When you click [Create Group], the app calls a backend API to list all existing `fzXXXX.json` files in the `public/` folder and picks the next available number, even if files were added outside the UI.
+	- This ensures that all new group/profile, token, and sticky files are always created with a unique, incremental number.
+	- The [Publish Group Files] button is also safe and will never overwrite an existing group file.
 - The Add Entry and Download buttons have been removed to prevent accidental or incomplete additions.
 - Only the [Create Group] and [Publish Group Files] buttons can add new groups, ensuring all associated files (profile, token, sticky) are created together.
 - The profileId and fileName fields in the directory are now read-only to protect directory integrity; only description and extra fields are editable.
@@ -12,11 +16,13 @@
 - UI improvements: clearer modal/box titles, increased spacing, and consistent button styling for a more user-friendly admin workbench.
 - The workflow is now robust against accidental data loss or corruption and is ready for further user-facing UI development.
 
-#### Example Group Creation & Publishing Workflow
-1. Click [Create Group] in Index Edit. Three new files are created in `public/NewState/` with the next available number.
-2. Edit the new group/profile as needed.
-3. Click [Publish Group Files] to copy the staged files to `public/`.
-4. Download and/or publish the updated `fz_profile_index.json` as needed.
+
+#### Example Group Creation & Publishing Workflow (Safe Numbering)
+1. Click [Create Group] in Index Edit. The app checks all existing group/profile files in `public/` and always picks the next available number (e.g., `fz0003.json` if `fz0002.json` exists, even if files were added manually).
+2. Three new files are created in `public/NewState/` with this unique number: profile, token, and sticky.
+3. Edit the new group/profile as needed.
+4. Click [Publish Group Files] to copy the staged files to `public/` (no overwrite risk).
+5. Download and/or publish the updated `fz_profile_index.json` as needed.
 
 ---
 
