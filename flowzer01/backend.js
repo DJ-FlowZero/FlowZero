@@ -1,4 +1,3 @@
-/* eslint-env node */
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
@@ -7,39 +6,42 @@ const PORT = 3001;
 
 app.use(express.json());
 
+// Endpoint to list all fzxxxx.json files in public and return their numbers
+app.get('/api/list-fz-files', (req, res) => {
+  fs.readdir(PUBLIC_DIR, (err, files) => {
+    if (err) return res.status(500).json({ status: 'error', message: 'Failed to read public dir' });
+    const nums = files
+      .map(fn => {
+        const m = fn.match(/^fz(\d{4,})\.json$/);
+        return m ? parseInt(m[1], 10) : null;
+      })
+      .filter(n => n !== null);
+    res.json({ status: 'ok', numbers: nums });
+  });
+});
+
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const NEWSTATE_DIR = path.join(PUBLIC_DIR, 'NewState');
 const FILENAME = 'text_text.txt';
 
-// Endpoint to save (stage) a file to NewState with timestamp and custom filename
+// Endpoint to save (stage) the file to NewState with timestamp
 app.post('/api/save-text', (req, res) => {
   const now = new Date();
   const timestamp = now.toISOString().replace('T', ' ').substring(0, 19);
   const content = req.body.content || '';
-  let filename = req.body.filename;
-  // Basic validation: only allow .json or .txt files, no path traversal
-  if (!filename || !/^[\w\d_-]+(\.json|\.txt)$/.test(filename)) {
-    return res.status(400).json({ status: 'error', message: 'Invalid filename.' });
-  }
-  const filePath = path.join(NEWSTATE_DIR, filename);
-  fs.writeFileSync(filePath, content, 'utf8');
-  res.json({ status: 'ok', message: `File ${filename} saved to NewState`, timestamp });
+  fs.writeFileSync(path.join(NEWSTATE_DIR, FILENAME), content, 'utf8');
+  res.json({ status: 'ok', message: 'File saved to NewState', timestamp });
 });
 
-// Endpoint to refresh (publish) a file from NewState to public
+// Endpoint to refresh (publish) the file from NewState to public
 app.post('/api/refresh-text', (req, res) => {
-  let filename = req.body.filename;
-  // Basic validation: only allow .json or .txt files, no path traversal
-  if (!filename || !/^[\w\d_-]+(\.json|\.txt)$/.test(filename)) {
-    return res.status(400).json({ status: 'error', message: 'Invalid filename.' });
-  }
-  const src = path.join(NEWSTATE_DIR, filename);
-  const dest = path.join(PUBLIC_DIR, filename);
+  const src = path.join(NEWSTATE_DIR, FILENAME);
+  const dest = path.join(PUBLIC_DIR, FILENAME);
   if (!fs.existsSync(src)) {
     return res.status(404).json({ status: 'error', message: 'No staged file found.' });
   }
   fs.copyFileSync(src, dest);
-  res.json({ status: 'ok', message: `File ${filename} refreshed to public.` });
+  res.json({ status: 'ok', message: 'File refreshed to public.' });
 });
 
 app.listen(PORT, () => {

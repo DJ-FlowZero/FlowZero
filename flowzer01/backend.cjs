@@ -99,3 +99,28 @@ app.post('/api/refresh-text', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);
 });
+// Endpoint to save (stage and publish) fz_profile_index.json with backup
+app.post('/api/save-profile-index', (req, res) => {
+  try {
+    const { content } = req.body;
+    if (!content) {
+      return res.status(400).json({ status: 'error', message: 'Missing content.' });
+    }
+    const indexPath = path.join(PUBLIC_DIR, 'fz_profile_index.json');
+    const backupPath = indexPath + '.bck';
+    // Backup current index if exists
+    if (fs.existsSync(indexPath)) {
+      try {
+        fs.copyFileSync(indexPath, backupPath);
+        console.log('[Profile Index] Backup created/updated:', backupPath);
+      } catch (err) {
+        console.error('[Profile Index] Backup failed:', err);
+      }
+    }
+    fs.writeFileSync(indexPath, content, 'utf8');
+    res.json({ status: 'ok', message: 'Profile index saved and backup created.' });
+  } catch (err) {
+    console.error('[Profile Index] Error:', err);
+    res.status(500).json({ status: 'error', message: 'Failed to save profile index.' });
+  }
+});

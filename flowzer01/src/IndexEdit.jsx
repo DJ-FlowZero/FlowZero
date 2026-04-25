@@ -53,16 +53,34 @@ export default function IndexEdit() {
 
 
 
-  // Find next available profile number (e.g., 0004 if fz0003.json exists)
-  const getNextProfileNum = () => {
-    const nums = indexData
+
+  // Find next available profile number by checking backend for existing files
+  const getNextProfileNumFromBackend = async () => {
+    // Gather all numbers in use (existing and unsaved)
+    let nums = indexData
       .map(e => e.fileName)
       .filter(Boolean)
       .map(fn => {
-        const m = fn.match(/fz(\d{4})\.json/);
+        const m = fn.match(/fz(\d{4,})\.json/);
         return m ? parseInt(m[1], 10) : null;
       })
       .filter(n => n !== null);
+    // Fetch from backend
+    try {
+      const res = await fetch('/api/list-fz-files');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data.numbers)) {
+          nums = nums.concat(data.numbers);
+        }
+      }
+    } catch { /* intentionally left empty: backend may not be available */ }
+    // Only add lastCreatedNum if not already present
+    if (lastCreatedNum) {
+      const n = parseInt(lastCreatedNum, 10);
+      if (!isNaN(n) && !nums.includes(n)) nums.push(n);
+    }
+    // Always increment from the highest
     return (nums.length ? Math.max(...nums) + 1 : 0).toString().padStart(4, '0');
   };
 
@@ -78,7 +96,8 @@ export default function IndexEdit() {
   };
   const [lastCreatedNum, setLastCreatedNum] = useState(null);
   const handleCreateGroup = async () => {
-    const nextNum = getNextProfileNum();
+    setSaveStatus("Checking for next available group number...");
+    const nextNum = await getNextProfileNumFromBackend();
     const profileId = `P${nextNum}`;
     const fileName = `fz${nextNum}.json`;
     const tokenFile = `fz${nextNum}_token.json`;
@@ -118,7 +137,17 @@ export default function IndexEdit() {
     setSaveStatus("Publishing group files...");
     try {
       await publishGroupFiles(lastCreatedNum);
-      setSaveStatus("Group files published to public.");
+      // Save updated fz_profile_index.json to backend (with backup)
+      const res = await fetch('/api/save-profile-index', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: JSON.stringify(indexData, null, 2) })
+      });
+      if (res.ok) {
+        setSaveStatus("Group files and profile index published to public.");
+      } else {
+        setSaveStatus("Group files published, but failed to update profile index.");
+      }
     } catch {
       setSaveStatus("Error publishing group files");
     }
@@ -138,13 +167,21 @@ export default function IndexEdit() {
         [Publish Group Files]
       </button>
       <form onSubmit={e => e.preventDefault()}>
+        {/* Column Headings */}
+        <div style={{ display: "flex", gap: 8, fontWeight: 'normal', fontSize: '0.93em', color: '#444', marginBottom: 4 }}>
+          <span style={{ width: 80 }}>Profile ID</span>
+          <span style={{ width: 120 }}>File Name</span>
+          <span style={{ width: 180 }}>Real Name</span>
+          <span style={{ width: 200 }}>Description</span>
+          <span style={{ width: 120 }}>Tag</span>
+        </div>
         {indexData.map((entry, idx) => (
           <div key={idx} style={{ marginBottom: 10, display: "flex", gap: 8 }}>
             <input
               type="text"
               value={entry.profileId || ""}
               readOnly
-              style={{ width: 120, background: '#f5f5f5', color: '#888' }}
+              style={{ width: 80, background: '#f5f5f5', color: '#888' }}
               placeholder="profileId"
               title="Profile ID is read-only."
             />
@@ -152,9 +189,17 @@ export default function IndexEdit() {
               type="text"
               value={entry.fileName || ""}
               readOnly
-              style={{ width: 180, background: '#f5f5f5', color: '#888' }}
+              style={{ width: 120, background: '#f5f5f5', color: '#888' }}
               placeholder="fileName"
               title="File name is read-only."
+            />
+            <input
+              type="text"
+              value={entry.realName || ""}
+              onChange={e => handleFieldChange(idx, "realName", e.target.value)}
+              style={{ width: 180 }}
+              placeholder="realName"
+              title="Display name for Gestalt and selectors."
             />
             <input
               type="text"
@@ -165,10 +210,10 @@ export default function IndexEdit() {
             />
             <input
               type="text"
-              value={entry.extra || ""}
-              onChange={e => handleFieldChange(idx, "extra", e.target.value)}
+              value={entry.tag || ""}
+              onChange={e => handleFieldChange(idx, "tag", e.target.value)}
               style={{ width: 120 }}
-              placeholder="extra"
+              placeholder="tag"
             />
           </div>
         ))}

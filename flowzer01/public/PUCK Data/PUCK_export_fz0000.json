@@ -1,0 +1,49 @@
+{
+  "profile": [
+    {
+      "label": "Genghis Khan",
+      "value": "Chris Eitsch ",
+      "flag": "secret",
+      "todo": "never reveal real last name"
+    },
+    {
+      "label": "Hobby",
+      "value": "Playing Guitar in the Silocats",
+      "flag": "Public",
+      "todo": "Focus the next practice on the set for May"
+    },
+    {
+      "label": "Guitar",
+      "value": "Gibson L5 Candy Apple Red",
+      "flag": "secret",
+      "todo": "do not sell, make sure the strings are fresh.  "
+    }
+  ],
+  "FZ_Tokens": [
+    {
+      "Token": "[Silocats]",
+      "Meaning": "SiloCats Band, practicing at the [Kulturprojekt], Allach",
+      "Usage": "Need to go to Silocats practice"
+    },
+    {
+      "label": "[new_label]",
+      "value": "",
+      "flag": "",
+      "Token": "[Kulturprojekt]",
+      "Meaning": "The Collection of Containers in Allach, converted to Band Practice Rooms",
+      "Usage": "I left Mitch at the Kulturprojekt"
+    },
+    {
+      "Token": "[JazzBox]",
+      "Meaning": "Gibson L5 Cherry Red",
+      "Usage": "Main Semi-Acoustic, not for live gigs, too valuable"
+    }
+  ],
+  "sticky": [
+    {
+      "stickytype": "Behavior",
+      "note": "The [JazzBox] can come to gigs in safe places, where the stage is not accessible by the public",
+      "links": "JazzBox, Gibson L5"
+    }
+  ]
+}

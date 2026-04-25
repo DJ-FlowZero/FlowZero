@@ -12,6 +12,7 @@ export default function TokenEdit() {
   const [userIndex, setUserIndex] = useState([]);
   const [profileLabels, setProfileLabels] = useState([]); // [{label, idx, tokenFile}]
   const [loadingIndex, setLoadingIndex] = useState(true);
+  const [visibility, setVisibility] = useState("secret"); // visibility filter
 
   // Load user index on mount
   useEffect(() => {
@@ -148,17 +149,37 @@ export default function TokenEdit() {
 
   const tokenKey = Object.keys(jsonData)[0];
   const tokenArr = jsonData[tokenKey];
+  // Filter records based on visibility
+  const allowedFlags = visibility === "secret" ? ["secret", "private", "public"] : visibility === "private" ? ["private", "public"] : ["public"];
+  const filteredTokenArr = tokenArr.filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
 
   return (
     <div style={{ border: "1px solid #ccc", padding: 16, borderRadius: 8, maxWidth: 700 }}>
       {/* No manual file picker in TokenEdit; tokens are always associated with a profile */}
+      <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 16 }}>
+        <label style={{ marginLeft: 0 }}>
+          Visibility:
+          <select value={visibility} onChange={e => setVisibility(e.target.value)} style={{ marginLeft: 8 }}>
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+            <option value="secret">Secret</option>
+          </select>
+        </label>
+      </div>
       <form
         onSubmit={(e) => {
           e.preventDefault();
           handleSaveAs();
         }}
       >
-        {tokenArr && tokenArr.map((entry, idx) => (
+        {/* Header Row */}
+        <div style={{ display: "flex", gap: 8, fontWeight: "bold", marginBottom: 4 }}>
+          <span style={{ width: 120 }}>Token</span>
+          <span style={{ width: 180 }}>Meaning</span>
+          <span style={{ width: 220 }}>Usage</span>
+          <span style={{ width: 90 }}>Flag</span>
+        </div>
+        {filteredTokenArr.map((entry, idx) => (
           <div key={idx} style={{ marginBottom: 10, display: "flex", gap: 8 }}>
             <input
               type="text"
@@ -181,6 +202,15 @@ export default function TokenEdit() {
               style={{ width: 220 }}
               placeholder="Usage"
             />
+            <select
+              value={entry.flag || "secret"}
+              onChange={e => handleFieldChange(idx, "flag", e.target.value)}
+              style={{ width: 90 }}
+            >
+              <option value="public">public</option>
+              <option value="private">private</option>
+              <option value="secret">secret</option>
+            </select>
           </div>
         ))}
         <button type="button" onClick={handleAddToken} style={{ marginTop: 8, marginRight: 8 }}>

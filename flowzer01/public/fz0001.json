@@ -41,6 +41,13 @@
       "value": "Mahjong",
       "flag": "public",
       "todo": ""
+    },
+    {
+      "label": "Friend",
+      "value": "Theresa",
+      "flag": "private",
+      "todo": "reach out to Dan",
+      "comment": "Dan, the rocket scientist"
     }
   ]
 }

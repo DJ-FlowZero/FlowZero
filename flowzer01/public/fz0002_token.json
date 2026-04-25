@@ -3,22 +3,25 @@
     {
       "Token": "[Skinny Thing]",
       "Meaning": "Hallway Shelf by the door, with 4 drawers, holding sun glasses",
-      "Usage": "Remember to put the glasses back into the Skinny Thing"
+      "Usage": "Remember to put the glasses back into the Skinny Thing",
+      "flag": "secret"
     },
     {
       "Token": "[Mitch]",
       "Meaning": "Fender Telecaster Honduras Mahagony, stored in office, hanging by the bed",
-      "Usage": "Need to take Mitch to the Silocats practice"
+      "Usage": "Need to take Mitch to the Silocats practice",
+      "flag": "secret"
     },
     {
       "Token": "[Silocats]",
       "Meaning": "SiloCats Band, practicing at the [Kulturprojekt], Allach",
-      "Usage": "Need to go to Silocats practice"
+      "Usage": "Need to go to Silocats practice",
+      "flag": "secret"
     },
     {
       "label": "[new_label]",
       "value": "",
-      "flag": "",
+      "flag": "secret",
       "Token": "[Kulturprojekt]",
       "Meaning": "The Collection of Containers in Allach, converted to Band Practice Rooms",
       "Usage": "I left Mitch at the Kulturprojekt"
@@ -26,7 +29,7 @@
     {
       "label": "[new_label]",
       "value": "",
-      "flag": "",
+      "flag": "secret",
       "Token": "[Ondej]",
       "Meaning": "Ondrej Zadak, Drummer of the [Silocats], married to Luciana, son called Luka",
       "Usage": "Need to ask Ondrej about joining for concert"
@@ -34,22 +37,26 @@
     {
       "Token": "[Kermit]",
       "Meaning": "Toyota Corolla, E10 Gasoline, 5-seater",
-      "Usage": "Need to fill Kermit"
+      "Usage": "Need to fill Kermit",
+      "flag": "secret"
     },
     {
       "Token": "[Allach]",
       "Meaning": "Location of [Kulturprojekt]], North-West Munich",
-      "Usage": "I left [Mitch] in [Allach]"
+      "Usage": "I left [Mitch] in [Allach]",
+      "flag": "secret"
     },
     {
       "Token": "[JazzBox]",
       "Meaning": "Gibson L5 Cherry Red",
-      "Usage": "Main Semi-Acoustic, not for live gigs, too valuable"
+      "Usage": "Main Semi-Acoustic, not for live gigs, too valuable",
+      "flag": "secret"
     },
     {
       "Token": "[new_token]",
       "Meaning": "",
-      "Usage": ""
+      "Usage": "",
+      "flag": "secret"
     }
   ]
 }

@@ -1,0 +1,7 @@
+{
+  "FZ_Tokens": [
+    { "Token": "KermitDealer", "Meaning": "Authorized Toyota service center for Kermit", "Usage": "Use for maintenance appointments", "flag": "secret" },
+    { "Token": "KermitTrips", "Meaning": "Family trips taken with Kermit", "Usage": "Tag for trip logs", "flag": "secret" },
+    { "Token": "KermitHybrid", "Meaning": "Hybrid system status or notes", "Usage": "Tag for hybrid-related info", "flag": "secret" }
+  ]
+}

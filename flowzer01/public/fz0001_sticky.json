@@ -3,17 +3,20 @@
     {
       "stickytype": "Cooking",
       "note": "3 course meals preferred when cooking for guests",
-      "links": ""
+      "links": "",
+      "flag": "secret"
     },
     {
       "stickytype": "Medication",
       "note": "[Allergy] (for [Pia], avoid [Livocab], use [Vividrin], reason: better tolerance)",
-      "links": "Dr. Schwinn"
+      "links": "Dr. Schwinn",
+      "flag": "secret"
     },
     {
       "stickytype": "",
       "note": "",
-      "links": ""
+      "links": "",
+      "flag": "secret"
     }
   ]
 }

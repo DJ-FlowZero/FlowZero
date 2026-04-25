@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { fetchUserIndex } from "./userIndexUtil";
 
@@ -7,8 +8,8 @@ export default function StickyEdit() {
   const [error, setError] = useState("");
   const [userIndex, setUserIndex] = useState([]);
   const [profileLabels, setProfileLabels] = useState([]); // [{label, idx, stickyFile}]
-    // Removed unused variable: selectedProfile
   const [loadingIndex, setLoadingIndex] = useState(true);
+  const [visibility, setVisibility] = useState("secret"); // visibility filter
 
   // Handle file input for loading sticky JSON
   const handleOpen = async (e) => {
@@ -25,6 +26,7 @@ export default function StickyEdit() {
       setJsonData(null);
     }
   };
+
   // Load user index on mount
   useEffect(() => {
     fetchUserIndex()
@@ -74,7 +76,6 @@ export default function StickyEdit() {
     const idx = e.target.value;
     if (idx === "") return;
     const profile = userIndex[idx];
-      // Removed unused setSelectedProfile
     const stickyFile = profile.fileName.replace(/\.json$/, "_sticky.json");
     setFilename(stickyFile);
     try {
@@ -152,6 +153,9 @@ export default function StickyEdit() {
 
   const stickyKey = Object.keys(jsonData)[0];
   const stickyArr = jsonData[stickyKey];
+  // Filter records based on visibility
+  const allowedFlags = visibility === "secret" ? ["secret", "private", "public"] : visibility === "private" ? ["private", "public"] : ["public"];
+  const filteredStickyArr = stickyArr.filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
 
   return (
     <div style={{ border: "1px solid #ccc", padding: 16, borderRadius: 8, maxWidth: 700 }}>
@@ -160,6 +164,14 @@ export default function StickyEdit() {
           <input type="file" accept=".json,application/json" onChange={handleOpen} style={{ marginRight: 8 }} />
           <span style={{ color: '#555', fontSize: '0.97em', fontStyle: 'italic' }}>{filename}</span>
         </label>
+        <label style={{ marginLeft: 0 }}>
+          Visibility:
+          <select value={visibility} onChange={e => setVisibility(e.target.value)} style={{ marginLeft: 8 }}>
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+            <option value="secret">Secret</option>
+          </select>
+        </label>
       </div>
       <form
         onSubmit={(e) => {
@@ -167,7 +179,14 @@ export default function StickyEdit() {
           handleSaveAs();
         }}
       >
-        {stickyArr.map((entry, idx) => (
+        {/* Header Row */}
+        <div style={{ display: "flex", gap: 8, fontWeight: "bold", marginBottom: 4 }}>
+          <span style={{ width: 120 }}>Stickytype</span>
+          <span style={{ width: 300 }}>Note</span>
+          <span style={{ width: 200 }}>Links</span>
+          <span style={{ width: 90 }}>Flag</span>
+        </div>
+        {filteredStickyArr.map((entry, idx) => (
           <div key={idx} style={{ marginBottom: 10, display: "flex", gap: 8 }}>
             <input
               type="text"
@@ -190,6 +209,15 @@ export default function StickyEdit() {
               style={{ width: 200 }}
               placeholder="Links"
             />
+            <select
+              value={entry.flag || "secret"}
+              onChange={e => handleFieldChange(idx, "flag", e.target.value)}
+              style={{ width: 90 }}
+            >
+              <option value="public">public</option>
+              <option value="private">private</option>
+              <option value="secret">secret</option>
+            </select>
           </div>
         ))}
         <button type="button" onClick={handleAddSticky} style={{ marginTop: 8, marginRight: 8 }}>

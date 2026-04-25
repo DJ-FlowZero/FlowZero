@@ -45,6 +45,46 @@
 
 
 FlowZero Baseline App Documentation
+
+---
+
+# Application Startup & Configuration (2026-04)
+
+## Quick Start
+
+1. **Install dependencies:**
+	 - Open a terminal in the project root and run: `npm install`
+2. **Start the app (backend + frontend):**
+	 - Run: `npm run dev`
+	 - This launches both the backend (Express, on http://localhost:3001) and the frontend (Vite/React, on http://localhost:5173) together.
+	 - The app will be available at [http://localhost:5173/](http://localhost:5173/)
+
+## Scripts (package.json)
+
+```
+"dev:backend": "nodemon backend.cjs"      # Starts the backend API server
+"dev:frontend": "vite"                     # Starts the Vite React frontend
+"dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""  # Runs both together
+```
+
+## Configuration
+
+- **Backend:**
+	- Main file: `backend.cjs` (Express server, API endpoints for profile, sticky, and token management)
+	- Port: 3001
+	- Serves and manages files in `public/` and `public/NewState/`
+- **Frontend:**
+	- React app (src/), served by Vite
+	- Port: 5173
+	- Proxy: API requests to `/api` are proxied to the backend (see `vite.config.js`)
+
+## Customization
+
+- To change ports, edit the `PORT` in `backend.cjs` and the `server` section in `vite.config.js`.
+- To add new API endpoints, edit `backend.cjs`.
+- To add new UI features, edit React components in `src/`.
+
+---
 ==================================
 
 # FlowZero Application Documentation (FZ_Appdocu)
@@ -73,8 +113,20 @@ The FlowZero App UI is a modular, user-friendly admin workbench for managing all
 	- **Publish Group Files:** The [Publish Group Files] button moves staged files to the public directory, always preventing overwrites.
 - **Gestalt Viewer (Show Gestalt):** A modal window that displays a combined, read-only summary of the selected profile's main data (profile fields, tokens, sticky notes)—the full context field (Gestalt) before pruning to a PUCK. This supports the workflow: start with Gestalt, prune to relevant context, and package as a PUCK.
 
-### UI Modes
-Three UI modes—Public, Private, and Secret—are selectable from a dropdown. UI elements and messages are shown or hidden based on the current mode, supporting different levels of visibility for sensitive information.
+
+### Visibility Filtering (2026-04-25)
+All Gestalt and PUCK creation workflows now support robust visibility filtering:
+- **Visibility Selector:** In both the Gestalt Viewer and PUCK Creator, a dropdown lets you select between Secret (all data), Private (private+public), and Public (public only).
+- **Filtered Views:** The Gestalt Viewer displays only the profile, token, and sticky records matching the selected visibility. The PUCK Creator allows you to select and export only the filtered set.
+- **Export Safety:** When creating a PUCK, only the visible (filtered) profile, token, and sticky items are included in the export, ensuring that sensitive data is never accidentally included.
+- **Consistent Logic:** The filtering logic is applied identically across all relevant UI components, and the codebase is fully linted and integrity-checked for reliability.
+
+This enables a workflow where a user can:
+1. View the full Gestalt (all context) filtered by visibility.
+2. Prune and select only the desired items for a PUCK export.
+3. Export a PUCK JSON for use as an AI prompt or calibration set, with confidence that only the intended data is included.
+
+---
 
 ### Visual Features
 - **Traffic Light Indicator:** Shows the current UI mode (green/yellow/red) in the top right corner.

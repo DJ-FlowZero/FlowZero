@@ -9,6 +9,7 @@ export default function Jedit() {
   const [userIndex, setUserIndex] = useState([]);
   const [loadingIndex, setLoadingIndex] = useState(true);
   const [saveStatus] = useState("");
+  const [visibility, setVisibility] = useState("secret"); // visibility filter
 
   // Load user index on mount
   useEffect(() => {
@@ -141,6 +142,9 @@ export default function Jedit() {
 
   const profileKey = Object.keys(jsonData)[0];
   const profileArr = jsonData[profileKey];
+  // Filter records based on visibility
+  const allowedFlags = visibility === "secret" ? ["secret", "private", "public"] : visibility === "private" ? ["private", "public"] : ["public"];
+  const filteredProfileArr = profileArr.filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
 
   return (
     <div style={{ border: "1px solid #ccc", padding: 16, borderRadius: 8, maxWidth: 700 }}>
@@ -150,6 +154,14 @@ export default function Jedit() {
           <input type="file" accept=".json,application/json" onChange={handleOpen} style={{ marginRight: 8 }} />
           <span style={{ color: '#555', fontSize: '0.97em', fontStyle: 'italic' }}>{filename}</span>
         </label>
+        <label style={{ marginLeft: 16 }}>
+          Visibility:
+          <select value={visibility} onChange={e => setVisibility(e.target.value)} style={{ marginLeft: 8 }}>
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+            <option value="secret">Secret</option>
+          </select>
+        </label>
       </div>
       <form
         onSubmit={(e) => {
@@ -157,7 +169,7 @@ export default function Jedit() {
           handleSaveAs();
         }}
       >
-        {profileArr.map((entry, idx) => (
+        {filteredProfileArr.map((entry, idx) => (
           <div key={idx} style={{ marginBottom: 10, display: "flex", gap: 8, flexWrap: 'wrap' }}>
             <input
               type="text"
@@ -199,7 +211,7 @@ export default function Jedit() {
         <button type="button" onClick={handleAddItem} style={{ marginTop: 8, marginRight: 8 }}>
           Add Item
         </button>
-        <button type="button" onClick={handleSaveAs} style={{ marginTop: 8, marginLeft: 8 }}>
+        <button type="submit" style={{ marginTop: 8, marginLeft: 8 }}>
           Save As
         </button>
       </form>

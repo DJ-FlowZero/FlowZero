@@ -21,7 +21,7 @@
     {
       "label": "Hobby",
       "value": "Playing Guitar in the Silocats",
-      "flag": "Public",
+      "flag": "public",
       "todo": "Focus the next practice on the set for May"
     },
     {
@@ -51,7 +51,7 @@
     {
       "label": "Tax Advisor",
       "value": "Alexander Rohrmus, Steuerberater",
-      "flag": "Private",
+      "flag": "private",
       "todo": "contact latest in June to prepare the tax declaration for 2023"
     },
     {

@@ -1,0 +1,60 @@
+{
+  "profile": [
+    {
+      "label": "Name",
+      "value": "Kermit",
+      "flag": "public",
+      "todo": "",
+      "comment": "Car name"
+    },
+    {
+      "label": "Type",
+      "value": "Car",
+      "flag": "public",
+      "todo": "",
+      "comment": "Vehicle type"
+    },
+    {
+      "label": "Make",
+      "value": "Toyota",
+      "flag": "public",
+      "todo": "",
+      "comment": "Manufacturer"
+    },
+    {
+      "label": "Model",
+      "value": "Corolla",
+      "flag": "public",
+      "todo": "",
+      "comment": "Model name"
+    },
+    {
+      "label": "Color",
+      "value": "Green",
+      "flag": "public",
+      "todo": "",
+      "comment": "Exterior color"
+    },
+    {
+      "label": "Year",
+      "value": "2025",
+      "flag": "public",
+      "todo": "",
+      "comment": "Year of manufacture"
+    },
+    {
+      "label": "License Plate",
+      "value": "M-HH 1217",
+      "flag": "secret",
+      "todo": "",
+      "comment": "Registration number"
+    },
+    {
+      "label": "Notes",
+      "value": "Hybrid, used for family trips.",
+      "flag": "public",
+      "todo": "Summer Tires",
+      "comment": "General notes"
+    }
+  ]
+}

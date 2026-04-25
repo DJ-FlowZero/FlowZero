@@ -11,13 +11,13 @@
     {
       "label": "User Name",
       "value": "Choirshark",
-      "flag": "Public",
+      "flag": "public",
       "todo": "make sure to use this username on all platforms"
     },
     {
       "label": "Hobby",
       "value": "Coding in React",
-      "flag": "Private",
+      "flag": "private",
       "todo": "do not forget to back up and amend the Appdocumentation"
     },
     {
@@ -47,7 +47,7 @@
     {
       "label": "Guitar",
       "value": "Gibson L5 Candy Apple Red",
-      "flag": "Secret",
+      "flag": "secret",
       "todo": "do not sell, make sure the strings are fresh.  "
     },
     {
@@ -191,7 +191,7 @@
       "label": "[new_label]",
       "value": "",
       "flag": "",
-      "Token": "[Ondej]",
+      "Token": "[Ondrej]",
       "Meaning": "Ondrej Zadak, Drummer of the [Silocats], married to Luciana, son called Luka",
       "Usage": "Need to ask Ondrej about joining for concert"
     },
@@ -229,19 +229,19 @@
     {
       "label": "User Name",
       "value": "Marie",
-      "flag": "Secret",
+      "flag": "secret",
       "todo": ""
     },
     {
       "label": "Hobby",
       "value": "Cooking",
-      "flag": "Public",
+      "flag": "public",
       "todo": ""
     },
     {
       "label": "Hobby",
       "value": "Netflix and Chill",
-      "flag": "Private",
+      "flag": "private",
       "todo": ""
     },
     {
@@ -334,7 +334,7 @@
     {
       "label": "Dachau",
       "value": "Storage Rooms",
-      "flag": "publis",
+      "flag": "public",
       "type": "Location",
       "substype": "Guitar Cases",
       "realname": "Govan Case"
@@ -442,7 +442,30 @@
     {
       "label": "Saporta Basement",
       "value": "Toby's old stuff",
-      "flag": "Private",
+      "flag": "private",
+      "todo": "Decide if we need to keep it or if we can get rid of it",
+      "type": "basement",
+      "substype": "appartment",
+      "realname": "main home"
+    }
+  ]
+} 
+===== fz10000.json.bck ===== 
+{
+  "profile": [
+    {
+      "label": "Saporta Basement",
+      "value": "Saporta Street 10",
+      "flag": "private",
+      "todo": "clean out toby stuff",
+      "type": "basement",
+      "substype": "appartment",
+      "realname": "main home"
+    },
+    {
+      "label": "Saporta Basement",
+      "value": "Toby's old stuff",
+      "flag": "private",
       "todo": "Decide if we need to keep it or if we can get rid of it",
       "type": "basement",
       "substype": "appartment",
@@ -451,6 +474,21 @@
   ]
 } 
 ===== fz10000_sticky.json ===== 
+{
+  "sticky": [
+    {
+      "stickytype": "Shelf One",
+      "note": "This will be for food items",
+      "links": "Mostly canned beans"
+    },
+    {
+      "stickytype": "Shelf Two",
+      "note": "This will be tools",
+      "links": "Mostly power tools"
+    }
+  ]
+} 
+===== fz10000_sticky.json.bck ===== 
 {
   "sticky": [
     {
@@ -490,6 +528,137 @@
     }
   ]
 } 
+===== fz10000_token.json.bck ===== 
+{
+  "FZ_Tokens": [
+    {
+      "Token": "Jackson Case",
+      "Meaning": "Hard Shell Case for Toby Guitar Jackson Soloist",
+      "Usage": "Where is the Jackson Case"
+    },
+    {
+      "Token": "Bachand Case",
+      "Meaning": "Hard Shell Case for Ibanez Matt Bachand Shadow Falls guitar",
+      "Usage": "Where is the Bachand Case"
+    },
+    {
+      "Token": "Govan Case",
+      "Meaning": "Hard Shell Case for Suhr Guthrie Govan Signature",
+      "Usage": "Where is the Govan Case"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
+    }
+  ]
+} 
+===== fz10001.json ===== 
+{
+  "profile": [
+    {
+      "label": "Name",
+      "value": "Parvine",
+      "flag": "secret",
+      "todo": "Mahjon Player",
+      "comment": "Ask about shopping list"
+    },
+    {
+      "label": "Location",
+      "value": "Zentner 44",
+      "flag": "secret",
+      "todo": "Neighbor",
+      "comment": "Mobility"
+    }
+  ]
+} 
+===== fz10001_sticky.json ===== 
+{
+  "sticky": []
+} 
+===== fz10001_token.json ===== 
+{
+  "FZ_Tokens": []
+} 
+===== fz10002.json ===== 
+{
+  "profile": [
+    {
+      "label": "Name",
+      "value": "Kermit",
+      "flag": "public",
+      "todo": "",
+      "comment": "Car name"
+    },
+    {
+      "label": "Type",
+      "value": "Car",
+      "flag": "public",
+      "todo": "",
+      "comment": "Vehicle type"
+    },
+    {
+      "label": "Make",
+      "value": "Toyota",
+      "flag": "public",
+      "todo": "",
+      "comment": "Manufacturer"
+    },
+    {
+      "label": "Model",
+      "value": "Corolla",
+      "flag": "public",
+      "todo": "",
+      "comment": "Model name"
+    },
+    {
+      "label": "Color",
+      "value": "Green",
+      "flag": "public",
+      "todo": "",
+      "comment": "Exterior color"
+    },
+    {
+      "label": "Year",
+      "value": "2025",
+      "flag": "public",
+      "todo": "",
+      "comment": "Year of manufacture"
+    },
+    {
+      "label": "License Plate",
+      "value": "M-HH 1217",
+      "flag": "secret",
+      "todo": "",
+      "comment": "Registration number"
+    },
+    {
+      "label": "Notes",
+      "value": "Hybrid, used for family trips.",
+      "flag": "public",
+      "todo": "Summer Tires",
+      "comment": "General notes"
+    }
+  ]
+} 
+===== fz10002_sticky.json ===== 
+{
+  "sticky": [
+    {
+      "stickytype": "Maintenance",
+      "note": "Tire change due April 26th",
+      "links": "Car Dealer Site"
+    }
+  ]
+} 
+===== fz10002_token.json ===== 
+{
+  "FZ_Tokens": [
+    { "Token": "KermitDealer", "Meaning": "Authorized Toyota service center for Kermit", "Usage": "Use for maintenance appointments" },
+    { "Token": "KermitTrips", "Meaning": "Family trips taken with Kermit", "Usage": "Tag for trip logs" },
+    { "Token": "KermitHybrid", "Meaning": "Hybrid system status or notes", "Usage": "Tag for hybrid-related info" }
+  ]
+} 
 ===== fz9999.json ===== 
 {
   "profile": [
@@ -523,19 +692,19 @@
 {
   "sticky": [
     {
-      "stickytype": "Mixed Salad",
-      "note": "Do not order again! It is wilted and not nice",
+      "stickytype": "Osteria",
+      "note": "Do not order salad again! Wilted and not nice",
       "links": "Osteria Elisbethstrasse"
     },
     {
-      "stickytype": "Bruschettta",
-      "note": "Three Pieces, actually very good for sharing",
+      "stickytype": "Tax Advisor",
+      "note": "Good person, highly recommended",
       "links": "Recommend to others"
     },
     {
-      "stickytype": "Beer",
+      "stickytype": "Osteria",
       "note": "No dark beer available any longer, order Franziskaner Dunkel",
-      "links": ""
+      "links": "Osteria Elisbethstrasse"
     }
   ]
 } 
@@ -566,8 +735,12 @@
 
 ## Profile/Group Creation, Staging, and Publishing (2026-04)
 
-### New Features & Learnings (2026-04-22)
-- The Index Edit window now acts as a directory of all groups (profiles) and allows safe creation and publishing of new groups.
+
+### New Features & Learnings (2026-04-23)
+- The Index Edit window now guarantees that new group/profile files will never overwrite existing files:
+	- When you click [Create Group], the app calls a backend API to list all existing `fzXXXX.json` files in the `public/` folder and picks the next available number, even if files were added outside the UI.
+	- This ensures that all new group/profile, token, and sticky files are always created with a unique, incremental number.
+	- The [Publish Group Files] button is also safe and will never overwrite an existing group file.
 - The Add Entry and Download buttons have been removed to prevent accidental or incomplete additions.
 - Only the [Create Group] and [Publish Group Files] buttons can add new groups, ensuring all associated files (profile, token, sticky) are created together.
 - The profileId and fileName fields in the directory are now read-only to protect directory integrity; only description and extra fields are editable.
@@ -576,11 +749,13 @@
 - UI improvements: clearer modal/box titles, increased spacing, and consistent button styling for a more user-friendly admin workbench.
 - The workflow is now robust against accidental data loss or corruption and is ready for further user-facing UI development.
 
-#### Example Group Creation & Publishing Workflow
-1. Click [Create Group] in Index Edit. Three new files are created in `public/NewState/` with the next available number.
-2. Edit the new group/profile as needed.
-3. Click [Publish Group Files] to copy the staged files to `public/`.
-4. Download and/or publish the updated `fz_profile_index.json` as needed.
+
+#### Example Group Creation & Publishing Workflow (Safe Numbering)
+1. Click [Create Group] in Index Edit. The app checks all existing group/profile files in `public/` and always picks the next available number (e.g., `fz0003.json` if `fz0002.json` exists, even if files were added manually).
+2. Three new files are created in `public/NewState/` with this unique number: profile, token, and sticky.
+3. Edit the new group/profile as needed.
+4. Click [Publish Group Files] to copy the staged files to `public/` (no overwrite risk).
+5. Download and/or publish the updated `fz_profile_index.json` as needed.
 
 ---
 
@@ -615,6 +790,38 @@ FlowZero is a zero-resistance workflow tool for managing and editing user config
 - **Sticky Notes:** Per-profile sticky note arrays, e.g., `fz0000_sticky.json`.
 - **Tokens:** Per-profile tag tokens, e.g., `fz0000_token.json`.
 - **User Index:** `fz_profile_index.json` and `fz_user_index.json` provide metadata and lookup for all profiles.
+
+
+
+## Application UI and Capabilities
+
+The FlowZero App UI is a modular, user-friendly admin workbench for managing all aspects of user configuration profiles (PUCKs), sticky notes, and tokens. The UI is organized around the core FlowZero loop: **Gestalt → Prune → PUCK → Prime → Prompt → Loop/Live**. Main features and components include:
+
+- **Profile Edit:** Edit the array of fields for any selected profile (PUCK). Add, modify, or remove entries, and save changes as a new JSON file.
+- **Token Edit:** Manage personal tag tokens (PTAGs) for the selected profile, including meanings and usage notes.
+- **Sticky Edit:** Edit sticky notes (contextual notes, links, reminders) for each user profile.
+- **Text File Edit:** Edit any `.txt` file in the system, with backup and safe publishing workflows (automatic backup before overwrite).
+- **Index Edit:** View and edit the profile index (`fz_profile_index.json`).
+	- **Create Puck:** The [Create Group] button safely creates a new PUCK (profile/group) with unique numbering, ensuring no overwrites. Associated token and sticky files are created together in `public/NewState/`.
+	- **Publish Group Files:** The [Publish Group Files] button moves staged files to the public directory, always preventing overwrites.
+- **Gestalt Viewer (Show Gestalt):** A modal window that displays a combined, read-only summary of the selected profile's main data (profile fields, tokens, sticky notes)—the full context field (Gestalt) before pruning to a PUCK. This supports the workflow: start with Gestalt, prune to relevant context, and package as a PUCK.
+
+### UI Modes
+Three UI modes—Public, Private, and Secret—are selectable from a dropdown. UI elements and messages are shown or hidden based on the current mode, supporting different levels of visibility for sensitive information.
+
+### Visual Features
+- **Traffic Light Indicator:** Shows the current UI mode (green/yellow/red) in the top right corner.
+- **Consistent Button Styling:** All main actions use a unified, accessible button style for clarity and ease of use.
+- **Immediate Feedback:** Status messages and modal dialogs provide clear feedback for all actions (saving, publishing, errors).
+
+### Data Safety and Workflow
+- All file operations (create, edit, publish) are designed to prevent accidental overwrites and data loss. Backups are created automatically before any file is overwritten.
+- The UI always reflects the latest state of the profile index and available files after changes.
+
+### Extensibility
+The UI is modular and ready for further user-facing development, with clear separation between profile, token, sticky, and text file management. The Gestalt/PUCK workflow is now explicit in the UI, supporting advanced context management and portable configuration.
+
+---
 
 ## File Structure
 - `src/Jedit.jsx`: Profile (PUCK) JSON editor.
@@ -1763,6 +1970,81 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     "fileName": "fz0000.json",
     "type": "person",
     "subtype": "family and friends",
+    "tag": "Person"
+  },
+  {
+    "realName": "Pia Hultqvist",
+    "profileId": "P0001",
+    "description": "Pia's main profile.",
+    "fileName": "fz0001.json",
+    "type": "person",
+    "subtype": "family and friends",
+    "tag": "Person"
+  },
+  {
+    "realName": "CatchAll Basket",
+    "profileId": "P9999",
+    "description": "Generic Locations",
+    "fileName": "fz9999.json",
+    "type": "CatchAll",
+    "subtype": "Generic",
+    "tag": "CatchAll"
+  },
+  {
+    "realName": "Dachau MyPlace",
+    "profileId": "P0002",
+    "description": "Storage Room In Dachau / Surplus",
+    "fileName": "fz0002.json",
+    "type": "location",
+    "subtype": "storage room",
+    "tag": "Real Estate"
+  },
+  {
+    "realName": "Practice Room Allach",
+    "profileId": "P0003",
+    "fileName": "fz0003.json",
+    "description": "Practice Room Allach / Music Gear",
+    "type": "location",
+    "subtype": "storage room",
+    "tag": "Real Estate"
+  },
+  {
+    "realName": "Saporta Basement",
+    "profileId": "P10000",
+    "fileName": "fz10000.json",
+    "description": "Saporta Basement / Appartment",
+    "type": "location",
+    "subtype": "storage room",
+    "tag": "Real Estate"
+  },
+  {
+    "realName": "Zentner Mahjong 6th Floor",
+    "profileId": "P10001",
+    "fileName": "fz10001.json",
+    "description": "Zentner Mahjong 6th Floor.",
+    "type": "person",
+    "subtype": "person",
+    "tag": "person"
+  },
+  {
+    "profileId": "P10002",
+    "fileName": "fz10002.json",
+    "description": "Kermit Car File",
+    "realName": "Kermit Car File",
+    "type": "group",
+    "subtype": "",
+    "tag": "Property"
+  }
+] 
+===== fz_profile_index.json.bck ===== 
+[
+  {
+    "realName": "Chris Horak",
+    "profileId": "P0000",
+    "description": "Main profile for Choirshark",
+    "fileName": "fz0000.json",
+    "type": "person",
+    "subtype": "family and friends",
     "extra": "Person"
   },
   {
@@ -1775,13 +2057,13 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     "extra": "Person"
   },
   {
-    "realName": "Osteria",
+    "realName": "CatchAll Basket",
     "profileId": "P9999",
-    "description": "Favorite Italian restaurant.",
+    "description": "Generic Locations",
     "fileName": "fz9999.json",
-    "type": "restaurant",
-    "subtype": "Italian",
-    "extra": "Location"
+    "type": "CatchAll",
+    "subtype": "Generic",
+    "extra": "CatchAll"
   },
   {
     "realName": "Dachau MyPlace",
@@ -1809,6 +2091,15 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     "type": "location",
     "subtype": "storage room",
     "extra": "Real Estate"
+  },
+  {
+    "realName": "Zentner Mahjong 6th Floor",
+    "profileId": "P10001",
+    "fileName": "fz10001.json",
+    "description": "Zentner Mahjong 6th Floor.",
+    "type": "person",
+    "subtype": "person",
+    "extra": "person"
   }
 ] 
 ===== fz_text_3working.txt ===== 
@@ -1832,13 +2123,13 @@ This is like a clip board for notes and cut and paste during the development
     {
       "label": "User Name",
       "value": "Choirshark",
-      "flag": "Public",
+      "flag": "public",
       "todo": "make sure to use this username on all platforms"
     },
     {
       "label": "Hobby",
       "value": "Coding in React",
-      "flag": "Private",
+      "flag": "private",
       "todo": "do not forget to back up and amend the Appdocumentation"
     },
     {
@@ -1868,7 +2159,7 @@ This is like a clip board for notes and cut and paste during the development
     {
       "label": "Guitar",
       "value": "Gibson L5 Candy Apple Red",
-      "flag": "Secret",
+      "flag": "secret",
       "todo": "do not sell, make sure the strings are fresh.  "
     },
     {
@@ -2012,7 +2303,7 @@ This is like a clip board for notes and cut and paste during the development
       "label": "[new_label]",
       "value": "",
       "flag": "",
-      "Token": "[Ondej]",
+      "Token": "[Ondrej]",
       "Meaning": "Ondrej Zadak, Drummer of the [Silocats], married to Luciana, son called Luka",
       "Usage": "Need to ask Ondrej about joining for concert"
     },
@@ -2050,19 +2341,19 @@ This is like a clip board for notes and cut and paste during the development
     {
       "label": "User Name",
       "value": "Marie",
-      "flag": "Secret",
+      "flag": "secret",
       "todo": ""
     },
     {
       "label": "Hobby",
       "value": "Cooking",
-      "flag": "Public",
+      "flag": "public",
       "todo": ""
     },
     {
       "label": "Hobby",
       "value": "Netflix and Chill",
-      "flag": "Private",
+      "flag": "private",
       "todo": ""
     },
     {
@@ -2155,7 +2446,7 @@ This is like a clip board for notes and cut and paste during the development
     {
       "label": "Dachau",
       "value": "Storage Rooms",
-      "flag": "publis",
+      "flag": "public",
       "type": "Location",
       "substype": "Guitar Cases",
       "realname": "Govan Case"
@@ -2263,7 +2554,30 @@ This is like a clip board for notes and cut and paste during the development
     {
       "label": "Saporta Basement",
       "value": "Toby's old stuff",
-      "flag": "Private",
+      "flag": "private",
+      "todo": "Decide if we need to keep it or if we can get rid of it",
+      "type": "basement",
+      "substype": "appartment",
+      "realname": "main home"
+    }
+  ]
+} 
+===== fz10000.json.bck ===== 
+{
+  "profile": [
+    {
+      "label": "Saporta Basement",
+      "value": "Saporta Street 10",
+      "flag": "private",
+      "todo": "clean out toby stuff",
+      "type": "basement",
+      "substype": "appartment",
+      "realname": "main home"
+    },
+    {
+      "label": "Saporta Basement",
+      "value": "Toby's old stuff",
+      "flag": "private",
       "todo": "Decide if we need to keep it or if we can get rid of it",
       "type": "basement",
       "substype": "appartment",
@@ -2272,6 +2586,21 @@ This is like a clip board for notes and cut and paste during the development
   ]
 } 
 ===== fz10000_sticky.json ===== 
+{
+  "sticky": [
+    {
+      "stickytype": "Shelf One",
+      "note": "This will be for food items",
+      "links": "Mostly canned beans"
+    },
+    {
+      "stickytype": "Shelf Two",
+      "note": "This will be tools",
+      "links": "Mostly power tools"
+    }
+  ]
+} 
+===== fz10000_sticky.json.bck ===== 
 {
   "sticky": [
     {
@@ -2311,6 +2640,137 @@ This is like a clip board for notes and cut and paste during the development
     }
   ]
 } 
+===== fz10000_token.json.bck ===== 
+{
+  "FZ_Tokens": [
+    {
+      "Token": "Jackson Case",
+      "Meaning": "Hard Shell Case for Toby Guitar Jackson Soloist",
+      "Usage": "Where is the Jackson Case"
+    },
+    {
+      "Token": "Bachand Case",
+      "Meaning": "Hard Shell Case for Ibanez Matt Bachand Shadow Falls guitar",
+      "Usage": "Where is the Bachand Case"
+    },
+    {
+      "Token": "Govan Case",
+      "Meaning": "Hard Shell Case for Suhr Guthrie Govan Signature",
+      "Usage": "Where is the Govan Case"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
+    }
+  ]
+} 
+===== fz10001.json ===== 
+{
+  "profile": [
+    {
+      "label": "Name",
+      "value": "Parvine",
+      "flag": "secret",
+      "todo": "Mahjon Player",
+      "comment": "Ask about shopping list"
+    },
+    {
+      "label": "Location",
+      "value": "Zentner 44",
+      "flag": "secret",
+      "todo": "Neighbor",
+      "comment": "Mobility"
+    }
+  ]
+} 
+===== fz10001_sticky.json ===== 
+{
+  "sticky": []
+} 
+===== fz10001_token.json ===== 
+{
+  "FZ_Tokens": []
+} 
+===== fz10002.json ===== 
+{
+  "profile": [
+    {
+      "label": "Name",
+      "value": "Kermit",
+      "flag": "public",
+      "todo": "",
+      "comment": "Car name"
+    },
+    {
+      "label": "Type",
+      "value": "Car",
+      "flag": "public",
+      "todo": "",
+      "comment": "Vehicle type"
+    },
+    {
+      "label": "Make",
+      "value": "Toyota",
+      "flag": "public",
+      "todo": "",
+      "comment": "Manufacturer"
+    },
+    {
+      "label": "Model",
+      "value": "Corolla",
+      "flag": "public",
+      "todo": "",
+      "comment": "Model name"
+    },
+    {
+      "label": "Color",
+      "value": "Green",
+      "flag": "public",
+      "todo": "",
+      "comment": "Exterior color"
+    },
+    {
+      "label": "Year",
+      "value": "2025",
+      "flag": "public",
+      "todo": "",
+      "comment": "Year of manufacture"
+    },
+    {
+      "label": "License Plate",
+      "value": "M-HH 1217",
+      "flag": "secret",
+      "todo": "",
+      "comment": "Registration number"
+    },
+    {
+      "label": "Notes",
+      "value": "Hybrid, used for family trips.",
+      "flag": "public",
+      "todo": "Summer Tires",
+      "comment": "General notes"
+    }
+  ]
+} 
+===== fz10002_sticky.json ===== 
+{
+  "sticky": [
+    {
+      "stickytype": "Maintenance",
+      "note": "Tire change due April 26th",
+      "links": "Car Dealer Site"
+    }
+  ]
+} 
+===== fz10002_token.json ===== 
+{
+  "FZ_Tokens": [
+    { "Token": "KermitDealer", "Meaning": "Authorized Toyota service center for Kermit", "Usage": "Use for maintenance appointments" },
+    { "Token": "KermitTrips", "Meaning": "Family trips taken with Kermit", "Usage": "Tag for trip logs" },
+    { "Token": "KermitHybrid", "Meaning": "Hybrid system status or notes", "Usage": "Tag for hybrid-related info" }
+  ]
+} 
 ===== fz9999.json ===== 
 {
   "profile": [
@@ -2344,19 +2804,19 @@ This is like a clip board for notes and cut and paste during the development
 {
   "sticky": [
     {
-      "stickytype": "Mixed Salad",
-      "note": "Do not order again! It is wilted and not nice",
+      "stickytype": "Osteria",
+      "note": "Do not order salad again! Wilted and not nice",
       "links": "Osteria Elisbethstrasse"
     },
     {
-      "stickytype": "Bruschettta",
-      "note": "Three Pieces, actually very good for sharing",
+      "stickytype": "Tax Advisor",
+      "note": "Good person, highly recommended",
       "links": "Recommend to others"
     },
     {
-      "stickytype": "Beer",
+      "stickytype": "Osteria",
       "note": "No dark beer available any longer, order Franziskaner Dunkel",
-      "links": ""
+      "links": "Osteria Elisbethstrasse"
     }
   ]
 } 
@@ -2387,8 +2847,12 @@ This is like a clip board for notes and cut and paste during the development
 
 ## Profile/Group Creation, Staging, and Publishing (2026-04)
 
-### New Features & Learnings (2026-04-22)
-- The Index Edit window now acts as a directory of all groups (profiles) and allows safe creation and publishing of new groups.
+
+### New Features & Learnings (2026-04-23)
+- The Index Edit window now guarantees that new group/profile files will never overwrite existing files:
+	- When you click [Create Group], the app calls a backend API to list all existing `fzXXXX.json` files in the `public/` folder and picks the next available number, even if files were added outside the UI.
+	- This ensures that all new group/profile, token, and sticky files are always created with a unique, incremental number.
+	- The [Publish Group Files] button is also safe and will never overwrite an existing group file.
 - The Add Entry and Download buttons have been removed to prevent accidental or incomplete additions.
 - Only the [Create Group] and [Publish Group Files] buttons can add new groups, ensuring all associated files (profile, token, sticky) are created together.
 - The profileId and fileName fields in the directory are now read-only to protect directory integrity; only description and extra fields are editable.
@@ -2397,11 +2861,13 @@ This is like a clip board for notes and cut and paste during the development
 - UI improvements: clearer modal/box titles, increased spacing, and consistent button styling for a more user-friendly admin workbench.
 - The workflow is now robust against accidental data loss or corruption and is ready for further user-facing UI development.
 
-#### Example Group Creation & Publishing Workflow
-1. Click [Create Group] in Index Edit. Three new files are created in `public/NewState/` with the next available number.
-2. Edit the new group/profile as needed.
-3. Click [Publish Group Files] to copy the staged files to `public/`.
-4. Download and/or publish the updated `fz_profile_index.json` as needed.
+
+#### Example Group Creation & Publishing Workflow (Safe Numbering)
+1. Click [Create Group] in Index Edit. The app checks all existing group/profile files in `public/` and always picks the next available number (e.g., `fz0003.json` if `fz0002.json` exists, even if files were added manually).
+2. Three new files are created in `public/NewState/` with this unique number: profile, token, and sticky.
+3. Edit the new group/profile as needed.
+4. Click [Publish Group Files] to copy the staged files to `public/` (no overwrite risk).
+5. Download and/or publish the updated `fz_profile_index.json` as needed.
 
 ---
 
@@ -2436,6 +2902,38 @@ FlowZero is a zero-resistance workflow tool for managing and editing user config
 - **Sticky Notes:** Per-profile sticky note arrays, e.g., `fz0000_sticky.json`.
 - **Tokens:** Per-profile tag tokens, e.g., `fz0000_token.json`.
 - **User Index:** `fz_profile_index.json` and `fz_user_index.json` provide metadata and lookup for all profiles.
+
+
+
+## Application UI and Capabilities
+
+The FlowZero App UI is a modular, user-friendly admin workbench for managing all aspects of user configuration profiles (PUCKs), sticky notes, and tokens. The UI is organized around the core FlowZero loop: **Gestalt → Prune → PUCK → Prime → Prompt → Loop/Live**. Main features and components include:
+
+- **Profile Edit:** Edit the array of fields for any selected profile (PUCK). Add, modify, or remove entries, and save changes as a new JSON file.
+- **Token Edit:** Manage personal tag tokens (PTAGs) for the selected profile, including meanings and usage notes.
+- **Sticky Edit:** Edit sticky notes (contextual notes, links, reminders) for each user profile.
+- **Text File Edit:** Edit any `.txt` file in the system, with backup and safe publishing workflows (automatic backup before overwrite).
+- **Index Edit:** View and edit the profile index (`fz_profile_index.json`).
+	- **Create Puck:** The [Create Group] button safely creates a new PUCK (profile/group) with unique numbering, ensuring no overwrites. Associated token and sticky files are created together in `public/NewState/`.
+	- **Publish Group Files:** The [Publish Group Files] button moves staged files to the public directory, always preventing overwrites.
+- **Gestalt Viewer (Show Gestalt):** A modal window that displays a combined, read-only summary of the selected profile's main data (profile fields, tokens, sticky notes)—the full context field (Gestalt) before pruning to a PUCK. This supports the workflow: start with Gestalt, prune to relevant context, and package as a PUCK.
+
+### UI Modes
+Three UI modes—Public, Private, and Secret—are selectable from a dropdown. UI elements and messages are shown or hidden based on the current mode, supporting different levels of visibility for sensitive information.
+
+### Visual Features
+- **Traffic Light Indicator:** Shows the current UI mode (green/yellow/red) in the top right corner.
+- **Consistent Button Styling:** All main actions use a unified, accessible button style for clarity and ease of use.
+- **Immediate Feedback:** Status messages and modal dialogs provide clear feedback for all actions (saving, publishing, errors).
+
+### Data Safety and Workflow
+- All file operations (create, edit, publish) are designed to prevent accidental overwrites and data loss. Backups are created automatically before any file is overwritten.
+- The UI always reflects the latest state of the profile index and available files after changes.
+
+### Extensibility
+The UI is modular and ready for further user-facing development, with clear separation between profile, token, sticky, and text file management. The Gestalt/PUCK workflow is now explicit in the UI, supporting advanced context management and portable configuration.
+
+---
 
 ## File Structure
 - `src/Jedit.jsx`: Profile (PUCK) JSON editor.
@@ -3584,6 +4082,81 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     "fileName": "fz0000.json",
     "type": "person",
     "subtype": "family and friends",
+    "tag": "Person"
+  },
+  {
+    "realName": "Pia Hultqvist",
+    "profileId": "P0001",
+    "description": "Pia's main profile.",
+    "fileName": "fz0001.json",
+    "type": "person",
+    "subtype": "family and friends",
+    "tag": "Person"
+  },
+  {
+    "realName": "CatchAll Basket",
+    "profileId": "P9999",
+    "description": "Generic Locations",
+    "fileName": "fz9999.json",
+    "type": "CatchAll",
+    "subtype": "Generic",
+    "tag": "CatchAll"
+  },
+  {
+    "realName": "Dachau MyPlace",
+    "profileId": "P0002",
+    "description": "Storage Room In Dachau / Surplus",
+    "fileName": "fz0002.json",
+    "type": "location",
+    "subtype": "storage room",
+    "tag": "Real Estate"
+  },
+  {
+    "realName": "Practice Room Allach",
+    "profileId": "P0003",
+    "fileName": "fz0003.json",
+    "description": "Practice Room Allach / Music Gear",
+    "type": "location",
+    "subtype": "storage room",
+    "tag": "Real Estate"
+  },
+  {
+    "realName": "Saporta Basement",
+    "profileId": "P10000",
+    "fileName": "fz10000.json",
+    "description": "Saporta Basement / Appartment",
+    "type": "location",
+    "subtype": "storage room",
+    "tag": "Real Estate"
+  },
+  {
+    "realName": "Zentner Mahjong 6th Floor",
+    "profileId": "P10001",
+    "fileName": "fz10001.json",
+    "description": "Zentner Mahjong 6th Floor.",
+    "type": "person",
+    "subtype": "person",
+    "tag": "person"
+  },
+  {
+    "profileId": "P10002",
+    "fileName": "fz10002.json",
+    "description": "Kermit Car File",
+    "realName": "Kermit Car File",
+    "type": "group",
+    "subtype": "",
+    "tag": "Property"
+  }
+] 
+===== fz_profile_index.json.bck ===== 
+[
+  {
+    "realName": "Chris Horak",
+    "profileId": "P0000",
+    "description": "Main profile for Choirshark",
+    "fileName": "fz0000.json",
+    "type": "person",
+    "subtype": "family and friends",
     "extra": "Person"
   },
   {
@@ -3596,13 +4169,13 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     "extra": "Person"
   },
   {
-    "realName": "Osteria",
+    "realName": "CatchAll Basket",
     "profileId": "P9999",
-    "description": "Favorite Italian restaurant.",
+    "description": "Generic Locations",
     "fileName": "fz9999.json",
-    "type": "restaurant",
-    "subtype": "Italian",
-    "extra": "Location"
+    "type": "CatchAll",
+    "subtype": "Generic",
+    "extra": "CatchAll"
   },
   {
     "realName": "Dachau MyPlace",
@@ -3630,6 +4203,15 @@ This PUCK (Personal Usage Configuration Knowledge) encodes a user’s microverse
     "type": "location",
     "subtype": "storage room",
     "extra": "Real Estate"
+  },
+  {
+    "realName": "Zentner Mahjong 6th Floor",
+    "profileId": "P10001",
+    "fileName": "fz10001.json",
+    "description": "Zentner Mahjong 6th Floor.",
+    "type": "person",
+    "subtype": "person",
+    "extra": "person"
   }
 ] 
 ===== fz_text_3working.txt ===== 

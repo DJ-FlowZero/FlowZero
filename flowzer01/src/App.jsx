@@ -26,7 +26,7 @@ function GestaltButton({ children, onClick, ...props }) {
 }
 
 // Gestalt Viewer Modal
-function GestaltModal({ open, onClose, gestaltText, profileOptions, selectedProfile, setSelectedProfile, onProfileChange }) {
+function GestaltModal({ open, onClose, gestaltText, profileOptions, selectedProfile, onProfileChange, visibility, setVisibility }) {
   if (!open) return null;
   return (
     <div style={{
@@ -46,12 +46,18 @@ function GestaltModal({ open, onClose, gestaltText, profileOptions, selectedProf
           <span style={{fontWeight: 'bold', fontSize: '1.2em'}}>Gestalt Viewer</span>
           <button onClick={onClose} style={{fontSize: '1.2em', background: 'none', border: 'none', cursor: 'pointer'}}>✕</button>
         </div>
-        <div style={{marginBottom: 16}}>
+        <div style={{marginBottom: 16, display: 'flex', alignItems: 'center', gap: 16}}>
           <label htmlFor="profileSelect" style={{fontWeight: 'bold', marginRight: 8}}>Profile:</label>
           <select id="profileSelect" value={selectedProfile} onChange={onProfileChange} style={{fontSize: '1em', padding: '4px 12px'}}>
             {profileOptions.map(opt => (
               <option key={opt.fileName} value={opt.fileName}>{opt.realName}</option>
             ))}
+          </select>
+          <label style={{ fontWeight: "bold", marginLeft: 24, marginRight: 8, color: '#15396a', fontSize: '1.1em' }}>Visibility:</label>
+          <select value={visibility} onChange={e => setVisibility(e.target.value)} style={{ fontSize: "1em", padding: "4px 12px", fontWeight: 'bold', color: '#15396a' }}>
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+            <option value="secret">Secret</option>
           </select>
         </div>
         <textarea
@@ -140,6 +146,9 @@ import TokenEdit from "./TokenEdit";
 import StickyEdit from "./StickyEdit";
 import TextFileBackandSave from "./TextFileBackandSave";
 import IndexEdit from "./IndexEdit";
+import PuckCreator from "./PuckCreator";
+import PuckCreatorWrapper from "./PuckCreatorWrapper";
+import GestaltViewer from "./GestaltViewer";
 // ===============================
 // CONFIG / CONSTANTS
 // ===============================
@@ -147,7 +156,7 @@ import IndexEdit from "./IndexEdit";
 // ...existing code...
 // fz_UI: renders UI strings from App_UI_ext.json
 // FzUI now respects the current UI mode (public/private/secret)
-function FzUI({ label, as = 'div', style = {}, className = '', fallback = null, mode = 'public' }) {
+function FzUI({ label, as = 'div', style = {}, className = '', mode = 'public' }) {
   // Enforce fz_ prefix and allow only numbered labels
   const normalizedLabel = label.startsWith('fz_') ? label : `fz_${label}`;
   const [uiObj, setUiObj] = useState(undefined);
@@ -155,10 +164,9 @@ function FzUI({ label, as = 'div', style = {}, className = '', fallback = null, 
     fetch('/App_UI_ext.json')
       .then(res => res.json())
       .then(data => {
-        if (data && Array.isArray(data.appUIext)) {
-          // Only allow fz_ prefix and numbered labels
-          const found = data.appUIext.find(item => item.label === normalizedLabel);
-          setUiObj(found);
+        if (data && typeof data === 'object') {
+          const found = data[normalizedLabel];
+          setUiObj(found || null);
         } else {
           setUiObj(null);
         }
@@ -168,10 +176,10 @@ function FzUI({ label, as = 'div', style = {}, className = '', fallback = null, 
   if (uiObj === undefined) return null; // loading
   const Tag = as;
   if (!uiObj) {
-    return fallback || <Tag style={{color:'red'}}>UI label not found: {normalizedLabel}</Tag>;
+    return <Tag style={{color:'red', fontWeight:'bold'}}>[LoadError: UI label not found: {normalizedLabel}]</Tag>;
   }
   if (!uiObj.value || typeof uiObj.value !== 'string' || !uiObj.value.trim()) {
-    return fallback || <Tag style={{color:'orange'}}>No value for {normalizedLabel}</Tag>;
+    return <Tag style={{color:'orange', fontWeight:'bold'}}>[LoadError: No value for {normalizedLabel}]</Tag>;
   }
   // Only show if flag is public, or matches/exceeds the current mode
   // Hierarchy: public < private < secret
@@ -208,54 +216,77 @@ function FZ_ConfigLoadFault(FZ_cfg, FZ_key, FZ_default_text) {
 
 
 function App() {
-    // Gestalt state
-    const [showGestalt, setShowGestalt] = useState(false);
-    const [gestaltText, setGestaltText] = useState('');
-    const [profileOptions, setProfileOptions] = useState([]);
-    const [selectedProfile, setSelectedProfile] = useState('');
+  // Config state (move above useEffect)
+  const [FZ_cfg_obj, FZ_set_cfg_obj] = useState({})
+  const [FZ_profile_ary, FZ_set_profile_ary] = useState([])
+  const [showJedit, setShowJedit] = useState(false)
+  const [showTokenEdit, setShowTokenEdit] = useState(false)
+  const [showStickyEdit, setShowStickyEdit] = useState(false)
+  const [showTextFileBackandSave, setShowTextFileBackandSave] = useState(false)
+  const [showIndexEdit, setShowIndexEdit] = useState(false)
+  const [uiMode, setUiMode] = useState('public');
 
-    // Load profile options for Gestalt
-    useEffect(() => {
-      fetchUserIndex().then(data => {
-        setProfileOptions(data);
-        if (data.length > 0) setSelectedProfile(data[0].fileName);
-      }).catch(() => setProfileOptions([]));
-    }, []);
+  // Gestalt state
+  const [showGestalt, setShowGestalt] = useState(false);
+  const [gestaltText, setGestaltText] = useState('');
+  const [profileOptions, setProfileOptions] = useState([]);
+  const [selectedProfile, setSelectedProfile] = useState('');
+  const [gestaltVisibility, setGestaltVisibility] = useState('secret');
 
-    // Load gestalt when profile changes
-    useEffect(() => {
-      if (!selectedProfile) return;
-      // Fetch profile, token, sticky
-      const base = selectedProfile.replace('.json', '');
-      Promise.all([
-        fetch(`/${base}.json`).then(r => r.json()).catch(() => null),
-        fetch(`/${base}_token.json`).then(r => r.json()).catch(() => null),
-        fetch(`/${base}_sticky.json`).then(r => r.json()).catch(() => null)
-      ]).then(([profile, token, sticky]) => {
-        let gestalt = '';
-        if (profile && Array.isArray(profile.profile)) {
-          gestalt += 'PROFILE\n';
-          for (const item of profile.profile) {
+  // Load profile options for Gestalt
+  useEffect(() => {
+    fetchUserIndex().then(data => {
+      setProfileOptions(data);
+      if (data.length > 0) setSelectedProfile(data[0].fileName);
+    }).catch(() => setProfileOptions([]));
+  }, []);
+
+  // Load gestalt when profile or visibility changes
+  useEffect(() => {
+    if (!selectedProfile) return;
+    // Fetch profile, token, sticky
+    const base = selectedProfile.replace('.json', '');
+    Promise.all([
+      fetch(`/${base}.json`).then(r => r.json()).catch(() => null),
+      fetch(`/${base}_token.json`).then(r => r.json()).catch(() => null),
+      fetch(`/${base}_sticky.json`).then(r => r.json()).catch(() => null)
+    ]).then(([profile, token, sticky]) => {
+      let gestalt = '';
+      // Visibility filter logic
+      const allowedFlags = gestaltVisibility === "secret" ? ["secret", "private", "public"] : gestaltVisibility === "private" ? ["private", "public"] : ["public"];
+      if (profile && Array.isArray(profile.profile)) {
+        gestalt += 'PROFILE\n';
+        for (const item of profile.profile) {
+          const flag = (item.flag || "public").toLowerCase();
+          if (allowedFlags.includes(flag)) {
             gestalt += `- ${item.label || ''}: ${item.value || ''}\n`;
           }
-          gestalt += '\n';
         }
-        if (token && Array.isArray(token.FZ_Tokens)) {
-          gestalt += 'TOKENS\n';
-          for (const t of token.FZ_Tokens) {
+        gestalt += '\n';
+      }
+      if (token && Array.isArray(token.FZ_Tokens)) {
+        gestalt += 'TOKENS\n';
+        for (const t of token.FZ_Tokens) {
+          const flag = (t.flag || "public").toLowerCase();
+          if (allowedFlags.includes(flag)) {
             gestalt += `- ${t.Token || t.label || ''}: ${t.Meaning || t.value || ''}\n`;
           }
-          gestalt += '\n';
         }
-        if (sticky && Array.isArray(sticky.sticky)) {
-          gestalt += 'STICKY\n';
-          for (const s of sticky.sticky) {
+        gestalt += '\n';
+      }
+      if (sticky && Array.isArray(sticky.sticky)) {
+        gestalt += 'STICKY\n';
+        for (const s of sticky.sticky) {
+          const flag = (s.flag || "public").toLowerCase();
+          if (allowedFlags.includes(flag)) {
             gestalt += `- ${s.stickytype || ''}: ${s.note || ''}\n`;
           }
         }
-        setGestaltText(gestalt.trim());
-      });
-    }, [selectedProfile, showGestalt]);
+      }
+      setGestaltText(gestalt.trim());
+    });
+  }, [selectedProfile, showGestalt, gestaltVisibility]);
+
   useEffect(() => {
     fetch("/config.json")
       .then((res) => res.json())
@@ -266,21 +297,6 @@ function App() {
         console.warn("CONFIG LOAD FAILED")
       })
   }, [])
-  const [FZ_cfg_obj, FZ_set_cfg_obj] = useState({})
-  const [FZ_profile_ary, FZ_set_profile_ary] = useState([])
-  const [showJedit, setShowJedit] = useState(false)
-  const [showTokenEdit, setShowTokenEdit] = useState(false)
-  const [showStickyEdit, setShowStickyEdit] = useState(false)
-  const [showTextFileBackandSave, setShowTextFileBackandSave] = useState(false)
-  const [showIndexEdit, setShowIndexEdit] = useState(false)
-  const [uiMode, setUiMode] = useState('public');
-
-  // Restore the original title logic
-  const FZ_title = FZ_ConfigLoadFault(
-    FZ_cfg_obj,
-    "XS_01_Title",
-    "Loading..." + FZ_ConfLoadFail
-  );
 
   return (
     <div style={{position: 'relative', minHeight: 80}}>
@@ -290,7 +306,7 @@ function App() {
       </div>
       {/* Header/title section */}
       <div className="fz_container">
-        <h1>{FZ_title}</h1>
+        <FzUI label="fz_00_headline" as="h1" mode={uiMode} style={{margin: 0}} />
       </div>
       {/* UI Mode Selector */}
       <div style={{marginTop: 24, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 12}}>
@@ -327,6 +343,8 @@ function App() {
         selectedProfile={selectedProfile}
         setSelectedProfile={setSelectedProfile}
         onProfileChange={e => setSelectedProfile(e.target.value)}
+        visibility={gestaltVisibility}
+        setVisibility={setGestaltVisibility}
       />
       {/* Toggleable IndexEdit (now below buttons) */}
       {showIndexEdit && (
@@ -375,6 +393,8 @@ function App() {
           <TextFileBackandSave />
         </div>
       )}
+      {/* PUCK Creator toggleable section */}
+      <PuckCreatorWrapper />
       {/* Demo: Show all three messages for current mode */}
       <div style={{marginTop: 32, textAlign: 'center'}}>
         <FzUI label="fz_05_public_message" as="div" mode={uiMode} style={{fontSize: '1.1em', margin: 8}} />
