@@ -1,65 +1,114 @@
 {
   "profile": [
     {
-      "label": "Genghis Khan",
-      "value": "Chris Eitsch ",
+      "label": "Code Name",
+      "value": "CHHO",
       "flag": "secret",
-      "todo": "never reveal real last name"
+      "todo": "never reveal real last name",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "User Name",
       "value": "Choirshark",
       "flag": "public",
-      "todo": "make sure to use this username on all platforms"
+      "todo": "make sure to use this username on all platforms",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Hobby",
       "value": "Coding in React",
       "flag": "private",
-      "todo": "do not forget to back up and amend the Appdocumentation"
+      "todo": "do not forget to back up and amend the Appdocumentation",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Hobby",
       "value": "Playing Guitar in the Silocats",
       "flag": "public",
-      "todo": "Focus the next practice on the set for May"
+      "todo": "Focus the next practice on the set for May",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Food",
       "value": "Vegetarian preferred",
       "flag": "public",
-      "todo": "never forget that Pia does not bear Cilantro or Red Peppers"
+      "todo": "never forget that Pia does not bear Cilantro or Red Peppers",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Breakfast",
       "value": "Omlette or egg dish",
       "flag": "secret",
-      "todo": "best to skip the extra bread."
+      "todo": "best to skip the extra bread.",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Guitar",
       "value": "Fender Telecaster [Mitch]",
       "flag": "public",
-      "todo": "do not sell, make sure the strings are fresh.  "
+      "todo": "do not sell, make sure the strings are fresh.  ",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Guitar",
       "value": "Gibson L5 Candy Apple Red",
       "flag": "secret",
-      "todo": "do not sell, make sure the strings are fresh.  "
+      "todo": "do not sell, make sure the strings are fresh.  ",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Tax Advisor",
       "value": "Alexander Rohrmus, Steuerberater",
       "flag": "private",
-      "todo": "contact latest in June to prepare the tax declaration for 2023"
+      "todo": "contact latest in June to prepare the tax declaration for 2023",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Guitar",
       "value": "Suhr Guthrie Govan",
       "flag": "secret",
       "todo": "Add new strings soon",
-      "comment": "Govan no longer plays Suhr but has switched to Charvel, reducing the value"
+      "links": "",
+      "comment": "Govan no longer plays Suhr but has switched to Charvel, reducing the value",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Guitar",
@@ -67,6 +116,28 @@
       "flag": "secret",
       "todo": "Add new strings",
       "comment": "Jazz Box alternative"
+    },
+    {
+      "label": "Hometown",
+      "value": "Munich",
+      "flag": "",
+      "todo": "moving in 2026",
+      "links": "",
+      "comment": "From [Zentner] to [Saporta]",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "Project",
+      "value": "FlowZero",
+      "flag": "",
+      "todo": "test and refine",
+      "links": "",
+      "comment": "Coded in React, collaboation optimization",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     }
   ]
 }

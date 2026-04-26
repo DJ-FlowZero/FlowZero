@@ -4,50 +4,89 @@
       "label": "Real Name",
       "value": "Pia",
       "flag": "secret",
-      "todo": ""
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "User Name",
       "value": "Marie",
       "flag": "secret",
-      "todo": ""
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Hobby",
       "value": "Cooking",
       "flag": "public",
-      "todo": ""
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Hobby",
       "value": "Netflix and Chill",
       "flag": "private",
-      "todo": ""
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Best Friends",
       "value": "Fiona",
       "flag": "secret",
-      "todo": ""
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Best Friends",
       "value": "Sarah",
       "flag": "secret",
-      "todo": ""
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Hobby",
       "value": "Mahjong",
       "flag": "public",
-      "todo": ""
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Friend",
       "value": "Theresa",
       "flag": "private",
-      "todo": "reach out to Dan",
-      "comment": "Dan, the rocket scientist"
+      "todo": "reach out to Dan, who lives in Virgina, USA",
+      "links": "",
+      "comment": "Dan, the rocket engineer",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     }
   ]
 }

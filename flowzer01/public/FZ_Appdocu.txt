@@ -204,3 +204,34 @@ The UI is modular and ready for further user-facing development, with clear sepa
 ---
 This documentation is sufficient for an AI (e.g., Codex, Claude) to regenerate the application structure, data model, and main UI flows from scratch.
 - The title is displayed in an <h1>.
+---
+
+## Field Labels Policy (2026-04-25)
+To keep the FlowZero system lean, maintainable, and user-friendly, the number of field labels (column headers) in all editors is intentionally limited. This ensures:
+- Simplicity for users and developers
+- Consistent UI and data model
+- Easier future maintenance and extension
+
+If additional fields are needed, they can be added through configuration or future updates, but the default set is kept minimal by design.
+
+---
+
+## Data Model Variation and Extensibility (2026-04-25)
+FlowZero intentionally uses different field labels and structures for profiles, tokens, and stickies. This variation is by design:
+- **Profiles** are structured, multi-field records for user or entity configuration.
+- **Tokens** are compact, tag-like records for tagging, lookup, or quick reference.
+- **Stickies** are lightweight, flexible modifiers that complement both profiles and tokens.
+
+This separation allows each type to serve its unique purpose, keeps the system expressive, and supports future extensibility. The UI and data model are kept consistent, so the backend (file system or database) can be swapped out without changing the user experience.
+
+> This documentation is written for programmers and AI agents. The goal is to enable anyone (human or AI) to generate a similar system or migrate to a new backend (e.g., a database) by following these principles and field label conventions. The separation of data structure and UI affordance is intentional and should be preserved in any implementation.
+
+---
+
+## Munchhausen Architecture Principle (Design Objective)
+
+The FlowZero system aspires to follow the "Munchhausen Architecture Principle": the ability to bootstrap its logic and structure from its own documentation. This means that, ideally, a future developer or AI could regenerate the system, its data models, and workflows solely from the documentation provided here.
+
+**Note:** This is a guiding design objective, not a hard constraint at this stage. The system is currently in an experimental phase, and frequent changes are expected. However, keeping this principle in mind will help ensure long-term extensibility, maintainability, and self-explanation.
+
+Developers and contributors are encouraged to update documentation alongside code and data model changes, and to use clear, explicit examples and rationale for all conventions and structures.

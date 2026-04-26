@@ -5,14 +5,22 @@
       "value": "Parvine",
       "flag": "secret",
       "todo": "Mahjon Player",
-      "comment": "Ask about shopping list"
+      "links": "",
+      "comment": "Ask about shopping list",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     },
     {
       "label": "Location",
       "value": "Zentner 44",
       "flag": "secret",
       "todo": "Neighbor",
-      "comment": "Mobility"
+      "links": "",
+      "comment": "Mobility",
+      "type": "",
+      "subtype": "",
+      "alias": ""
     }
   ]
 }

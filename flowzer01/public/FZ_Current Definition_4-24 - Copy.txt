@@ -1,0 +1,1983 @@
+
+# FlowZero Systematik — Daily Definition (v0.3)
+
+---
+
+## 🧠 Core Idea
+
+FlowZero turns generic AI (“digital air”) into a **personal concierge** by applying your context through a simple, composable system.The LLM/AI field describes the Universe in terms of generalized abstractions, rules, statistics, etc. FlowZero allows
+users to define and tune their MiniVerse in terms of their ideosyncacies, preferences, personal concepts, tribes and locations. The intermediate system FlowZero provides acts as translator and mediator between universe and miniverse based on "Modes".
+
+> **You are the application (your mode)
+> The system logs into you (fine tune the universe)
+> Do you!
+
+SLOGAN ====================
+FlowZero
+Just right. Right now.
+<<FlowZero lets you define what “just right” means to you—right now.>> <<When you have no time to explain>>
+===========================
+
+=============================================
+FLOWZERO PATCH — SOBA CONSTRAINT (v0.1)
+Version 1 Operational Scope
+=============================================
+
+1. CORE CONSTRAINT
+
+FlowZero Version 1 is strictly limited to:
+
+→ SOBA (Service On Behalf Of) use cases
+
+Definition:
+A SOBA case is a task where one person defines intent and another person or system executes it.
+
+Pattern:
+Requester → defines context
+Executor → performs task
+
+---------------------------------------------
+
+2. PURPOSE
+
+The SOBA constraint ensures:
+
+- immediate practical value
+- low cognitive overhead
+- no need for shared system understanding
+- clear success criteria
+
+FlowZero is not introduced as a system.
+It is experienced as improved task completion.
+
+---------------------------------------------
+
+3. VALID SOBA CASES (V1)
+
+Allowed domains include:
+
+- Shopping
+  “Buy [Tofu]”
+
+- Errands / Retrieval
+  “Bring [Mitch] to [Allach]”
+
+- Household Coordination
+  “Diapers are in [Skinny Thing]”
+
+- Childcare Instructions
+  “Use [GentleHands] if upset”
+
+- Basic Maintenance / Dispatch
+  “[Esc3] [JamType1]”
+
+All cases must have:
+
+- clear intent
+- constrained domain
+- observable outcome
+
+---------------------------------------------
+
+4. EXCLUDED IN V1
+
+The following are explicitly out of scope:
+
+- open-ended reasoning tasks
+- advisory or coaching interactions
+- identity or profile management
+- abstract system explanation
+- multi-party negotiation
+
+If success cannot be clearly verified,
+the use case is not SOBA and is excluded.
+
+---------------------------------------------
+
+5. EXECUTION MODEL
+
+FlowZero operates as:
+
+→ semantic compression at request time
+→ ambiguity resolution before execution
+
+The executor should receive:
+
+- clear instruction
+- minimal ambiguity
+- no system overhead
+
+No knowledge of FlowZero is required.
+
+---------------------------------------------
+
+6. LEARNING MODEL (CERO)
+
+All SOBA interactions feed the CERO loop:
+
+Configuration → Engagement → Recursion → Optimisation
+
+Principle:
+
+There are no failures in V1,
+only unencoded or missing context.
+
+User corrections are captured as improvements,
+not errors.
+
+---------------------------------------------
+
+7. INTERFACE PRINCIPLE
+
+FlowZero must present as:
+
+- “your usuals”
+- “your shortcuts”
+- “your way of saying things”
+
+NOT as:
+
+- a system
+- a framework
+- a new language
+
+---------------------------------------------
+
+8. SUCCESS METRIC
+
+Primary metric:
+
+→ reduction in clarification loops
+
+Secondary metrics:
+
+- first-time task completion rate
+- perceived effort reduction
+- user trust in delegation
+
+---------------------------------------------
+
+9. FINAL POSITIONING (V1)
+
+FlowZero Version 1 is not a general system.
+
+It is:
+
+→ a lightweight semantic layer
+→ for reliable task execution on behalf of a user
+
+---------------------------------------------
+
+One-liner:
+
+“FlowZero v1 focuses on ‘do this for me’ tasks, where defining context once removes the need for repeated explanation.”
+
+=============================================
+END PATCH
+=============================================
+
+## ⚙️ Core System
+
+FlowZero is built on three primitives:
+
+### 👤 Profiles
+
+Entities in your world:
+
+* people
+* places
+* objects
+* environments
+
+Profiles define:
+
+> **where and for whom meaning applies**
+
+---
+
+### 🔑 Nomers (personal name space defined in a Flexicon)
+
+Meaning anchors expressed as tokens:
+
+```text id="5f8d2a"
+[Mitch] [Dachau] [Breakfast]
+```
+
+* locally defined
+* stable
+* reusable
+
+> A nomer is a **locally fixed meaning for a handle** (Could be definitions, links, even function calls, acting like a macro)
+A nomer is aspirational shorthand; the Flexicon constrains how that shorthand expands into actionable meaning.
+
+---
+
+### 🫙 JAR (JSON Accessible Render)
+
+Structured meaning behind a nomer.
+
+May contain:
+
+* definition
+* properties
+* relationships
+* links / media
+* usage notes
+
+Example:
+
+```json id="c1a9e3"
+{
+  "Mitch": {
+    "type": "guitar",
+    "description": "Fender Telecaster, Hurricane Mitch mahogany",
+    "tools": ["2.5mm hex", "long trem arm"],
+    "notes": "slightly sensitive tuning, expressive tone"
+  }
+}
+```
+
+> A nomer is the label.
+> The JAR is the meaning.
+
+---
+
+### 📌 Stickies
+
+Situational modifiers applied at runtime.
+
+```text id="e2b7c4"
+[Breakfast] (for 3, at [Dachau], skip eggs)
+```
+
+Stickies:
+
+* override defaults
+* adapt to context
+* remain temporary
+
+> describe **what is different now**
+
+---
+
+## 🧾 CCML — Context Concierge Markup Language
+
+CCML is the language used to encode FlowZero semantics in natural text.
+
+### Syntax
+
+```text id="d9f3a1"
+[nomer]     → recognized nomer  
+[!nomer]    → broken or unresolved nomer
+```
+
+### Modes
+
+* **Compact** → `[Mitch]`
+* **Expanded** → `[Fender Telecaster, mahogany body, tremolo system]`
+
+---
+
+### Purpose
+
+> **CCML is how you talk to your concierge.**
+
+It enables:
+
+* human-readable context
+* machine-parsable structure
+* progressive expansion of meaning
+
+---
+
+## 🧩 PUCK (Updated Definition)
+
+> **PUCK is a compressed, portable, task-relevant semantic field.**
+
+---
+
+### 🔄 How PUCK is created
+
+* start with **Gestalt** (full identity field)
+* **prune** to relevant context
+* package for reuse
+
+---
+
+### ⚙️ Properties
+
+* **Compressed**
+  uses nomers instead of verbose text
+
+* **Portable**
+  moves across systems, people, and devices
+
+* **Task-relevant**
+  contains only what matters now
+
+* **Semantic field**
+  preserves relationships and meaning
+
+---
+
+### 🎸 Practical meaning
+
+PUCK enables:
+
+* efficient communication
+* consistent interpretation
+* meaningful interoperability
+* even **without AI**
+
+> systems can exchange meaning, not just data
+
+---
+
+## 🔄 FlowZero Loop
+
+> **Gestalt → Prune → PUCK → Prime → Prompt → Loop / Live**
+
+---
+
+### 🧩 Gestalt
+
+Your full context mode field:
+
+* profiles
+* nomers
+* JARs
+
+A coherent whole:
+
+> **identity as a structured semantic field**
+
+---
+
+### ✂️ Prune
+
+Select relevant context, activate a FlowMode
+
+* Puckslice / FlowMode
+* apply stickies
+* ignore the rest
+
+---
+
+### 📦 PUCK
+
+The packaged result:
+
+> **your context, compressed and ready to travel**
+
+---
+
+### ⚡ Prime
+
+Inject context into digital air:
+
+* via CCML
+* align system behavior
+
+---
+
+### 💬 Prompt (tuned into FlowMode by uploading the PUCK)
+
+Interact:
+
+* ask
+* decide
+* act
+
+---
+
+### 🔄 Loop / Live
+
+* **Live** → act in the moment
+* **Loop** → learn and refine
+
+---
+
+## 🌍 Semantic Fields
+
+FlowZero distinguishes three layers:
+
+### Public
+
+* widely understood
+* shareable
+
+---
+
+### Private
+
+* shared within a group
+* requires nomerpedia
+
+---
+
+### Secret
+
+* restricted
+* not exposed unless allowed
+
+---
+
+## 🧭 Communication Model
+
+### Shared Flexicon / Nomerpedia (for parsing and PUCK exchange)
+
+Once aligned:
+
+```text id="7a6d2b"
+Bring [Mitch] to [Dachau]
+```
+
+→ fully understood without expansion
+
+---
+
+### Fallback
+
+```text id="a4c8e1"
+[!Mitch]
+```
+
+→ unresolved or missing meaning
+
+---
+
+## ⚡ Core Insight
+
+FlowZero enables:
+
+> **Define once → reuse everywhere**
+
+---
+
+## 🧠 Mental Model
+
+* AI = **digital air**, the Universe behind the curtain
+* FlowZero = **context layering** 
+* CERO = personal concierge (Configure / Engage / Recurse / Optimize)
+* CCML = **language**
+* Result = **personal concierge-mediated engagement**
+
+---
+
+## 🎸 Analogy
+
+> Generic AI is like a highly capable border collie. (Universal, generic, untrained)
+> FlowZero trains it using your context.( You trusted shepherd assistant)
+
+Or:
+
+> FlowZero **primes the digital air** with your chosen mode.
+
+---
+
+## 🎯 Positioning
+
+> **FlowZero Systematik — a method for contextual coordination.**
+
+---
+
+## 🧭 Final One-Liner
+
+> FlowZero captures your mode, prunes it to context, and primes AI to work like you prefer.
+
+---
+
+End of Definition
+
+# FlowZero – Daily Specification (v0.1 Draft)
+
+## 1. Overview
+
+FlowZero is a lightweight, human-centric system for managing meaning, context, and action in everyday life. It enables individuals and small groups to tune their interaction with sytems using simple constructs that remain readable, flexible, and composable.
+
+At its core, FlowZero solves a common problem:
+
+> Humans operate in rich, contextual environments, but traditional systems force rigid structure or lose meaning entirely.
+
+FlowZero provides a middle path:
+
+* **natural language remains intact**
+* **meaning is explicitly anchored**
+* **context is dynamically applied**
+
+This is achieved through three core primitives:
+
+* **Profiles (context)**
+* **Nomers (meaning anchors)**
+* **Stickies (situational modifiers)**
+
+Together, these form a minimal yet powerful system capable of handling a wide range of real-world coordination tasks, by using portable "Modes" that fine tune receiving systems.
+
+---
+
+## 2. Core Concepts
+
+### 2.1 Profiles
+
+A **Profile** represents any identifiable entity:
+
+* Person (Chris, Pia, Uli)
+* Place (Dachau, Allach, Practice Room)
+* Object (Mitch guitar, generator, car)
+* Environment (restaurant, building, gig setup)
+
+Profiles serve as containers for:
+
+* Nomers
+* JAR definitions
+* Norms (rules and conventions)
+* Contextual knowledge
+
+Profiles define:
+
+> **Where and for whom meaning applies**
+
+---
+
+### 2.2 Nomers
+
+A **Nomer** is a labeled handle that represents a concept with a defined meaning.
+
+Nomers can be:
+
+* existing words with specialized meaning (“garlic”)
+* nicknames (“Mitch”)
+* acronyms (“EMC”)
+* invented terms (“foodeldunk”)
+* phrases (“the usual”)
+
+A nomer is not defined by its form, but by its function:
+
+> A nomer is a **locally fixed meaning for a handle**
+
+Nomers are written in square brackets:
+
+```text
+[Mitch]
+[Dachau]
+[Breakfast]
+```
+
+---
+
+### 2.3 Tokens
+
+A **Token** is the system-level representation of a nomer.
+
+* Always enclosed in square brackets
+* Used for parsing and recognition
+
+```text
+[Mitch]
+```
+
+A token represents a nomer but is not the meaning itself.
+
+---
+
+### 2.4 JAR (JSON Accessible Render)
+
+A **JAR** is the structured meaning package behind a nomer.
+
+It can contain:
+
+* definition
+* properties
+* relationships to other nomers
+* media references (images, links)
+* usage notes and quirks
+
+Example:
+
+```json
+{
+  "Mitch": {
+    "type": "guitar",
+    "description": "Fender Telecaster, Hurricane Mitch mahogany",
+    "tools": ["2.5mm hex", "long trem arm"],
+    "notes": "slightly sensitive tuning, expressive tone"
+  }
+}
+```
+
+Conceptually:
+
+* label = outside of the jar
+* JAR = everything inside
+
+JARs are:
+
+* structured
+* portable
+* expandable on demand
+
+---
+
+### 2.5 Stickies
+
+**Stickies** represent situational context.
+
+They:
+
+* modify nomers or profiles
+* override defaults
+* are temporary and dynamic
+
+Example:
+
+```text
+[Breakfast] (for 3, at [Dachau], skip eggs)
+```
+
+Stickies allow the system to express:
+
+> “What is different today”
+
+---
+
+## 3. Syntax
+
+### 3.1 Nomer Syntax
+
+```text
+[nomer]
+```
+
+Indicates:
+
+* system-recognized meaning
+* linked to a JAR
+
+---
+
+### 3.2 Error / Unresolved Nomer
+
+```text
+[!nomer]
+```
+
+Indicates:
+
+* nomer recognized
+* JAR missing, broken, or inaccessible
+
+---
+
+### 3.3 Modes
+
+#### Compact Mode (default)
+
+```text
+Bring [Mitch] to [Dachau]
+```
+
+#### Expansion Mode
+
+```text
+Bring [Fender Telecaster, mahogany body, tremolo system]
+to [storage location in Dachau]
+```
+
+Same syntax, different rendering.
+
+---
+
+## 4. Semantic Fields
+
+FlowZero distinguishes between three semantic layers:
+
+### Public
+
+* widely shared meaning
+* accessible to all
+* example: legal, technical, sports terminology
+
+### Private
+
+* shared within a group
+* requires shared nomerpedia
+* example: family shorthand, band context
+
+### Secret
+
+* restricted meaning
+* not exposed without permission
+* example: passwords, medical data, safe words
+
+Default behavior:
+
+* unknown or sensitive meaning is not expanded
+* system favors non-disclosure over incorrect inference
+
+---
+
+## 5. Communication Model
+
+### 5.1 Shared Nomerpedia
+
+Participants exchange JAR definitions (PUCK).
+
+Once aligned:
+
+```text
+Bring [Mitch] to [Dachau]
+```
+
+is fully understood without expansion.
+
+---
+
+### 5.2 Fallback
+
+If a nomer is not resolved:
+
+```text
+[!Mitch]
+```
+
+System may:
+
+* request definition
+* offer expansion
+* flag inconsistency
+
+---
+
+## 6. CCML – Contextual Collaboration Markup Language
+
+CCML is the markup language used to encode FlowZero semantics in text.
+
+### Definition
+
+> CCML is a lightweight markup language that embeds structured meaning into natural language using shared semantic tokens.
+
+---
+
+### Characteristics
+
+* human-readable
+* machine-parsable
+* context-aware
+* composable
+* minimal syntax
+
+---
+
+### Example
+
+```ccml
+Bring [Mitch] to [Dachau] after [Practice]
+```
+
+---
+
+### Layers
+
+1. Inline text (communication)
+2. JAR definitions (meaning)
+3. Stickies (state)
+
+---
+
+### Key Property
+
+> CCML separates **meaning from representation**, while keeping both accessible.
+
+---
+
+## 7. Design Principles
+
+1. **Compact by default**
+2. **Expand on demand**
+3. **Meaning over structure**
+4. **Context defines interpretation**
+5. **Stable nomers, evolving JARs**
+6. **Profiles + Nomers + Stickies are sufficient**
+7. **Do not over-specify**
+8. **Favor usability over completeness**
+
+---
+
+## 8. Example Use Cases
+
+### 8.1 Guitar Management
+
+```text
+Bring [Mitch]
+```
+
+Expands to:
+
+* specific guitar
+* required tools
+* known quirks
+
+---
+
+### 8.2 Breakfast Planning
+
+```text
+[Breakfast] (for 3, at [Dachau], skip eggs)
+```
+
+System derives:
+
+* items
+* quantity
+* modifications
+
+---
+
+### 8.3 Maintenance Scenario
+
+* technician profile
+* building profile
+* object profile
+* stickies describing issues
+
+System generates:
+
+* actionable briefing
+
+---
+
+### 8.4 Legal Interpretation
+
+```text
+[fiduciary duty]
+[exculpated]
+[judicial decree]
+```
+
+Expanded:
+
+* plain-language explanation
+
+---
+
+## 9. System Behavior
+
+FlowZero enables:
+
+* semantic compression
+* contextual expansion
+* high-bandwidth communication
+* reduced cognitive load
+* improved coordination
+
+---
+
+## 10. Summary
+
+FlowZero is not:
+
+* a database
+* a note-taking system
+* a rigid schema
+
+FlowZero is:
+
+> **a semantic layer that allows humans and AI to share, compress, and expand meaning in context**
+
+---
+
+## Final One-Liner
+
+> FlowZero turns everyday language into a structured, context-aware collaboration system through nomers, profiles, and stickies, encoded via CCML.
+
+---
+
+End of Daily Draft
+
+Update April 23
+
+FLOWZERO PATCH — MODES, MINIVERSE, AND CERO LOOP
+
+1. CORE PRINCIPLE SHIFT
+   FlowZero is not a data system or identity system.
+
+FlowZero is a:
+→ mode-based tuning layer
+→ that aligns universal systems (Digital Air) with a user’s current miniverse
+
+Key distinction:
+
+* Identity = who you are (not transmitted)
+* Mode (FM) = how you want to interact right now (transmitted)
+
+---
+
+2. TWO-LAYER MODEL
+
+Universe (Digital Air / AI)
+
+* general
+* scalable
+* statistical
+* shared
+
+Miniverse (User)
+
+* personal
+* situational
+* evolving
+* limited
+
+Cero connects the two:
+→ translates universal capability into miniverse-aligned interaction
+
+---
+
+3. FLOW MODE (FM)
+
+Definition:
+A Flow Mode is a named snapshot of what matters right now.
+
+Alternate phrasing:
+Mode = what matters right now
+
+Examples:
+
+* "Wednesday mode"
+* "inspection mode"
+* "restaurant mode"
+* "Hendrix mode"
+
+Properties:
+
+* no identity required
+* socially understandable
+* compresses complex context into shorthand
+
+---
+
+4. FLEXICON
+
+Definition:
+The Flexicon is the user’s personal semantic dictionary.
+
+It maps:
+user language → structured meaning → executable context
+
+Example:
+"harvegi" → vegan, quiet, known dishes
+"inspection" → diagnose only, no repair
+
+---
+
+5. MACRO (CCML)
+
+Syntax:
+@[context[:name] +modifiers]
+
+Function:
+Invokes a Flow Mode via Flexicon resolution
+
+Examples:
+@[restaurant:harvegi]
+@[maintenance:inspection]
+@[login:retirement >checklist]
+
+---
+
+6. PUCK
+
+Definition:
+A PUCK is an executable context packet derived from a Flow Mode.
+
+It contains:
+
+* relevant constraints
+* preferences
+* allowed actions
+* disallowed actions
+* expected outcome
+
+Key idea:
+PUCK = prepared situation, not raw data
+
+---
+
+7. CERO (ORCHESTRATOR)
+
+Cero = local concierge/orchestrator
+
+Role:
+
+* resolves macros
+* activates Flow Modes
+* generates/refines PUCKs
+* interfaces with Digital Air
+
+User-facing name can be customized (Alfred, etc.)
+System name remains: Cero
+
+---
+
+8. CERO LOOP (CORE ENGINE)
+
+C = Configuration
+E = Engagement
+R = Recursion
+O = Optimisation
+
+Loop:
+Configuration → Engagement → Recursion → Optimisation → (repeat)
+
+Meaning:
+
+* system is not static
+* every interaction improves the next one
+
+Principle:
+There are no failures—only unencoded learnings
+
+---
+
+9. RETUNING CONCEPT
+
+FlowZero does not change systems.
+
+It:
+→ retunes interaction
+
+Analogy:
+
+* tuning a guitar
+* tuning a radio (FM)
+* tuning a car profile
+* tuning a synthesizer preset
+
+Core idea:
+Same system, different behavior
+
+---
+
+10. ECONOMIC NECESSITY
+
+AI cannot store all personal states for all users.
+
+Therefore:
+
+* systems must remain general
+* personalization must be portable
+
+Principle:
+The only scalable personalization is portable personalization
+
+---
+
+11. COORDINATION INSIGHT
+
+FlowZero enables:
+→ shared shorthand for complex situations
+
+Pattern:
+Explain → Define → Name → Reuse
+
+Example:
+“Wednesday mode” replaces full schedule explanation
+
+---
+
+12. FINAL SYNTHESIS
+
+FlowZero =
+a mode-based, recursive tuning system
+that allows users to carry portable configurations (PUCKs)
+to align universal systems (Digital Air)
+with their current miniverse
+without exposing identity
+
+Short version:
+“Tune your mode. The system follows.”
+
+============================================= ExplainFrames and Objection Handling ==============================
+
+
+xExplainFrame: A concise, familiar analogy used to make complex or abstract concepts understandable in everyday language. It maps structure to common experience for quick intuition, without claiming exact equivalence or replacing formal definitions.
+
+[Digital Air] can be understood as an ambient computing system that comprises all accessible processing but hides the
+complexity of the underlying system architecture. The most common Digital Air implementation today is the accessibility of knowledge behind a Google Search, or access to an LLM. Digital Air may, when properly used and configured, appear like a game engine, but instead of enforcing fixed rules, it converges around real-world observations, physics, and statistical patterns. Unlike traditional game engines that can override reality (e.g. anti-gravity, resurrection), Digital Air operates as a probabilistic environment shaped by plausibility, where outcomes emerge through convergence rather than strict rule execution. Within this frame, CERO acts as the game controller, selecting and tuning Flow Modes (FM), shaping the active context, and guiding interaction so the system behaves coherently and predictably for the user. FlowZero therefore provides a controllable interface to an otherwise fluid system—making Digital Air feel interactive, responsive, and stateful, while remaining grounded in real-world constraints.
+
+
+[Game Analogy]: Digital Air may appear like a game engine, but it converges around real-world constraints rather than enforcing arbitrary rules. FlowZero provides a familiar interaction layer: Flow Modes act like avatar configurations, the Flexicon defines interpretation rules, PUCK carries session context, and CERO serves as the controller and boundary to execution.
+One-liner: Digital Air appears like a game engine; FlowZero provides the controller and configuration layer for interacting with it under real-world constraints.
+
+[Gamer's Fallacy]: The Gamer's Fallacy (GF) is a type of Paradigm Frame Lock (PFL) where expectations shaped by highly responsive, configurable environments are unconsciously applied to the real world. These environments can include interactive gaming systems (where outcomes are controllable and failures are reversible) as well as pampered or high-service contexts (e.g. service staff, concierge, or butler-style support) where individual needs are consistently anticipated and fulfilled. Under GF, people may expect high configurability, low-cost failure, and that systems or others will adapt to their personal preferences. In real-world contexts—governed by shared constraints, policies, and non-negotiable trade-offs—this leads to friction. In edge cases, GF can manifest as entitled behavior, where individuals expect others to adjust to their needs, quirks, and idiosyncrasies without reciprocal adaptation.
+One-liner: Gamer’s Fallacy = expecting real-world systems to behave like configurable, low-risk environments.
+
+[Differential Gearbox]: FlowZero can be understood as a differential gearbox with traction control for intent. In mechanical systems, a differential allows multiple wheels to rotate at different speeds while remaining part of the same system, and traction control prevents loss of grip under varying conditions. Similarly, FlowZero aligns interactions across human (slow), social (medium), and digital (fast) layers, allowing each to operate at its natural pace while maintaining coherence. The system does not change the underlying components but matches their operating speeds and conditions. Traction control corresponds to mechanisms like Flexicon constraints, PUCK context, and CERO intervention, which prevent misalignment, overreach, or unrealistic expectations (e.g. Gamer’s Fallacy), ensuring that intent translates into effective action under real-world constraints.
+One-liner: FlowZero = differential gearbox with traction control for intent.
+
+[Neighborhood Concierge]: FlowZero can be applied as a lightweight neighborhood concierge system for assisting someone with recurring, preference-sensitive tasks such as shopping. A Profile is created for the person (even without full identity, but optionally with a user-chosen nickname such as MahjongLady2000), and a Flexicon captures their specific meanings for common items (e.g. “milk” → 2% low fat from Rewe, “butter” → preferred brand and type). This allows simple requests to be interpreted consistently without repeated clarification. Changes in condition (e.g. dietary restrictions, temporary needs) are expressed as Stickies, modifying behavior without altering the underlying definitions. The Profile, Flexicon, and Stickies can be packaged into a PUCK and shared with Digital Air, allowing AI systems to generate aligned outputs (e.g. “create a shopping list within a €50 budget”) that respect personal preferences and constraints. The result is a system where everyday help can be provided reliably, whether executed manually or assisted by AI.
+
+One-liner: Shared shorthand + personal preferences + PUCK → reliable, AI-assisted everyday assistance.
+
+[Stammkunden-Affordance]: The Stammkunden-Affordance (SKA) describes the effect where a system, person, or service behaves like a well-trained regular-service provider (“they know you”) by aligning with a user’s established preferences, shorthand, and context. Instead of requiring explicit instructions each time, the system interprets intent based on prior knowledge encoded in Profiles, Flexicon, and PUCKs. SKA is not based on identity exposure, but on consistent, portable context that allows the system to act as an expert on user intent. It reflects the familiar experience of being a regular customer, where minimal input yields highly aligned outcomes. In FlowZero, SKA emerges when Digital Air is properly primed with a user’s Mode, enabling responsive, context-aware interaction without repeated explanation.
+One-liner: Stammkunden-Affordance = the system knows your “usual” without you having to explain it.
+
+[CCML Minimal Core]: CCML can be understood as a minimal symbolic “control panel” for intent, using a fixed set of primitives (7 max) to encode meaning, context, and execution in a compact, human-readable form. Each symbol has a single, stable role: tokens represent meaning, types classify objects, flags constrain behavior, macros activate modes, and stickies capture what is different right now. This allows complex situations to be expressed as short, composable statements that can be interpreted consistently by humans and systems. The design intentionally limits the number of primitives to prevent drift and encourage reuse, similar to how small instruction sets enable powerful computation.
+One-liner: CCML = a 7-symbol control panel for expressing intent, context, and action.
+[CCML Syntax]: CCML uses a minimal set of 7 primitives to encode intent, context, and execution in natural text.
+
+[token]     → nomer (Flexicon-resolved meaning handle)  
+{type}      → object classification (profile / sticky context)  
+<flag>      → processing or constraint modifier (e.g. public, private, no_dairy)  
+@macro      → activation key (invokes Flow Mode / PUCK / macro)  
+!token      → unresolved, protected, or flagged nomer  
+//sticky    → inline situational modifier (temporary override)  
+::          → binding / association operator (minimal linkage)
+
+Rules:
+- Each primitive has a single, stable role  
+- Tokens are semantic only; control is expressed via flags, macros, and stickies  
+- Syntax is human-readable and machine-parsable  
+- Expansion of meaning is handled via Flexicon, not syntax  
+- Composition is preferred over nesting or complex grammar
+
+One-liner: CCML syntax = 7 primitives, each with one job, combined to express intent clearly.
+
+[Münchhausen Architecture Principle]: The Münchhausen Architecture Principle (MAP) describes a system design approach in which the system is sufficiently self-describing to enable its own reconstruction from within (bootstrap). All essential meaning, structure, and behavior are encoded in portable, human-readable artifacts such as Profiles, Flexicon (nomers), and Stickies. Given this description and access to the stored data, a sufficiently capable AI/LLM can reconstruct a minimal working version of the system and its affordances without relying on fixed implementation details. The system effectively “pulls itself up by its own bootstraps,” not through hidden mechanics, but through explicit, structured descriptions of how it operates.
+One-liner: MAP = the system contains enough description to rebuild itself from its own semantic artifacts.
+[MAP] + [Dictionary-to-Sonnet]: The Münchhausen Architecture Principle can be understood like having a complete dictionary and asking a system to write a sonnet. The dictionary contains all the building blocks (words, meanings, relationships), but not the final artifact. Given sufficient structure and context, a capable system can generate new, functional outputs from those primitives. Similarly, FlowZero encodes meaning in Profiles, Flexicon, and Stickies so that, even without fixed implementation, a system can reconstruct useful behavior and affordances from the available semantic components.
+One-liner: Given the building blocks and rules, the system can recreate the outcome.
+
+[Digital 1 vs Digital 2]: Digital 1 systems infer user intent by observing behavior and applying statistical models based on standard patterns. Digital 2 systems align with user intent by tuning behavior based on explicitly provided context (Profiles, Flexicon, Stickies, PUCK). Instead of guessing from past actions, the system responds to what the user chooses to reveal in the current situation. FlowZero focuses on optimizing this tuning step—making context definition simple, composable, and portable across system instances—so aligned behavior can be reproduced without re-learning. Through the CERO loop (Configuration → Engagement → Recursion → Optimisation), friction is iteratively reduced over time rather than assumed to be zero.
+One-liner: Digital 1 guesses; Digital 2 aligns; FlowZero makes alignment portable and iteratively reduces friction.
+
+=============================================
+FLOWZERO PATCH — KEYWORD SEMANTICS (v0.1.1)
+Exact Execution Constraint (Revised)
+=============================================
+
+3. EXECUTION BEHAVIOR
+When encountering a Keyword:
+
+IF definition is known:
+  → execute exactly as defined
+IF definition is unclear:
+  → request clarification before proceeding
+IF exact instance is unavailable:
+  → stop and ask for confirmation or alternative
+
+NEVER:
+  → silently substitute
+  → approximate
+  → “best guess”
+
+---------------------------------------------
+
+3a. MODIFICATION RULE (NEW)
+
+A Keyword cannot be reinterpreted at execution time.
+The only valid ways to change a Keyword are:
+1. **Definition Update (persistent)**
+   → modify the Keyword’s underlying definition in the Flexicon
+2. **Sticky Override (temporary)**
+   → apply a contextual override using a Sticky
+
+Example:
+```text
+[Tofu] //sticky: use smoked version today
+
+============================================== EVOLUTION PATCH April 24 =====================
+============================================================
+FLOWZERO CORE PATCH — CONTEXT & EXECUTION MODEL (v0.2)
+============================================================
+
+CORE DEFINITIONS
+----------------
+FlowZero (FZ): Instant situation briefing system for AI interaction.
+
+JITLAG (Just-In-Time Learning and Generation):
+Context is injected at runtime, enabling immediate alignment without persistent memory.
+
+PUCK (Portable Use Case Knowledge):
+A structured, portable context packet that enables an AI to act effectively in a specific situation.
+
+Gestalt:
+The full contextual field of a user (all potentially relevant knowledge, preferences, constraints, and relationships).
+
+PUCK = Pruned Gestalt:
+A deliberate, situation-specific slice of the Gestalt.
+
+------------------------------------------------------------
+
+FUNDAMENTAL PRINCIPLE
+---------------------
+AI is inherently generic, statistical, and context-poor.
+
+Useful outcomes are driven by context alignment, not model intelligence.
+
+Context > Prompt > Model
+
+------------------------------------------------------------
+
+CORE MECHANISM (CERO LOOP)
+--------------------------
+Gestalt → Prune → PUCK → Upload → JITLAG → Execute → Refine → Repeat
+
+Behavior improves through iterative refinement of context, not prompt engineering.
+
+------------------------------------------------------------
+
+SOBA MODEL (SERVICE ON BEHALF OF)
+---------------------------------
+FlowZero enables AI to act as a situational operator.
+
+Effective execution requires:
+- Role
+- Situation
+- Constraints
+
+A PUCK defines the execution environment for SOBA tasks.
+
+------------------------------------------------------------
+
+SYSTEM COMPONENTS
+-----------------
+Profiles: Persistent background context
+Tokens: Semantic anchors (e.g. [Mitch])
+Keywords: Non-substitutable constants
+Stickies: Situational modifiers (“context paint”)
+Protocol: Interpretation and behavior rules
+
+------------------------------------------------------------
+
+SYSTEM PROPERTIES
+-----------------
+- Stateless alignment (no reliance on memory)
+- Portable across AI systems
+- Flexible, human-centric data structure
+- Stable through token anchoring
+- Scale-invariant (user-level and use-case-level)
+
+------------------------------------------------------------
+
+BEHAVIORAL EVOLUTION PRINCIPLE
+-----------------------------
+Do not store identity.
+Store what consistently improves outcomes.
+
+Evolution loop:
+Use → Observe → Keep → Discard
+
+------------------------------------------------------------
+
+CONTEXT LITERACY
+----------------
+In a world of pervasive AI (“Digital Air”):
+
+The key skill shifts from:
+Knowing → Prompting → Contexting
+
+Context-savvy behavior becomes the primary differentiator.
+
+------------------------------------------------------------
+
+EXECUTION MODEL (ANALOGIES)
+---------------------------
+
+Game Analogy:
+AI = Game engine
+User = Avatar
+Gestalt = Full inventory
+PUCK = Loadout
+
+Principle:
+Do not change the engine.
+Change the loadout.
+
+Musical Analogy:
+PUCK = Score
+AI = Musician
+Tokens = Chords
+Stickies = Dynamics
+
+Principle:
+Define structure, allow controlled interpretation.
+
+------------------------------------------------------------
+
+PRIVACY & CONTROL MODEL
+-----------------------
+Users do not reveal themselves.
+They select what context is relevant for a situation.
+
+Core question:
+"Which part of my Gestalt is useful for this task?"
+
+More context → better results
+Less context → higher privacy
+
+------------------------------------------------------------
+
+USAGE PATTERN
+-------------
+- Create PUCK per situation or daily context
+- Start fresh AI session
+- Upload PUCK
+- Execute task
+- Discard or switch context
+
+Context reset is a feature (prevents drift and contamination).
+
+------------------------------------------------------------
+
+POSITIONING
+-----------
+AI provides answers.
+FlowZero provides alignment.
+
+AI provides possibilities.
+FlowZero makes them relevant.
+
+------------------------------------------------------------
+
+STRUCTURAL PRINCIPLE
+--------------------
+Flexible data + stable anchors = usable system
+
+Protocol must remain:
+- Lightweight
+- Evolvable
+- Non-rigid
+
+Avoid premature standardization.
+
+------------------------------------------------------------
+
+META INSIGHT
+------------
+FlowZero formalizes vibe-coded interaction patterns into reusable, portable protocols.
+
+------------------------------------------------------------
+
+CORE PHRASES
+------------
+- Don’t prompt better — brief better
+- Context in — results out
+- Don’t change the engine — change the loadout
+- Don’t store yourself — store what works
+- Be somebody (in context)
+
+============================================================
+END PATCH
+============================================================
+
+============================================================
+FLOWZERO SHARPENING PATCH — CONSTRAINT & EXECUTION MODEL (v0.21)
+============================================================
+
+CORE REFRAME
+------------
+FlowZero is not a context system.
+
+FlowZero is a:
+→ constraint injection system
+→ for temporary agency delegation
+
+------------------------------------------------------------
+
+REFINED DEFINITIONS
+-------------------
+
+Context:
+Not information.
+→ Constraints that shape possible actions and outcomes.
+
+JITLAG (Just-In-Time Learning and Generation):
+Runtime context injection that:
+→ overrides prior assumptions
+→ resets behavioral drift
+→ enforces current constraints
+
+PUCK (Portable Use Case Knowledge):
+A portable constraint set that defines:
+→ what is allowed
+→ what is preferred
+→ what is excluded
+
+PUCK = executable constraint surface
+
+Gestalt:
+Total available constraint space.
+
+PUCK = constrained slice of Gestalt.
+
+------------------------------------------------------------
+
+FUNDAMENTAL PRINCIPLE (SHARPENED)
+--------------------------------
+Model capability is abundant.
+
+Correct behavior emerges from constraint quality.
+
+Constraints > Prompts > Model
+
+------------------------------------------------------------
+
+CERO LOOP (REFINED)
+-------------------
+Gestalt → Prune → PUCK → Inject → Constrain → Execute → Learn → Repeat
+
+Key shift:
+You do not send data.
+You shape the behavior space.
+
+------------------------------------------------------------
+
+SOBA MODEL (SHARPENED)
+----------------------
+SOBA = Service On Behalf Of
+
+Definition:
+Temporary delegation of agency under constraints.
+
+A PUCK defines:
+→ scope of authority
+→ boundaries of action
+→ success conditions
+
+Without constraints → hallucination risk
+With constraints → controlled execution
+
+------------------------------------------------------------
+
+SYSTEM COMPONENTS (FUNCTIONAL)
+------------------------------
+Profiles:
+Background constraint reservoirs
+
+Tokens:
+Stable semantic anchors (constraint handles)
+
+Keywords:
+Non-substitutable constants (hard constraints)
+
+Stickies:
+Runtime constraint modifiers (delta layer)
+
+Protocol:
+Rules for constraint interpretation and execution
+
+------------------------------------------------------------
+
+CONSTRAINT TYPES (NEW)
+----------------------
+Hard Constraints:
+Must not be violated
+(e.g. vegan, budget limit, safety rules)
+
+Soft Constraints:
+Preferred but flexible
+(e.g. style, brand, tone)
+
+Exclusions:
+Explicitly forbidden outcomes
+
+Defaults:
+Implicit assumptions if not overridden
+
+------------------------------------------------------------
+
+SYSTEM PROPERTIES (SHARPENED)
+-----------------------------
+- Stateless alignment (no history dependency)
+- Deterministic biasing (reduced randomness via constraints)
+- Portable execution logic
+- Stable via token anchoring
+- Scale-invariant (task ↔ system)
+
+------------------------------------------------------------
+
+BEHAVIORAL EVOLUTION PRINCIPLE (REFINED)
+---------------------------------------
+Do not store identity.
+
+Store:
+→ constraints that improve outcomes
+
+Loop:
+Use → Observe → Extract constraint → Reuse
+
+------------------------------------------------------------
+
+CONTEXT LITERACY (SHARPENED)
+----------------------------
+The primary skill is not prompting.
+
+It is:
+→ selecting and composing constraints
+
+Shift:
+Knowing → Prompting → Constraining
+
+------------------------------------------------------------
+
+EXECUTION MODEL (REFINED ANALOGIES)
+-----------------------------------
+
+Game:
+AI = Engine
+PUCK = Loadout
+
+You do not modify the engine.
+You restrict available moves.
+
+Music:
+AI = Performer
+PUCK = Score + Rules
+
+You do not play the instrument.
+You define what can be played.
+
+------------------------------------------------------------
+
+PRIVACY MODEL (SHARPENED)
+-------------------------
+Identity is not transmitted.
+
+Only constraints are transmitted.
+
+Privacy control =
+→ selection of constraints
+
+More constraints → better alignment
+Fewer constraints → higher ambiguity
+
+------------------------------------------------------------
+
+USAGE PATTERN (REFINED)
+-----------------------
+1. Define situation
+2. Extract relevant constraints
+3. Build PUCK
+4. Inject into fresh session
+5. Execute
+6. Extract improved constraints
+7. Discard session
+
+Reset is mandatory.
+Drift is failure.
+
+------------------------------------------------------------
+
+POSITIONING (SHARPENED)
+-----------------------
+AI generates possibilities.
+
+FlowZero constrains them into correctness.
+
+------------------------------------------------------------
+
+STRUCTURAL PRINCIPLE (UNCHANGED)
+-------------------------------
+Flexible data + stable anchors = usable system
+
+------------------------------------------------------------
+
+META INSIGHT (SHARPENED)
+-----------------------
+FlowZero converts informal “vibe control”
+into explicit, reusable constraint systems.
+
+------------------------------------------------------------
+
+CORE PHRASES (REFINED)
+----------------------
+- Don’t prompt better — constrain better
+- Constraints in — behavior out
+- Don’t change the engine — change the loadout
+- Don’t store yourself — store what works
+- Be somebody (in context)
+
+============================================================
+END PATCH
+============================================================
+
+========================================
+FLOWZERO PATCH — PROJECT LEARNINGS v0.4
+April 25, 2026
+==========
+
+1. FLOWZERO IS NOT MEMORY
+
+---
+
+Early ambiguity reduced:
+
+FlowZero is not:
+
+* memory storage
+* identity storage
+* personal CRM
+* notes
+
+FlowZero is:
+→ context calibration infrastructure
+
+Core function:
+reduce explanation cost.
+
+One-liner:
+FlowZero exists because explaining repeatedly is expensive.
+
+---
+
+2. THE HANDOVER THRESHOLD
+
+---
+
+A useful test emerged:
+
+FlowZero becomes economically useful at the point where:
+
+explanation cost > execution cost
+
+Examples:
+
+* vacation handover
+* onboarding
+* dog hotel handler
+* recurring assistant tasks
+* specialist shorthand environments
+
+Definition:
+Handover Threshold =
+the minimum complexity where packaging context beats re-explaining.
+
+One-liner:
+If briefing hurts, FlowZero helps.
+
+---
+
+3. STAMMKUNDEN IS THE REAL UX TARGET
+
+---
+
+Not “personalization.”
+
+More precise:
+
+Stammkunden-Affordance (SKA)
+
+Goal:
+make systems behave like trusted regular-service providers.
+
+Signal:
+minimal input → aligned output
+
+Meaning:
+less prompting
+more continuity
+
+One-liner:
+The ideal interface remembers your “usual.”
+
+---
+
+4. PUCK IS COMPILED CONTEXT
+
+---
+
+Important distinction stabilized:
+
+Profiles = source material
+Stickies = runtime modifiers
+Tokens = semantic handles
+PUCK = compiled executable context packet
+
+Not raw identity.
+
+Pruned identity.
+
+One-liner:
+PUCK is compiled context, not stored self.
+
+---
+
+5. FLOW MODE > IDENTITY
+
+---
+
+Critical architecture simplification:
+
+Identity is heavy.
+Mode is light.
+
+Transmit:
+how I want to operate now
+
+Do not transmit:
+who I fundamentally am
+
+Examples:
+
+* inspection mode
+* restaurant mode
+* Wednesday mode
+
+One-liner:
+Mode beats identity for execution.
+
+---
+
+6. DIGITAL 1 VS DIGITAL 2
+
+---
+
+Strong framing:
+
+Digital 1:
+system infers from behavior
+
+Digital 2:
+system aligns from explicit context
+
+FlowZero improves Digital 2.
+
+Key:
+portable alignment
+
+One-liner:
+Digital 1 guesses.
+Digital 2 aligns.
+
+---
+
+7. CERO LOOP STABILIZED
+
+---
+
+Configuration
+Engagement
+Recursion
+Optimisation
+
+Key realization:
+
+friction approaches zero asymptotically
+
+Never zero.
+
+Always tuning.
+
+One-liner:
+FlowZero is continuous calibration.
+
+---
+
+8. CCML REFINED
+
+---
+
+Shift in interpretation:
+
+CCML is less “markup language”
+more:
+
+control surface for intent
+
+Minimal primitives.
+Stable semantics.
+
+Purpose:
+human legible
+machine actionable
+
+One-liner:
+CCML is the dashboard for intent.
+
+---
+
+9. FLEXICON BECAME CENTRAL
+
+---
+
+Important architectural shift:
+
+Language is local.
+
+Meaning is local.
+
+Flexicon stores:
+local semantic compression.
+
+Not universal definitions.
+
+One-liner:
+The Flexicon makes shorthand trustworthy.
+
+---
+
+10. MAP PRINCIPLE (MÜNCHHAUSEN)
+
+---
+
+Core philosophical constraint:
+
+System must be reconstructable from artifacts.
+
+Meaning:
+no hidden essential logic.
+
+Portable semantics must be sufficient to rebuild.
+
+One-liner:
+If you lose the app, keep the meaning.
+
+---
+
+11. EXPLAINFRAMES MATTER
+
+---
+
+Adoption insight:
+
+People understand systems through analogies.
+
+Useful frames stabilized:
+
+* concierge
+* gearbox
+* game controller
+* Stammkunde
+
+These reduce onboarding friction.
+
+One-liner:
+People buy frames before systems.
+
+---
+
+12. FLOWZERO IS A HUMAN INTERFACE LAYER
+
+---
+
+Not an AI layer.
+
+Not a model.
+
+Not a platform.
+
+It is:
+
+a human-aligned calibration layer
+between person and digital air.
+
+One-liner:
+FlowZero tunes the interface, not the intelligence.
+
+---
+
+13. VISIBILITY LAYERS VALIDATED
+
+---
+
+Public
+Private
+Secret
+
+Not decorative.
+
+Operational.
+
+Important because:
+PUCK export can be selectively scoped.
+
+One-liner:
+Context without boundary is leakage.
+
+---
+
+14. THE UNIVERSAL EMOTION FOUND
+
+---
+
+Strong emotional anchor discovered:
+
+“If I have to explain it,
+it’s easier to do it myself.”
+
+This is the emotional market signal.
+
+Not productivity.
+
+Friction fatigue.
+
+One-liner:
+FlowZero sells relief from re-explaining.
+
+---
+
+15. WORKING PROTOTYPE CHANGED EVERYTHING
+
+---
+
+Major practical shift:
+
+The idea is no longer hypothetical.
+
+You now have:
+
+* profile system
+* token system
+* sticky system
+* visibility filtering
+* safe staging
+* publishing workflow
+
+Meaning:
+FlowZero crossed into executable territory.
+
+One-liner:
+A prototype turns philosophy into pressure.
+
+---
+
+## CURRENT CORE FORMULA
+
+Gestalt
+→ Prune
+→ PUCK
+→ Prime
+→ Prompt
+→ Loop
+
+Expanded:
+
+Gestalt
+→ Flow Mode
+→ Compile PUCK
+→ Prime Digital Air
+→ Execute
+→ Learn
+→ Retune
+
+---
+
+## FINAL STABILIZED POSITION
+
+FlowZero is:
+
+a portable context-calibration system
+for reducing explanation cost
+and increasing aligned execution
+across human and digital systems.
+
+Short version:
+
+FlowZero.
+Just right.
+Right now.
+
+========================================
+END PATCH
+=========

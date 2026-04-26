@@ -1,0 +1,28 @@
+{
+  "FZ_Tokens": [
+    {
+      "Token": "[DW]",
+      "Meaning": "Toby's drum set",
+      "Usage": "Ondrej is playing on the DW",
+      "flag": "secret"
+    },
+    {
+      "Token": "[Roomkey]",
+      "Meaning": "Christoph has [Allach] roomkey",
+      "Usage": "Never double lock the room",
+      "flag": "secret"
+    },
+    {
+      "Token": "[Allach Doorcode]",
+      "Meaning": "To get into [Kulturprojekt], Allach you need to hit 3684",
+      "Usage": "Do not forget the Allach Doorcode",
+      "flag": "secret"
+    },
+            {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": "",
+      "flag": "secret"
+    }
+  ]
+}

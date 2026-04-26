@@ -1,62 +1,19 @@
 // Use a constant for the profile description field
 const PROFILE_DESCRIPTION_LABEL = "description";
 
-import React, { useState, useEffect } from "react";
-import { fetchUserIndex } from "./userIndexUtil";
+import React, { useState } from "react";
 
 // TokenEdit: JSON Token Editor Component
 export default function TokenEdit() {
   const [jsonData, setJsonData] = useState(null);
   const [filename, setFilename] = useState("");
   const [error, setError] = useState("");
-  const [userIndex, setUserIndex] = useState([]);
-  const [profileLabels, setProfileLabels] = useState([]); // [{label, idx, tokenFile}]
-  const [loadingIndex, setLoadingIndex] = useState(true);
+  const [userIndex] = useState([]);
+  const [profileLabels] = useState([]); // [{label, idx, tokenFile, description}]
+  const [loadingIndex] = useState(true);
   const [visibility, setVisibility] = useState("secret"); // visibility filter
+  const [selectedProfile, setSelectedProfile] = useState(null); // {label, description, tokenFile}
 
-  // Load user index on mount
-  useEffect(() => {
-    fetchUserIndex()
-      .then(async (data) => {
-        setUserIndex(data);
-        // Fetch each profile file and extract a display label
-        const labels = await Promise.all(
-          data.map(async (profile, idx) => {
-            const tokenFile = profile.fileName.replace(/\.json$/, "_token.json");
-            try {
-              const res = await fetch(`/${profile.fileName}`);
-              if (!res.ok) throw new Error();
-              const json = await res.json();
-              const arr = json.profile || [];
-              // Try to find a good label: Real Name, User Name, Name, or fallback
-              let display = arr.find(e => e.label === "Real Name")?.value
-                || arr.find(e => e.label === "Name")?.value
-                || profile.profileId;
-              return {
-                label: display,
-                idx,
-                tokenFile,
-                description: profile[PROFILE_DESCRIPTION_LABEL]
-              };
-            } catch {
-              return {
-                label: profile.profileId,
-                idx,
-                tokenFile,
-                description: profile[PROFILE_DESCRIPTION_LABEL]
-              };
-            }
-          })
-        );
-        setProfileLabels(labels);
-        setLoadingIndex(false);
-      })
-      .catch(() => {
-        setUserIndex([]);
-        setProfileLabels([]);
-        setLoadingIndex(false);
-      });
-  }, []);
 
   // Load JSON file from file picker
   // Removed unused handleOpen function
@@ -69,6 +26,9 @@ export default function TokenEdit() {
     // Guess token file name
     const tokenFile = profile.fileName.replace(/\.json$/, "_token.json");
     setFilename(tokenFile);
+    // Find the label/description from profileLabels
+    const labelObj = profileLabels.find(l => l.idx == idx);
+    setSelectedProfile(labelObj || null);
     try {
       const res = await fetch(`/${tokenFile}`);
       if (!res.ok) throw new Error("Failed to load file");
@@ -138,6 +98,14 @@ export default function TokenEdit() {
             ))}
           </select>
         )}
+        {filename && selectedProfile && (
+          <div style={{ marginTop: 18, marginBottom: 8, padding: 8, background: '#f0f7ff', borderRadius: 6, border: '1px solid #b3d1ff', fontSize: '1.1em', fontWeight: 500 }}>
+            <span style={{color:'#003366'}}>
+              <span style={{fontWeight:700}}>{selectedProfile.label}</span>
+              {selectedProfile.description ? <span style={{marginLeft:12, color:'#555'}}>- {selectedProfile.description}</span> : null}
+            </span>
+          </div>
+        )}
         {filename && (
           <div style={{ marginTop: 10, color: '#007', fontSize: '1em' }}>
             <b>Loaded file:</b> {filename} {filename.endsWith('_token.json') && <span style={{color:'#090', marginLeft:8}}>[Token File]</span>}
@@ -150,12 +118,20 @@ export default function TokenEdit() {
   const tokenKey = Object.keys(jsonData)[0];
   const tokenArr = jsonData[tokenKey];
   // Filter records based on visibility
-  const allowedFlags = visibility === "secret" ? ["secret", "private", "public"] : visibility === "private" ? ["private", "public"] : ["public"];
-  const filteredTokenArr = tokenArr.filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
-
+  // No allowedFlags needed; render tokenArr directly
+  // No filteredTokenArr needed; render tokenArr directly
+  // Sort by label
+  // No sort/delete UI. Just render the array as before.
   return (
     <div style={{ border: "1px solid #ccc", padding: 16, borderRadius: 8, maxWidth: 700 }}>
-      {/* No manual file picker in TokenEdit; tokens are always associated with a profile */}
+      {selectedProfile && (
+        <div style={{ marginBottom: 18, padding: 8, background: '#f0f7ff', borderRadius: 6, border: '1px solid #b3d1ff', fontSize: '1.1em', fontWeight: 500 }}>
+          <span style={{color:'#003366'}}>
+            <span style={{fontWeight:700}}>{selectedProfile.label}</span>
+            {selectedProfile.description ? <span style={{marginLeft:12, color:'#555'}}>- {selectedProfile.description}</span> : null}
+          </span>
+        </div>
+      )}
       <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 16 }}>
         <label style={{ marginLeft: 0 }}>
           Visibility:
@@ -172,14 +148,13 @@ export default function TokenEdit() {
           handleSaveAs();
         }}
       >
-        {/* Header Row */}
         <div style={{ display: "flex", gap: 8, fontWeight: "bold", marginBottom: 4 }}>
           <span style={{ width: 120 }}>Token</span>
           <span style={{ width: 180 }}>Meaning</span>
           <span style={{ width: 220 }}>Usage</span>
           <span style={{ width: 90 }}>Flag</span>
         </div>
-        {filteredTokenArr.map((entry, idx) => (
+        {tokenArr.map((entry, idx) => (
           <div key={idx} style={{ marginBottom: 10, display: "flex", gap: 8 }}>
             <input
               type="text"
@@ -214,7 +189,7 @@ export default function TokenEdit() {
           </div>
         ))}
         <button type="button" onClick={handleAddToken} style={{ marginTop: 8, marginRight: 8 }}>
-          Add Token
+          Add Record
         </button>
         <button type="button" onClick={handleSaveAs} style={{ marginTop: 8, marginLeft: 8 }}>
           Save As

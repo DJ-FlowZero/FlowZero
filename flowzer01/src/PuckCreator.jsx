@@ -7,26 +7,36 @@ export default function PuckCreator() {
   const [profileData, setProfileData] = useState([]);
   const [tokenData, setTokenData] = useState([]);
   const [stickyData, setStickyData] = useState([]);
-  const [selectedProfileRows, setSelectedProfileRows] = useState([]);
-  const [selectedTokenRows, setSelectedTokenRows] = useState([]);
-  const [selectedStickyRows, setSelectedStickyRows] = useState([]);
+  // Selection state: store selected indices for all data, not just visible
+  const [selectedProfileRows, setSelectedProfileRows] = useState([]); // indices in profileData
+  const [selectedTokenRows, setSelectedTokenRows] = useState([]); // indices in tokenData
+  const [selectedStickyRows, setSelectedStickyRows] = useState([]); // indices in stickyData
   const [visibility, setVisibility] = useState("secret");
 
   useEffect(() => {
     fetchUserIndex().then(setUserIndex);
   }, []);
 
+  // Filter profile, tokens, and stickies by visibility and add _originalIdx for selection
+  const allowedFlags = visibility === "secret" ? ["secret", "private", "public"] : visibility === "private" ? ["private", "public"] : ["public"];
+  const filteredProfileData = profileData
+    .map((entry, idx) => ({ ...entry, _originalIdx: idx }))
+    .filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
+  const filteredTokenData = tokenData
+    .map((entry, idx) => ({ ...entry, _originalIdx: idx }))
+    .filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
+  const filteredStickyData = stickyData
+    .map((entry, idx) => ({ ...entry, _originalIdx: idx }))
+    .filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
+
   useEffect(() => {
     if (!selectedProfile) {
-      // Use setTimeout to avoid direct setState in effect
-      setTimeout(() => {
-        setProfileData([]);
-        setTokenData([]);
-        setStickyData([]);
-        setSelectedProfileRows([]);
-        setSelectedTokenRows([]);
-        setSelectedStickyRows([]);
-      }, 0);
+      setProfileData([]);
+      setTokenData([]);
+      setStickyData([]);
+      setSelectedProfileRows([]);
+      setSelectedTokenRows([]);
+      setSelectedStickyRows([]);
       return;
     }
     const base = selectedProfile.replace('.json', '');
@@ -35,16 +45,63 @@ export default function PuckCreator() {
       fetch(`/${base}_token.json`).then(r => r.json()).catch(() => null),
       fetch(`/${base}_sticky.json`).then(r => r.json()).catch(() => null)
     ]).then(([profile, token, sticky]) => {
-      // Use a single function to batch state updates
-      setProfileData(Array.isArray(profile?.profile) ? profile.profile : []);
-      setTokenData(Array.isArray(token?.FZ_Tokens) ? token.FZ_Tokens : []);
-      setStickyData(Array.isArray(sticky?.sticky) ? sticky.sticky : []);
-      setSelectedProfileRows([]);
-      setSelectedTokenRows([]);
-      setSelectedStickyRows([]);
+      const profileArr = Array.isArray(profile?.profile) ? profile.profile : [];
+      const tokenArr = Array.isArray(token?.FZ_Tokens) ? token.FZ_Tokens : [];
+      const stickyArr = Array.isArray(sticky?.sticky) ? sticky.sticky : [];
+      setProfileData(profileArr);
+      setTokenData(tokenArr);
+      setStickyData(stickyArr);
+      // Select all by default only if data is not empty
+      setSelectedProfileRows(profileArr.length > 0 ? profileArr.map((_, idx) => idx) : []);
+      setSelectedTokenRows(tokenArr.length > 0 ? tokenArr.map((_, idx) => idx) : []);
+      setSelectedStickyRows(stickyArr.length > 0 ? stickyArr.map((_, idx) => idx) : []);
     });
-    // No direct setState in effect body after async
   }, [selectedProfile]);
+
+
+
+  // Derived: which visible rows are selected?
+  const visibleSelectedProfileRows = filteredProfileData
+    .map(entry => entry._originalIdx)
+    .filter(idx => selectedProfileRows.includes(idx));
+  const visibleSelectedTokenRows = filteredTokenData
+    .map(entry => entry._originalIdx)
+    .filter(idx => selectedTokenRows.includes(idx));
+  const visibleSelectedStickyRows = filteredStickyData
+    .map(entry => entry._originalIdx)
+    .filter(idx => selectedStickyRows.includes(idx));
+
+  // When visibility changes, reselect all visible rows
+  // Filter profile, tokens, and stickies by visibility
+  // allowedFlags already declared above
+  // filteredProfileData, filteredTokenData, filteredStickyData already declared above if needed
+
+
+  // Select All / Deselect All handlers
+  const handleSelectAllProfile = () => {
+    const visibleIdxs = filteredProfileData.map(entry => entry._originalIdx);
+    if (visibleSelectedProfileRows.length === visibleIdxs.length) {
+      setSelectedProfileRows(selectedProfileRows.filter(idx => !visibleIdxs.includes(idx)));
+    } else {
+      setSelectedProfileRows(Array.from(new Set([...selectedProfileRows, ...visibleIdxs])));
+    }
+  };
+  const handleSelectAllToken = () => {
+    const visibleIdxs = filteredTokenData.map(entry => entry._originalIdx);
+    if (visibleSelectedTokenRows.length === visibleIdxs.length) {
+      setSelectedTokenRows(selectedTokenRows.filter(idx => !visibleIdxs.includes(idx)));
+    } else {
+      setSelectedTokenRows(Array.from(new Set([...selectedTokenRows, ...visibleIdxs])));
+    }
+  };
+  const handleSelectAllSticky = () => {
+    const visibleIdxs = filteredStickyData.map(entry => entry._originalIdx);
+    if (visibleSelectedStickyRows.length === visibleIdxs.length) {
+      setSelectedStickyRows(selectedStickyRows.filter(idx => !visibleIdxs.includes(idx)));
+    } else {
+      setSelectedStickyRows(Array.from(new Set([...selectedStickyRows, ...visibleIdxs])));
+    }
+  };
 
   const handleProfileChange = (e) => {
     setSelectedProfile(e.target.value);
@@ -86,17 +143,7 @@ export default function PuckCreator() {
     URL.revokeObjectURL(url);
   };
 
-  // Filter profile, tokens, and stickies by visibility
-  const allowedFlags = visibility === "secret" ? ["secret", "private", "public"] : visibility === "private" ? ["private", "public"] : ["public"];
-  const filteredProfileData = profileData
-    .map((entry, idx) => ({ ...entry, _originalIdx: idx }))
-    .filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
-  const filteredTokenData = tokenData
-    .map((entry, idx) => ({ ...entry, _originalIdx: idx }))
-    .filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
-  const filteredStickyData = stickyData
-    .map((entry, idx) => ({ ...entry, _originalIdx: idx }))
-    .filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
+
 
   return (
     <div>
@@ -122,7 +169,12 @@ export default function PuckCreator() {
       {/* Profile block */}
       {filteredProfileData.length > 0 && (
         <div style={{ border: "1px solid #ccc", borderRadius: 6, marginBottom: 16, padding: 12, background: '#fff' }}>
-          <div style={{fontWeight: 'bold', color: '#15396a', marginBottom: 6}}>Profile</div>
+          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6}}>
+            <span style={{fontWeight: 'bold', color: '#15396a'}}>Profile</span>
+            <button type="button" onClick={handleSelectAllProfile} style={{fontSize: '0.95em', padding: '2px 10px', borderRadius: 5, border: '1px solid #15396a', background: '#eaf1fa', color: '#15396a', fontWeight: 500, cursor: 'pointer'}}>
+              {selectedProfileRows.length === filteredProfileData.length ? 'Deselect All' : 'Select All'}
+            </button>
+          </div>
           {filteredProfileData.map((entry) => (
             <div key={entry._originalIdx} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
               <input
@@ -142,7 +194,12 @@ export default function PuckCreator() {
       {/* Token block */}
       {filteredTokenData.length > 0 && (
         <div style={{ border: "1px solid #ccc", borderRadius: 6, marginBottom: 16, padding: 12, background: '#fff' }}>
-          <div style={{fontWeight: 'bold', color: '#15396a', marginBottom: 6}}>Tokens</div>
+          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6}}>
+            <span style={{fontWeight: 'bold', color: '#15396a'}}>Tokens</span>
+            <button type="button" onClick={handleSelectAllToken} style={{fontSize: '0.95em', padding: '2px 10px', borderRadius: 5, border: '1px solid #15396a', background: '#eaf1fa', color: '#15396a', fontWeight: 500, cursor: 'pointer'}}>
+              {selectedTokenRows.length === filteredTokenData.length ? 'Deselect All' : 'Select All'}
+            </button>
+          </div>
           {filteredTokenData.map((entry) => (
             <div key={entry._originalIdx} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
               <input
@@ -159,7 +216,12 @@ export default function PuckCreator() {
       {/* Sticky block */}
       {filteredStickyData.length > 0 && (
         <div style={{ border: "1px solid #ccc", borderRadius: 6, marginBottom: 16, padding: 12, background: '#fff' }}>
-          <div style={{fontWeight: 'bold', color: '#15396a', marginBottom: 6}}>Sticky</div>
+          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6}}>
+            <span style={{fontWeight: 'bold', color: '#15396a'}}>Sticky</span>
+            <button type="button" onClick={handleSelectAllSticky} style={{fontSize: '0.95em', padding: '2px 10px', borderRadius: 5, border: '1px solid #15396a', background: '#eaf1fa', color: '#15396a', fontWeight: 500, cursor: 'pointer'}}>
+              {selectedStickyRows.length === filteredStickyData.length ? 'Deselect All' : 'Select All'}
+            </button>
+          </div>
           {filteredStickyData.map((entry) => (
             <div key={entry._originalIdx} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
               <input

@@ -7,9 +7,10 @@ export default function StickyEdit() {
   const [filename, setFilename] = useState("");
   const [error, setError] = useState("");
   const [userIndex, setUserIndex] = useState([]);
-  const [profileLabels, setProfileLabels] = useState([]); // [{label, idx, stickyFile}]
+  const [profileLabels, setProfileLabels] = useState([]); // [{label, idx, stickyFile, description}]
   const [loadingIndex, setLoadingIndex] = useState(true);
   const [visibility, setVisibility] = useState("secret"); // visibility filter
+  const [selectedProfile, setSelectedProfile] = useState(null); // {label, description, stickyFile}
 
   // Handle file input for loading sticky JSON
   const handleOpen = async (e) => {
@@ -78,6 +79,9 @@ export default function StickyEdit() {
     const profile = userIndex[idx];
     const stickyFile = profile.fileName.replace(/\.json$/, "_sticky.json");
     setFilename(stickyFile);
+    // Find the label/description from profileLabels
+    const labelObj = profileLabels.find(l => l.idx == idx);
+    setSelectedProfile(labelObj || null);
     try {
       const res = await fetch(`/${stickyFile}`);
       if (!res.ok) throw new Error("Failed to load file");
@@ -142,6 +146,14 @@ export default function StickyEdit() {
             ))}
           </select>
         )}
+        {filename && selectedProfile && (
+          <div style={{ marginTop: 18, marginBottom: 8, padding: 8, background: '#f0f7ff', borderRadius: 6, border: '1px solid #b3d1ff', fontSize: '1.1em', fontWeight: 500 }}>
+            <span style={{color:'#003366'}}>
+              <span style={{fontWeight:700}}>{selectedProfile.label}</span>
+              {selectedProfile.description ? <span style={{marginLeft:12, color:'#555'}}>- {selectedProfile.description}</span> : null}
+            </span>
+          </div>
+        )}
         {filename && (
           <div style={{ marginTop: 10, color: '#007', fontSize: '1em' }}>
             <b>Loaded file:</b> {filename}
@@ -154,11 +166,20 @@ export default function StickyEdit() {
   const stickyKey = Object.keys(jsonData)[0];
   const stickyArr = jsonData[stickyKey];
   // Filter records based on visibility
-  const allowedFlags = visibility === "secret" ? ["secret", "private", "public"] : visibility === "private" ? ["private", "public"] : ["public"];
-  const filteredStickyArr = stickyArr.filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
-
+  // No allowedFlags needed; render stickyArr directly
+  // No filteredStickyArr needed; render stickyArr directly
+  // Sort by label
+  // No sort/delete UI. Just render the array as before.
   return (
     <div style={{ border: "1px solid #ccc", padding: 16, borderRadius: 8, maxWidth: 700 }}>
+      {selectedProfile && (
+        <div style={{ marginBottom: 18, padding: 8, background: '#f0f7ff', borderRadius: 6, border: '1px solid #b3d1ff', fontSize: '1.1em', fontWeight: 500 }}>
+          <span style={{color:'#003366'}}>
+            <span style={{fontWeight:700}}>{selectedProfile.label}</span>
+            {selectedProfile.description ? <span style={{marginLeft:12, color:'#555'}}>- {selectedProfile.description}</span> : null}
+          </span>
+        </div>
+      )}
       <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 16 }}>
         <label style={{ margin: 0 }}>
           <input type="file" accept=".json,application/json" onChange={handleOpen} style={{ marginRight: 8 }} />
@@ -179,33 +200,32 @@ export default function StickyEdit() {
           handleSaveAs();
         }}
       >
-        {/* Header Row */}
         <div style={{ display: "flex", gap: 8, fontWeight: "bold", marginBottom: 4 }}>
           <span style={{ width: 120 }}>Stickytype</span>
           <span style={{ width: 300 }}>Note</span>
           <span style={{ width: 200 }}>Links</span>
           <span style={{ width: 90 }}>Flag</span>
         </div>
-        {filteredStickyArr.map((entry, idx) => (
+        {stickyArr.map((entry, idx) => (
           <div key={idx} style={{ marginBottom: 10, display: "flex", gap: 8 }}>
             <input
               type="text"
-              value={entry.stickytype}
-              onChange={(e) => handleFieldChange(idx, "stickytype", e.target.value)}
+              value={entry.stickytype || ""}
+              onChange={e => handleFieldChange(idx, "stickytype", e.target.value)}
               style={{ width: 120 }}
               placeholder="Stickytype"
             />
             <input
               type="text"
-              value={entry.note}
-              onChange={(e) => handleFieldChange(idx, "note", e.target.value)}
+              value={entry.note || ""}
+              onChange={e => handleFieldChange(idx, "note", e.target.value)}
               style={{ width: 300 }}
               placeholder="Note"
             />
             <input
               type="text"
-              value={entry.links}
-              onChange={(e) => handleFieldChange(idx, "links", e.target.value)}
+              value={entry.links || ""}
+              onChange={e => handleFieldChange(idx, "links", e.target.value)}
               style={{ width: 200 }}
               placeholder="Links"
             />
@@ -221,7 +241,7 @@ export default function StickyEdit() {
           </div>
         ))}
         <button type="button" onClick={handleAddSticky} style={{ marginTop: 8, marginRight: 8 }}>
-          Add Sticky
+          Add Record
         </button>
         <button type="button" onClick={handleSaveAs} style={{ marginTop: 8, marginLeft: 8 }}>
           Save As

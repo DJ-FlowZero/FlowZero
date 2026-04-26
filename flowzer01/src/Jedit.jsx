@@ -10,6 +10,7 @@ export default function Jedit() {
   const [loadingIndex, setLoadingIndex] = useState(true);
   const [saveStatus] = useState("");
   const [visibility, setVisibility] = useState("secret"); // visibility filter
+  const [selectedProfile, setSelectedProfile] = useState(null); // {profileId, description}
 
   // Load user index on mount
   useEffect(() => {
@@ -54,6 +55,7 @@ export default function Jedit() {
     if (idx === "") return;
     const profile = userIndex[idx];
     setFilename(profile.fileName);
+    setSelectedProfile(profile ? { profileId: profile.profileId, description: profile.description } : null);
     try {
       const res = await fetch(`/${profile.fileName}`);
       if (!res.ok) throw new Error("Failed to load file");
@@ -85,18 +87,22 @@ export default function Jedit() {
       if (!prev) return prev;
       const newData = { ...prev };
       const profileKey = Object.keys(newData)[0];
-      // Defensive: clone the array to avoid mutation
       newData[profileKey] = Array.isArray(newData[profileKey]) ? [...newData[profileKey]] : [];
       newData[profileKey].push({
         label: "new label",
         value: "",
         flag: "",
         todo: "",
-        comment: ""
+        links: "",
+        comment: "",
+        type: "",
+        subtype: "",
+        alias: ""
       });
       return newData;
     });
   }, []);
+
 
   // Save as JSON file and backup to backend (no local download)
   // Save as JSON file (download)
@@ -131,6 +137,14 @@ export default function Jedit() {
             ))}
           </select>
         )}
+        {filename && selectedProfile && (
+          <div style={{ marginTop: 18, marginBottom: 8, padding: 8, background: '#f0f7ff', borderRadius: 6, border: '1px solid #b3d1ff', fontSize: '1.1em', fontWeight: 500 }}>
+            <span style={{color:'#003366'}}>
+              <span style={{fontWeight:700}}>{selectedProfile.profileId}</span>
+              {selectedProfile.description ? <span style={{marginLeft:12, color:'#555'}}>- {selectedProfile.description}</span> : null}
+            </span>
+          </div>
+        )}
         <div style={{ margin: "16px 0 8px 0", color: "#888", fontSize: "0.95em" }}>or open a file manually:</div>
         <label style={{ margin: 0 }}>
           <input type="file" accept=".json,application/json" onChange={handleOpen} style={{ marginRight: 8 }} />
@@ -143,12 +157,19 @@ export default function Jedit() {
   const profileKey = Object.keys(jsonData)[0];
   const profileArr = jsonData[profileKey];
   // Filter records based on visibility
-  const allowedFlags = visibility === "secret" ? ["secret", "private", "public"] : visibility === "private" ? ["private", "public"] : ["public"];
-  const filteredProfileArr = profileArr.filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
-
+  // No sort/delete UI. Just render the array as before.
   return (
     <div style={{ border: "1px solid #ccc", padding: 16, borderRadius: 8, maxWidth: 700 }}>
       {saveStatus && <div style={{ color: saveStatus.startsWith("Saved") ? "green" : "#b00", marginBottom: 8 }}>{saveStatus}</div>}
+      {/* Show selected profile label/description at the top */}
+      {selectedProfile && (
+        <div style={{ marginBottom: 18, padding: 8, background: '#f0f7ff', borderRadius: 6, border: '1px solid #b3d1ff', fontSize: '1.1em', fontWeight: 500 }}>
+          <span style={{color:'#003366'}}>
+            <span style={{fontWeight:700}}>{selectedProfile.profileId}</span>
+            {selectedProfile.description ? <span style={{marginLeft:12, color:'#555'}}>- {selectedProfile.description}</span> : null}
+          </span>
+        </div>
+      )}
       <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 16 }}>
         <label style={{ margin: 0 }}>
           <input type="file" accept=".json,application/json" onChange={handleOpen} style={{ marginRight: 8 }} />
@@ -169,47 +190,56 @@ export default function Jedit() {
           handleSaveAs();
         }}
       >
-        {filteredProfileArr.map((entry, idx) => (
-          <div key={idx} style={{ marginBottom: 10, display: "flex", gap: 8, flexWrap: 'wrap' }}>
+        <div style={{ display: "flex", gap: 8, fontWeight: 'bold', marginBottom: 4 }}>
+          <span style={{ width: 100 }}>Label</span>
+          <span style={{ width: 100 }}>Value</span>
+          <span style={{ width: 80 }}>Flag</span>
+          <span style={{ width: 120 }}>Todo</span>
+          <span style={{ width: 120 }}>Comment</span>
+        </div>
+        {profileArr.map((entry, profileIdx) => (
+          <div key={profileIdx} style={{ marginBottom: 10, display: "flex", gap: 8, flexWrap: 'wrap' }}>
             <input
               type="text"
               value={entry.label}
-              onChange={(e) => handleFieldChange(idx, "label", e.target.value)}
+              onChange={(e) => handleFieldChange(profileIdx, "label", e.target.value)}
               style={{ width: 100 }}
               placeholder="label"
             />
             <input
               type="text"
               value={entry.value}
-              onChange={(e) => handleFieldChange(idx, "value", e.target.value)}
+              onChange={(e) => handleFieldChange(profileIdx, "value", e.target.value)}
               style={{ width: 100 }}
               placeholder="value"
             />
-            <input
-              type="text"
-              value={entry.flag || ""}
-              onChange={(e) => handleFieldChange(idx, "flag", e.target.value)}
-              style={{ width: 70 }}
-              placeholder="flag"
-            />
+            <select
+              value={entry.flag || "public"}
+              onChange={e => handleFieldChange(profileIdx, "flag", e.target.value)}
+              style={{ width: 80 }}
+            >
+              <option value="secret">secret</option>
+              <option value="private">private</option>
+              <option value="public">public</option>
+            </select>
             <input
               type="text"
               value={entry.todo || ""}
-              onChange={(e) => handleFieldChange(idx, "todo", e.target.value)}
+              onChange={(e) => handleFieldChange(profileIdx, "todo", e.target.value)}
               style={{ width: 120 }}
               placeholder="todo"
             />
             <input
               type="text"
               value={entry.comment || ""}
-              onChange={(e) => handleFieldChange(idx, "comment", e.target.value)}
+              onChange={(e) => handleFieldChange(profileIdx, "comment", e.target.value)}
               style={{ width: 120 }}
               placeholder="comment"
             />
           </div>
         ))}
         <button type="button" onClick={handleAddItem} style={{ marginTop: 8, marginRight: 8 }}>
-          Add Item
+          Add Record
         </button>
         <button type="submit" style={{ marginTop: 8, marginLeft: 8 }}>
           Save As

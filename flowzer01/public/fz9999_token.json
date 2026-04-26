@@ -1,5 +1,5 @@
 {
-  "0": [
+  "FZ_Tokens": [
     {
       "Token": "Bruschetta",
       "Meaning": "3 Pieces of bread with tomato, onion and garlic",
@@ -18,7 +18,5 @@
       "Usage": "",
       "flag": "secret"
     }
-  ],
-  "1": "",
-  "2": ""
+  ]
 }

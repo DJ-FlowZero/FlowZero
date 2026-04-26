@@ -5,16 +5,23 @@
       "value": "Storage Room",
       "flag": "public",
       "todo": "Check it out",
+      "links": "",
+      "comment": "",
       "type": "Location",
-      "substype": "Storage",
+      "subtype": "Storage",
+      "alias": "",
       "realname": "Extra Gear"
     },
     {
       "label": "Dachau",
       "value": "Storage Rooms",
       "flag": "public",
+      "todo": "",
+      "links": "",
+      "comment": "",
       "type": "Location",
-      "substype": "Guitar Cases",
+      "subtype": "Guitar Cases",
+      "alias": "",
       "realname": "Govan Case"
     }
   ]
