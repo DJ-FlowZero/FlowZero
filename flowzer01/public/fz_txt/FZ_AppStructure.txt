@@ -1,0 +1,66 @@
+
+FlowZero App Structure (custom project files and directories)
+
+Top-level Directories:
+- src/                # All React frontend source code (custom)
+- public/             # Static assets, config, and all user data (custom structure)
+- public/Gestalt/     # All profile, token, sticky, and index files (custom, not standard Vite)
+- public/fz_txt/      # App documentation, code plans, and editable .txt files (custom)
+- public/NewState/    # Staging area for new/edited files before publishing (custom)
+- public/PUCK Data/   # Exported PUCK files (custom)
+- public/Recyclebin/  # Old/archived profile files (custom)
+
+Key Custom Files (not standard in Vite/React):
+- backend.cjs, backend.js         # Node/Express backend for file ops (custom)
+- App.jsx, Jedit.jsx, IndexEdit.jsx, TokenEdit.jsx, StickyEdit.jsx, PuckCreator.jsx, GestaltViewer.jsx, PuckCreatorWrapper.jsx, TextFileBackandSave.jsx, profileFileUtil.js, userIndexUtil.js  # Custom React components/utilities
+- public/config.json              # App config (custom, not Vite default)
+- public/Gestalt/fz_profile_index.json   # Main profile index (custom)
+- public/Gestalt/fzXXXX.json, *_token.json, *_sticky.json  # All user profile data (custom)
+- public/Gestalt/FZ_PUCK_loader_readme.txt  # PUCK loader doc (custom)
+- public/fz_txt/FZ_Appdocu.txt, FZ_CodePlan.txt, FZ_AppStructure.txt  # Project docs (custom)
+- public/Loop_PUCK_FZ.json        # Loop config (custom)
+- public/zipUP2LLM.bat, backup_backend.bat, meup.bat  # Utility scripts (custom)
+
+Not Standard in Vite/React:
+- All Gestalt, fz_txt, NewState, PUCK Data, Recyclebin directories and their contents
+- All backend Node/Express code (backend.cjs, backend.js)
+- All profile management, PUCK creation, and text file editing logic
+
+Standard Vite/React files (not listed):
+- node_modules/, dist/, package.json, vite.config.js, index.html, etc.
+
+
+---
+
+Data Model Overview
+------------------
+- fz_profile_index.json: Array of profile/group index entries (realName, profileId, fileName, description, type, tag, etc.)
+- fzXXXX.json: { profile: [ { label, value, flag, todo, ... } ] }
+- fzXXXX_token.json: { FZ_Tokens: [ { Token, Meaning, Usage, flag, ... } ] }
+- fzXXXX_sticky.json: { sticky: [ { stickytype, note, links, flag, ... } ] }
+
+Key Workflows
+-------------
+1. Profile/Group Creation: Use IndexEdit to create a new group/profile, which generates new fzXXXX.json, *_token.json, *_sticky.json in NewState/.
+2. Editing: Use Jedit, TokenEdit, StickyEdit, or TextFileBackandSave to modify data.
+3. Publishing: Use IndexEdit to publish new/edited files from NewState/ to Gestalt/ and update fz_profile_index.json.
+4. Export: Use PuckCreator to export a PUCK (profile+token+sticky) as a .txt file with loader readme.
+5. Backup/Restore: All saves create .bck files; Recyclebin/ holds old versions for manual recovery.
+
+---
+
+MAP Munchhausen Architecture Principle (Onboarding & Recovery)
+-------------------------------------------------------------
+
+Onboarding a New Developer
+- Prerequisites: Node.js, npm, VS Code (recommended), Git
+- Clone repo, run `npm install`, then `npm run dev` to start backend/frontend
+- See FZ_Appdocu.txt and this file for architecture, code plan, and workflows
+
+Recovery/Restore Instructions
+- To restore any .json or .txt file, copy the corresponding .bck file (in NewState/, Gestalt/, or fz_txt/) to the original filename
+- To recover deleted/overwritten profiles, copy from Recyclebin/ to Gestalt/
+- For full reset, re-clone repo and copy in latest Gestalt/ and fz_txt/ files
+
+Migration Log & Major Refactor Steps
+- See FZ_CodePlan.txt for ongoing migration notes and planned refactors

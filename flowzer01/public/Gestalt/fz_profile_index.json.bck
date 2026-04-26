@@ -6,7 +6,7 @@
     "fileName": "fz0000.json",
     "type": "person",
     "subtype": "family and friends",
-    "tag": "Person"
+    "extra": "Person"
   },
   {
     "realName": "Pia Hultqvist",
@@ -15,7 +15,7 @@
     "fileName": "fz0001.json",
     "type": "person",
     "subtype": "family and friends",
-    "tag": "Person"
+    "extra": "Person"
   },
   {
     "realName": "CatchAll Basket",
@@ -24,7 +24,7 @@
     "fileName": "fz9999.json",
     "type": "CatchAll",
     "subtype": "Generic",
-    "tag": "CatchAll"
+    "extra": "CatchAll"
   },
   {
     "realName": "Dachau MyPlace",
@@ -33,7 +33,7 @@
     "fileName": "fz0002.json",
     "type": "location",
     "subtype": "storage room",
-    "tag": "Real Estate"
+    "extra": "Real Estate"
   },
   {
     "realName": "Practice Room Allach",
@@ -42,7 +42,7 @@
     "description": "Practice Room Allach / Music Gear",
     "type": "location",
     "subtype": "storage room",
-    "tag": "Real Estate"
+    "extra": "Real Estate"
   },
   {
     "realName": "Saporta Basement",
@@ -51,7 +51,7 @@
     "description": "Saporta Basement / Appartment",
     "type": "location",
     "subtype": "storage room",
-    "tag": "Real Estate"
+    "extra": "Real Estate"
   },
   {
     "realName": "Zentner Mahjong 6th Floor",
@@ -60,15 +60,6 @@
     "description": "Zentner Mahjong 6th Floor.",
     "type": "person",
     "subtype": "person",
-    "tag": "person"
-  },
-  {
-    "profileId": "P10002",
-    "fileName": "fz10002.json",
-    "description": "Kermit Car File",
-    "realName": "Kermit Car File",
-    "type": "group",
-    "subtype": "",
-    "tag": "Property"
+    "extra": "person"
   }
 ]

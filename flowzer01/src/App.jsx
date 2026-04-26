@@ -244,12 +244,12 @@ function App() {
   // Load gestalt when profile or visibility changes
   useEffect(() => {
     if (!selectedProfile) return;
-    // Fetch profile, token, sticky
+    // Fetch profile, token, sticky from Gestalt directory
     const base = selectedProfile.replace('.json', '');
     Promise.all([
-      fetch(`/${base}.json`).then(r => r.json()).catch(() => null),
-      fetch(`/${base}_token.json`).then(r => r.json()).catch(() => null),
-      fetch(`/${base}_sticky.json`).then(r => r.json()).catch(() => null)
+      fetch(`/Gestalt/${base}.json`).then(r => r.json()).catch(() => null),
+      fetch(`/Gestalt/${base}_token.json`).then(r => r.json()).catch(() => null),
+      fetch(`/Gestalt/${base}_sticky.json`).then(r => r.json()).catch(() => null)
     ]).then(([profile, token, sticky]) => {
       let gestalt = '';
       // Visibility filter logic

@@ -8,7 +8,8 @@ app.use(express.json());
 
 // Endpoint to list all fzxxxx.json files in public and return their numbers
 app.get('/api/list-fz-files', (req, res) => {
-  fs.readdir(PUBLIC_DIR, (err, files) => {
+  const GESTALT_DIR = path.join(__dirname, 'public', 'Gestalt');
+  fs.readdir(GESTALT_DIR, (err, files) => {
     if (err) return res.status(500).json({ status: 'error', message: 'Failed to read public dir' });
     const nums = files
       .map(fn => {

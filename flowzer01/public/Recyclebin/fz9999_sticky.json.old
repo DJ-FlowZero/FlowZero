@@ -1,0 +1,22 @@
+{
+  "sticky": [
+    {
+      "stickytype": "Osteria",
+      "note": "Do not order salad again! Wilted and not nice",
+      "links": "Osteria Elisbethstrasse",
+      "flag": "secret"
+    },
+    {
+      "stickytype": "Tax Advisor",
+      "note": "Good person, highly recommended",
+      "links": "Recommend to others",
+      "flag": "secret"
+    },
+    {
+      "stickytype": "Osteria",
+      "note": "No dark beer available any longer, order Franziskaner Dunkel",
+      "links": "Osteria Elisbethstrasse",
+      "flag": "secret"
+    }
+  ]
+}

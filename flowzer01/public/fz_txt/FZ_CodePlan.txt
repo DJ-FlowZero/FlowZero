@@ -1,0 +1,4 @@
+
+At start: batchfile called meup.bat (terminal "start meup") this starts the servers
+
+- refactor .\Gestalt references to FZ_GPATH variable in config.json

@@ -1,17 +1,19 @@
+
 import React, { useState, useEffect } from "react";
 import { fetchUserIndex } from "./userIndexUtil";
 
 export default function PuckCreator() {
   const [userIndex, setUserIndex] = useState([]);
   const [selectedProfile, setSelectedProfile] = useState("");
-  const [profileData, setProfileData] = useState([]);
-  const [tokenData, setTokenData] = useState([]);
-  const [stickyData, setStickyData] = useState([]);
-  // Selection state: store selected indices for all data, not just visible
-  const [selectedProfileRows, setSelectedProfileRows] = useState([]); // indices in profileData
-  const [selectedTokenRows, setSelectedTokenRows] = useState([]); // indices in tokenData
-  const [selectedStickyRows, setSelectedStickyRows] = useState([]); // indices in stickyData
   const [visibility, setVisibility] = useState("secret");
+  const [puckState, setPuckState] = useState({
+    profileData: [],
+    tokenData: [],
+    stickyData: [],
+    selectedProfileRows: [],
+    selectedTokenRows: [],
+    selectedStickyRows: []
+  });
 
   useEffect(() => {
     fetchUserIndex().then(setUserIndex);
@@ -19,57 +21,52 @@ export default function PuckCreator() {
 
   // Filter profile, tokens, and stickies by visibility and add _originalIdx for selection
   const allowedFlags = visibility === "secret" ? ["secret", "private", "public"] : visibility === "private" ? ["private", "public"] : ["public"];
-  const filteredProfileData = profileData
+  const filteredProfileData = puckState.profileData
     .map((entry, idx) => ({ ...entry, _originalIdx: idx }))
     .filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
-  const filteredTokenData = tokenData
+  const filteredTokenData = puckState.tokenData
     .map((entry, idx) => ({ ...entry, _originalIdx: idx }))
     .filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
-  const filteredStickyData = stickyData
+  const filteredStickyData = puckState.stickyData
     .map((entry, idx) => ({ ...entry, _originalIdx: idx }))
     .filter(entry => allowedFlags.includes((entry.flag || "public").toLowerCase()));
 
   useEffect(() => {
-    if (!selectedProfile) {
-      setProfileData([]);
-      setTokenData([]);
-      setStickyData([]);
-      setSelectedProfileRows([]);
-      setSelectedTokenRows([]);
-      setSelectedStickyRows([]);
-      return;
-    }
+    if (!selectedProfile) return;
     const base = selectedProfile.replace('.json', '');
     Promise.all([
-      fetch(`/${base}.json`).then(r => r.json()).catch(() => null),
-      fetch(`/${base}_token.json`).then(r => r.json()).catch(() => null),
-      fetch(`/${base}_sticky.json`).then(r => r.json()).catch(() => null)
+      fetch(`/Gestalt/${base}.json`).then(r => r.json()).catch(() => null),
+      fetch(`/Gestalt/${base}_token.json`).then(r => r.json()).catch(() => null),
+      fetch(`/Gestalt/${base}_sticky.json`).then(r => r.json()).catch(() => null)
     ]).then(([profile, token, sticky]) => {
       const profileArr = Array.isArray(profile?.profile) ? profile.profile : [];
       const tokenArr = Array.isArray(token?.FZ_Tokens) ? token.FZ_Tokens : [];
       const stickyArr = Array.isArray(sticky?.sticky) ? sticky.sticky : [];
-      setProfileData(profileArr);
-      setTokenData(tokenArr);
-      setStickyData(stickyArr);
-      // Select all by default only if data is not empty
-      setSelectedProfileRows(profileArr.length > 0 ? profileArr.map((_, idx) => idx) : []);
-      setSelectedTokenRows(tokenArr.length > 0 ? tokenArr.map((_, idx) => idx) : []);
-      setSelectedStickyRows(stickyArr.length > 0 ? stickyArr.map((_, idx) => idx) : []);
+      setPuckState({
+        profileData: profileArr,
+        tokenData: tokenArr,
+        stickyData: stickyArr,
+        selectedProfileRows: profileArr.length > 0 ? profileArr.map((_, idx) => idx) : [],
+        selectedTokenRows: tokenArr.length > 0 ? tokenArr.map((_, idx) => idx) : [],
+        selectedStickyRows: stickyArr.length > 0 ? stickyArr.map((_, idx) => idx) : []
+      });
     });
   }, [selectedProfile]);
+
+
 
 
 
   // Derived: which visible rows are selected?
   const visibleSelectedProfileRows = filteredProfileData
     .map(entry => entry._originalIdx)
-    .filter(idx => selectedProfileRows.includes(idx));
+    .filter(idx => puckState.selectedProfileRows.includes(idx));
   const visibleSelectedTokenRows = filteredTokenData
     .map(entry => entry._originalIdx)
-    .filter(idx => selectedTokenRows.includes(idx));
+    .filter(idx => puckState.selectedTokenRows.includes(idx));
   const visibleSelectedStickyRows = filteredStickyData
     .map(entry => entry._originalIdx)
-    .filter(idx => selectedStickyRows.includes(idx));
+    .filter(idx => puckState.selectedStickyRows.includes(idx));
 
   // When visibility changes, reselect all visible rows
   // Filter profile, tokens, and stickies by visibility
@@ -80,65 +77,102 @@ export default function PuckCreator() {
   // Select All / Deselect All handlers
   const handleSelectAllProfile = () => {
     const visibleIdxs = filteredProfileData.map(entry => entry._originalIdx);
-    if (visibleSelectedProfileRows.length === visibleIdxs.length) {
-      setSelectedProfileRows(selectedProfileRows.filter(idx => !visibleIdxs.includes(idx)));
-    } else {
-      setSelectedProfileRows(Array.from(new Set([...selectedProfileRows, ...visibleIdxs])));
-    }
+    setPuckState(prev => ({
+      ...prev,
+      selectedProfileRows:
+        visibleSelectedProfileRows.length === visibleIdxs.length
+          ? prev.selectedProfileRows.filter(idx => !visibleIdxs.includes(idx))
+          : Array.from(new Set([...prev.selectedProfileRows, ...visibleIdxs]))
+    }));
   };
   const handleSelectAllToken = () => {
     const visibleIdxs = filteredTokenData.map(entry => entry._originalIdx);
-    if (visibleSelectedTokenRows.length === visibleIdxs.length) {
-      setSelectedTokenRows(selectedTokenRows.filter(idx => !visibleIdxs.includes(idx)));
-    } else {
-      setSelectedTokenRows(Array.from(new Set([...selectedTokenRows, ...visibleIdxs])));
-    }
+    setPuckState(prev => ({
+      ...prev,
+      selectedTokenRows:
+        visibleSelectedTokenRows.length === visibleIdxs.length
+          ? prev.selectedTokenRows.filter(idx => !visibleIdxs.includes(idx))
+          : Array.from(new Set([...prev.selectedTokenRows, ...visibleIdxs]))
+    }));
   };
   const handleSelectAllSticky = () => {
     const visibleIdxs = filteredStickyData.map(entry => entry._originalIdx);
-    if (visibleSelectedStickyRows.length === visibleIdxs.length) {
-      setSelectedStickyRows(selectedStickyRows.filter(idx => !visibleIdxs.includes(idx)));
-    } else {
-      setSelectedStickyRows(Array.from(new Set([...selectedStickyRows, ...visibleIdxs])));
-    }
+    setPuckState(prev => ({
+      ...prev,
+      selectedStickyRows:
+        visibleSelectedStickyRows.length === visibleIdxs.length
+          ? prev.selectedStickyRows.filter(idx => !visibleIdxs.includes(idx))
+          : Array.from(new Set([...prev.selectedStickyRows, ...visibleIdxs]))
+    }));
   };
 
   const handleProfileChange = (e) => {
-    setSelectedProfile(e.target.value);
+    const value = e.target.value;
+    setSelectedProfile(value);
+    if (!value) {
+      setPuckState(prev => ({
+        ...prev,
+        profileData: [],
+        tokenData: [],
+        stickyData: [],
+        selectedProfileRows: [],
+        selectedTokenRows: [],
+        selectedStickyRows: []
+      }));
+    }
   };
 
   const handleProfileCheckbox = (idx) => {
-    setSelectedProfileRows((prev) =>
-      prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
-    );
+    setPuckState(prev => ({
+      ...prev,
+      selectedProfileRows: prev.selectedProfileRows.includes(idx)
+        ? prev.selectedProfileRows.filter(i => i !== idx)
+        : [...prev.selectedProfileRows, idx]
+    }));
   };
   const handleTokenCheckbox = (idx) => {
-    setSelectedTokenRows((prev) =>
-      prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
-    );
+    setPuckState(prev => ({
+      ...prev,
+      selectedTokenRows: prev.selectedTokenRows.includes(idx)
+        ? prev.selectedTokenRows.filter(i => i !== idx)
+        : [...prev.selectedTokenRows, idx]
+    }));
   };
   const handleStickyCheckbox = (idx) => {
-    setSelectedStickyRows((prev) =>
-      prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
-    );
+    setPuckState(prev => ({
+      ...prev,
+      selectedStickyRows: prev.selectedStickyRows.includes(idx)
+        ? prev.selectedStickyRows.filter(i => i !== idx)
+        : [...prev.selectedStickyRows, idx]
+    }));
   };
 
-  const handleExport = () => {
+  const handleExport = async () => {
+    // Fetch the loader readme text
+    let loaderText = '';
+    try {
+      const res = await fetch('/Gestalt/FZ_PUCK_loader_readme.txt');
+      loaderText = await res.text();
+    } catch {
+      loaderText = 'FZ_PUCK_loader_readme.txt missing or failed to load.';
+    }
     const exportObj = {};
-    if (selectedProfileRows.length > 0) {
-      exportObj.profile = profileData.filter((_, idx) => selectedProfileRows.includes(idx));
+    if (puckState.selectedProfileRows.length > 0) {
+      exportObj.profile = puckState.profileData.filter((_, idx) => puckState.selectedProfileRows.includes(idx));
     }
-    if (selectedTokenRows.length > 0) {
-      exportObj.FZ_Tokens = tokenData.filter((_, idx) => selectedTokenRows.includes(idx));
+    if (puckState.selectedTokenRows.length > 0) {
+      exportObj.FZ_Tokens = puckState.tokenData.filter((_, idx) => puckState.selectedTokenRows.includes(idx));
     }
-    if (selectedStickyRows.length > 0) {
-      exportObj.sticky = stickyData.filter((_, idx) => selectedStickyRows.includes(idx));
+    if (puckState.selectedStickyRows.length > 0) {
+      exportObj.sticky = puckState.stickyData.filter((_, idx) => puckState.selectedStickyRows.includes(idx));
     }
-    const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
+    // Combine loader text and PUCK JSON
+    const combined = loaderText + '\n---\n' + JSON.stringify(exportObj, null, 2);
+    const blob = new Blob([combined], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `PUCK_export_${selectedProfile}`;
+    a.download = `PUCK_export_${selectedProfile}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -172,21 +206,31 @@ export default function PuckCreator() {
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6}}>
             <span style={{fontWeight: 'bold', color: '#15396a'}}>Profile</span>
             <button type="button" onClick={handleSelectAllProfile} style={{fontSize: '0.95em', padding: '2px 10px', borderRadius: 5, border: '1px solid #15396a', background: '#eaf1fa', color: '#15396a', fontWeight: 500, cursor: 'pointer'}}>
-              {selectedProfileRows.length === filteredProfileData.length ? 'Deselect All' : 'Select All'}
+              {puckState.selectedProfileRows.length === filteredProfileData.length ? 'Deselect All' : 'Select All'}
             </button>
+          </div>
+          {/* Column headers */}
+          <div style={{ display: 'flex', gap: 8, fontWeight: 'bold', marginBottom: 4, fontSize: '0.85em', color: '#444' }}>
+            <span style={{ width: 24 }}></span>
+            <span style={{ width: 100 }}>Label</span>
+            <span style={{ width: 100 }}>Value</span>
+            <span style={{ width: 80 }}>Flag</span>
+            <span style={{ width: 120 }}>Todo</span>
+            <span style={{ width: 120 }}>Comment</span>
           </div>
           {filteredProfileData.map((entry) => (
             <div key={entry._originalIdx} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
               <input
                 type="checkbox"
-                checked={selectedProfileRows.includes(entry._originalIdx)}
+                checked={puckState.selectedProfileRows.includes(entry._originalIdx)}
                 onChange={() => handleProfileCheckbox(entry._originalIdx)}
+                style={{ width: 18, height: 18, marginRight: 2 }}
               />
-              {Object.entries(entry).map(([key, val]) => (
-                <span key={key} style={{ minWidth: 80, fontFamily: 'monospace', fontSize: '0.98em', color: '#444', background: '#f3f6fa', borderRadius: 4, padding: '2px 6px', marginRight: 4 }}>
-                  <span style={{ color: '#15396a', fontWeight: 500 }}>{key}:</span> {String(val)}
-                </span>
-              ))}
+              <span style={{ width: 100, fontFamily: 'monospace', fontSize: '0.75em', color: '#444', fontWeight: 700 }}>{entry.label}</span>
+              <span style={{ width: 100, fontFamily: 'monospace', fontSize: '0.75em', color: '#444' }}>{entry.value}</span>
+              <span style={{ width: 80, fontFamily: 'monospace', fontSize: '0.75em', color: '#444' }}>{entry.flag}</span>
+              <span style={{ width: 120, fontFamily: 'monospace', fontSize: '0.75em', color: '#444' }}>{entry.todo}</span>
+              <span style={{ width: 120, fontFamily: 'monospace', fontSize: '0.75em', color: '#444' }}>{entry.comment}</span>
             </div>
           ))}
         </div>
@@ -197,18 +241,19 @@ export default function PuckCreator() {
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6}}>
             <span style={{fontWeight: 'bold', color: '#15396a'}}>Tokens</span>
             <button type="button" onClick={handleSelectAllToken} style={{fontSize: '0.95em', padding: '2px 10px', borderRadius: 5, border: '1px solid #15396a', background: '#eaf1fa', color: '#15396a', fontWeight: 500, cursor: 'pointer'}}>
-              {selectedTokenRows.length === filteredTokenData.length ? 'Deselect All' : 'Select All'}
+              {puckState.selectedTokenRows.length === filteredTokenData.length ? 'Deselect All' : 'Select All'}
             </button>
           </div>
           {filteredTokenData.map((entry) => (
             <div key={entry._originalIdx} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
               <input
                 type="checkbox"
-                checked={selectedTokenRows.includes(entry._originalIdx)}
+                checked={puckState.selectedTokenRows.includes(entry._originalIdx)}
                 onChange={() => handleTokenCheckbox(entry._originalIdx)}
+                style={{ width: 18, height: 18, marginRight: 2 }}
               />
-              <span style={{ fontWeight: 500 }}>{entry.Token || entry.label}</span>
-              <span style={{ fontFamily: "monospace", fontSize: "0.98em", color: '#444' }}>{entry.Meaning || entry.value}</span>
+              <span style={{ fontWeight: 500, fontSize: '0.75em' }}>{entry.Token || entry.label}</span>
+              <span style={{ fontFamily: "monospace", fontSize: "0.75em", color: '#444' }}>{entry.Meaning || entry.value}</span>
             </div>
           ))}
         </div>
@@ -219,34 +264,35 @@ export default function PuckCreator() {
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6}}>
             <span style={{fontWeight: 'bold', color: '#15396a'}}>Sticky</span>
             <button type="button" onClick={handleSelectAllSticky} style={{fontSize: '0.95em', padding: '2px 10px', borderRadius: 5, border: '1px solid #15396a', background: '#eaf1fa', color: '#15396a', fontWeight: 500, cursor: 'pointer'}}>
-              {selectedStickyRows.length === filteredStickyData.length ? 'Deselect All' : 'Select All'}
+              {puckState.selectedStickyRows.length === filteredStickyData.length ? 'Deselect All' : 'Select All'}
             </button>
           </div>
           {filteredStickyData.map((entry) => (
             <div key={entry._originalIdx} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
               <input
                 type="checkbox"
-                checked={selectedStickyRows.includes(entry._originalIdx)}
+                checked={puckState.selectedStickyRows.includes(entry._originalIdx)}
                 onChange={() => handleStickyCheckbox(entry._originalIdx)}
+                style={{ width: 18, height: 18, marginRight: 2 }}
               />
-              <span style={{ fontWeight: 500 }}>{entry.stickytype}</span>
-              <span style={{ fontFamily: "monospace", fontSize: "0.98em", color: '#444' }}>{entry.note}</span>
+              <span style={{ fontWeight: 500, fontSize: '0.75em' }}>{entry.stickytype}</span>
+              <span style={{ fontFamily: "monospace", fontSize: "0.75em", color: '#444' }}>{entry.note}</span>
             </div>
           ))}
         </div>
       )}
       <button
         onClick={handleExport}
-        disabled={selectedProfileRows.length + selectedTokenRows.length + selectedStickyRows.length === 0}
+        disabled={puckState.selectedProfileRows.length + puckState.selectedTokenRows.length + puckState.selectedStickyRows.length === 0}
         style={{
           padding: "8px 18px",
           fontSize: "1em",
           border: "3px solid #15396a",
-          background: (selectedProfileRows.length + selectedTokenRows.length + selectedStickyRows.length) ? "#15396a" : "#b0b8c9",
+          background: (puckState.selectedProfileRows.length + puckState.selectedTokenRows.length + puckState.selectedStickyRows.length) ? "#15396a" : "#b0b8c9",
           color: "#fff",
           borderRadius: 8,
           fontWeight: "bold",
-          cursor: (selectedProfileRows.length + selectedTokenRows.length + selectedStickyRows.length) ? "pointer" : "not-allowed"
+          cursor: (puckState.selectedProfileRows.length + puckState.selectedTokenRows.length + puckState.selectedStickyRows.length) ? "pointer" : "not-allowed"
         }}
       >
         Export

@@ -2,7 +2,7 @@
   "profile": [
     {
       "label": "Name",
-      "value": "Parvine",
+      "value": "Parvin",
       "flag": "secret",
       "todo": "Mahjon Player",
       "links": "",
@@ -17,7 +17,7 @@
       "flag": "secret",
       "todo": "Neighbor",
       "links": "",
-      "comment": "Mobility",
+      "comment": "Mobility Issues",
       "type": "",
       "subtype": "",
       "alias": ""

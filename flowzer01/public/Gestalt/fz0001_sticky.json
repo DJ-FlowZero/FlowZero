@@ -13,10 +13,15 @@
       "flag": "secret"
     },
     {
-      "stickytype": "",
-      "note": "",
-      "links": "",
+      "stickytype": "Food",
+      "note": "No Cilantro, No Red Peppers",
+      "links": "Restaurant LInks",
       "flag": "secret"
+    },
+    {
+      "stickytype": "Food",
+      "note": "Loves Mushrooms, but CHHO cannot eat",
+      "links": "Restaurant Links"
     }
   ]
 }

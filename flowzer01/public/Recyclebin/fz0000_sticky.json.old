@@ -1,0 +1,34 @@
+{
+  "sticky": [
+    {
+      "stickytype": "Behavior",
+      "note": "Likes Flat White in morning",
+      "links": "[Standl20, CoffeeShop]",
+      "flag": "secret"
+    },
+    {
+      "stickytype": "Habit",
+      "note": "Changes Strings on Guitars before Gigs",
+      "links": "Mitch, Jazz Box",
+      "flag": "secret"
+    },
+    {
+      "stickytype": "Flow",
+      "note": "Tea in the Morning, then Pills, then Walk",
+      "links": "Herzogpark Schwabing",
+      "flag": "secret"
+    },
+    {
+      "stickytype": "Flow",
+      "note": "Develop Code Plan, then code",
+      "links": "MS Visual Studio Code",
+      "flag": "secret"
+    },
+    {
+      "stickytype": "Behavior",
+      "note": "The [JazzBox] can come to gigs in safe places, where the stage is not accessible by the public",
+      "links": "JazzBox, Gibson L5",
+      "flag": "secret"
+    }
+  ]
+}

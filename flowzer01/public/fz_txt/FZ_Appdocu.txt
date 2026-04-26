@@ -206,6 +206,19 @@ This documentation is sufficient for an AI (e.g., Codex, Claude) to regenerate t
 - The title is displayed in an <h1>.
 ---
 
+## PUCK Loader Readme and Export Metadata (2026-04-26)
+
+All PUCK exports now automatically prepend the loader readme file: `FZ_PUCK_loader_readme.txt`.
+
+- This file provides import instructions, field limits, and metadata for any system or user importing a PUCK.
+- It is always included as the first section or file in any exported PUCK, ensuring consistent interpretation and safe integration.
+- The loader readme describes the expected JSON structure, field definitions, versioning, and import validation steps.
+- Edit `FZ_PUCK_loader_readme.txt` in the `public/` directory to update import instructions or field policies as the PUCK format evolves.
+
+This guarantees that all exported PUCKs are self-describing and compatible with future systems or workflows.
+
+---
+
 ## Field Labels Policy (2026-04-25)
 To keep the FlowZero system lean, maintainable, and user-friendly, the number of field labels (column headers) in all editors is intentionally limited. This ensures:
 - Simplicity for users and developers

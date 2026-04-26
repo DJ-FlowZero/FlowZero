@@ -1,16 +1,61 @@
 // Use a constant for the profile description field
 const PROFILE_DESCRIPTION_LABEL = "description";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { fetchUserIndex } from "./userIndexUtil";
 
 // TokenEdit: JSON Token Editor Component
 export default function TokenEdit() {
   const [jsonData, setJsonData] = useState(null);
   const [filename, setFilename] = useState("");
   const [error, setError] = useState("");
-  const [userIndex] = useState([]);
-  const [profileLabels] = useState([]); // [{label, idx, tokenFile, description}]
-  const [loadingIndex] = useState(true);
+  const [userIndex, setUserIndex] = useState([]);
+  const [profileLabels, setProfileLabels] = useState([]); // [{label, idx, tokenFile, description}]
+  const [loadingIndex, setLoadingIndex] = useState(true);
+
+    // Load user index on mount
+    useEffect(() => {
+      fetchUserIndex()
+        .then(async (data) => {
+          setUserIndex(data);
+          // Fetch each profile file and extract a display label
+          const labels = await Promise.all(
+            data.map(async (profile, idx) => {
+              const tokenFile = profile.fileName.replace(/\.json$/, "_token.json");
+              try {
+                const res = await fetch(`/Gestalt/${profile.fileName}`);
+                if (!res.ok) throw new Error();
+                const json = await res.json();
+                const arr = json.profile || [];
+                let display = arr.find(e => e.label === "Real Name")?.value
+                  || arr.find(e => e.label === "User Name")?.value
+                  || arr.find(e => e.label === "Name")?.value
+                  || profile.profileId;
+                return {
+                  label: display,
+                  idx,
+                  tokenFile,
+                  description: profile.description
+                };
+              } catch {
+                return {
+                  label: profile.profileId,
+                  idx,
+                  tokenFile,
+                  description: profile.description
+                };
+              }
+            })
+          );
+          setProfileLabels(labels);
+          setLoadingIndex(false);
+        })
+        .catch(() => {
+          setUserIndex([]);
+          setProfileLabels([]);
+          setLoadingIndex(false);
+        });
+    }, []);
   const [visibility, setVisibility] = useState("secret"); // visibility filter
   const [selectedProfile, setSelectedProfile] = useState(null); // {label, description, tokenFile}
 
@@ -30,7 +75,7 @@ export default function TokenEdit() {
     const labelObj = profileLabels.find(l => l.idx == idx);
     setSelectedProfile(labelObj || null);
     try {
-      const res = await fetch(`/${tokenFile}`);
+      const res = await fetch(`/Gestalt/${tokenFile}`);
       if (!res.ok) throw new Error("Failed to load file");
       const data = await res.json();
       setJsonData(data);

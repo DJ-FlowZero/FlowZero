@@ -7,7 +7,7 @@ const PORT = 3001;
 app.use(express.json({ limit: '5mb' }));
 
 const PUBLIC_DIR = path.join(__dirname, 'public');
-const NEWSTATE_DIR = path.join(PUBLIC_DIR, 'NewState');
+const GESTALT_DIR = path.join(PUBLIC_DIR, 'Gestalt');
 const FILENAME = 'text_text.txt';
 
 
@@ -18,7 +18,7 @@ app.post('/api/save-profile', (req, res) => {
     if (!filename) {
       return res.status(400).json({ status: 'error', message: 'Missing filename.' });
     }
-    const profilePath = path.join(NEWSTATE_DIR, filename);
+    const profilePath = path.join(GESTALT_DIR, filename);
     const backupPath = profilePath + '.bck';
     if (fs.existsSync(profilePath)) {
       try {
@@ -42,8 +42,8 @@ app.post('/api/refresh-profile', (req, res) => {
     if (!filename) {
       return res.status(400).json({ status: 'error', message: 'Missing filename.' });
     }
-    const src = path.join(NEWSTATE_DIR, filename);
-    const dest = path.join(PUBLIC_DIR, filename);
+    const src = path.join(GESTALT_DIR, filename);
+    const dest = path.join(GESTALT_DIR, filename); // publish stays in Gestalt
     const backupPath = dest + '.bck';
     if (!fs.existsSync(src)) {
       return res.status(404).json({ status: 'error', message: 'No staged profile found.' });
@@ -70,7 +70,7 @@ app.post('/api/refresh-profile', (req, res) => {
 app.post('/api/save-text', (req, res) => {
   const file = req.body.filename || FILENAME;
   const content = req.body.content || "";
-  const filePath = path.join(NEWSTATE_DIR, file);
+  const filePath = path.join(GESTALT_DIR, file);
   const backupPath = filePath + '.bck';
   if (fs.existsSync(filePath)) {
     try { fs.copyFileSync(filePath, backupPath); } catch {}
@@ -83,17 +83,17 @@ app.post('/api/save-text', (req, res) => {
 app.post('/api/refresh-text', (req, res) => {
   const file = req.body.filename || FILENAME;
   const src = path.join(NEWSTATE_DIR, file);
-  const dest = path.join(PUBLIC_DIR, file);
+  const dest = path.join(PUBLIC_DIR, 'fz_txt', file);
   const backupPath = dest + '.bck';
   if (!fs.existsSync(src)) {
     return res.status(404).json({ status: 'error', message: 'No staged file found.' });
   }
-  // Backup the current public file before overwrite
+  // Backup the current fz_txt file before overwrite
   if (fs.existsSync(dest)) {
-    try { fs.copyFileSync(dest, backupPath); } catch {}
+    try { fs.copyFileSync(dest, backupPath); } catch {} 
   }
   fs.copyFileSync(src, dest);
-  res.json({ status: 'ok', message: 'File refreshed to public.' });
+  res.json({ status: 'ok', message: 'File refreshed to fz_txt.' });
 });
 
 app.listen(PORT, () => {
@@ -106,7 +106,7 @@ app.post('/api/save-profile-index', (req, res) => {
     if (!content) {
       return res.status(400).json({ status: 'error', message: 'Missing content.' });
     }
-    const indexPath = path.join(PUBLIC_DIR, 'fz_profile_index.json');
+    const indexPath = path.join(PUBLIC_DIR, 'Gestalt', 'fz_profile_index.json');
     const backupPath = indexPath + '.bck';
     // Backup current index if exists
     if (fs.existsSync(indexPath)) {

@@ -3,22 +3,26 @@
     {
       "Token": "Jackson Case",
       "Meaning": "Hard Shell Case for Toby Guitar Jackson Soloist",
-      "Usage": "Where is the Jackson Case"
+      "Usage": "Where is the Jackson Case",
+      "flag": "secret"
     },
     {
       "Token": "Bachand Case",
       "Meaning": "Hard Shell Case for Ibanez Matt Bachand Shadow Falls guitar",
-      "Usage": "Where is the Bachand Case"
+      "Usage": "Where is the Bachand Case",
+      "flag": "secret"
     },
     {
       "Token": "Govan Case",
       "Meaning": "Hard Shell Case for Suhr Guthrie Govan Signature",
-      "Usage": "Where is the Govan Case"
+      "Usage": "Where is the Govan Case",
+      "flag": "secret"
     },
     {
       "Token": "[new_token]",
       "Meaning": "",
-      "Usage": ""
+      "Usage": "",
+      "flag": "secret"
     }
   ]
 }

@@ -5,8 +5,11 @@
       "value": "Saporta Street 10",
       "flag": "private",
       "todo": "clean out toby stuff",
+      "links": "",
+      "comment": "",
       "type": "basement",
-      "substype": "appartment",
+      "subtype": "",
+      "alias": "",
       "realname": "main home"
     },
     {
@@ -14,8 +17,11 @@
       "value": "Toby's old stuff",
       "flag": "private",
       "todo": "Decide if we need to keep it or if we can get rid of it",
+      "links": "",
+      "comment": "",
       "type": "basement",
-      "substype": "appartment",
+      "subtype": "",
+      "alias": "",
       "realname": "main home"
     }
   ]

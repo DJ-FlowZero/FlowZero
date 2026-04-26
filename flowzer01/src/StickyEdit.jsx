@@ -38,7 +38,7 @@ export default function StickyEdit() {
           data.map(async (profile, idx) => {
             const stickyFile = profile.fileName.replace(/\.json$/, "_sticky.json");
             try {
-              const res = await fetch(`/${profile.fileName}`);
+              const res = await fetch(`/Gestalt/${profile.fileName}`);
               if (!res.ok) throw new Error();
               const json = await res.json();
               const arr = json.profile || [];
@@ -83,7 +83,7 @@ export default function StickyEdit() {
     const labelObj = profileLabels.find(l => l.idx == idx);
     setSelectedProfile(labelObj || null);
     try {
-      const res = await fetch(`/${stickyFile}`);
+      const res = await fetch(`/Gestalt/${stickyFile}`);
       if (!res.ok) throw new Error("Failed to load file");
       const data = await res.json();
       setJsonData(data);
@@ -238,6 +238,14 @@ export default function StickyEdit() {
               <option value="private">private</option>
               <option value="secret">secret</option>
             </select>
+            <button type="button" onClick={() => {
+              setJsonData(prev => {
+                if (!prev) return prev;
+                const newData = { ...prev };
+                newData[stickyKey] = newData[stickyKey].filter((_, i) => i !== idx);
+                return newData;
+              });
+            }} style={{ color: '#b00', background: 'none', border: 'none', fontWeight: 'bold', cursor: 'pointer' }} title="Delete this row">✕</button>
           </div>
         ))}
         <button type="button" onClick={handleAddSticky} style={{ marginTop: 8, marginRight: 8 }}>

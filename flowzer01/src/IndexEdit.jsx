@@ -18,7 +18,7 @@ async function publishGroupFiles(profileNum) {
 
 // Utility to fetch and parse fz_profile_index.json
 async function fetchProfileIndex() {
-  const res = await fetch("/fz_profile_index.json");
+  const res = await fetch("/Gestalt/fz_profile_index.json");
   if (!res.ok) throw new Error("Failed to load profile index");
   return await res.json();
 }

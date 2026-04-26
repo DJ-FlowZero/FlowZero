@@ -57,7 +57,7 @@ export default function Jedit() {
     setFilename(profile.fileName);
     setSelectedProfile(profile ? { profileId: profile.profileId, description: profile.description } : null);
     try {
-      const res = await fetch(`/${profile.fileName}`);
+      const res = await fetch(`/Gestalt/${profile.fileName}`);
       if (!res.ok) throw new Error("Failed to load file");
       const data = await res.json();
       setJsonData(data);

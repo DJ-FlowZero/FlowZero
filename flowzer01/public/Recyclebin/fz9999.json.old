@@ -1,0 +1,48 @@
+{
+  "profile": [
+    {
+      "label": "Local Italian",
+      "value": "Osteria Elisabethstrasse, München",
+      "flag": "public",
+      "todo": "Next door to Zentner, do not order the salad",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "[Tax Advisor]",
+      "value": "Alexander Rohrmus Wiesbaden",
+      "flag": "public",
+      "todo": " contact before July every year.",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "Bass Guitar String  type",
+      "value": "Elixir 6 String Bass Strings, Nickel Plated Steel, Light Gauge",
+      "flag": "public",
+      "todo": "Last changed 2004",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "LLM",
+      "value": "Open AI Chat GPT 99",
+      "flag": "secret",
+      "todo": "Get the profile info out into flat file",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    }
+  ]
+}

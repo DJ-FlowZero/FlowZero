@@ -1,0 +1,26 @@
+{
+  "profile": [
+    {
+      "label": "Name",
+      "value": "Parvin",
+      "flag": "secret",
+      "todo": "Mahjon Player",
+      "links": "",
+      "comment": "Ask about shopping list",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "Location",
+      "value": "Zentner 44",
+      "flag": "secret",
+      "todo": "Neighbor",
+      "links": "",
+      "comment": "Mobility Issues",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    }
+  ]
+}

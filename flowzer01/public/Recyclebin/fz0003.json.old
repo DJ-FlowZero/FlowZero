@@ -1,0 +1,39 @@
+{
+  "profile": [
+    {
+      "label": "Allach",
+      "value": "Practice Room",
+      "flag": "public",
+      "todo": "Make a list of the inventory",
+      "links": "Kulturprojekt",
+      "comment": "Christoph pays 50 Euro/month",
+      "type": "Location",
+      "subtype": "Storage",
+      "alias": "Silo",
+      "realname": "Music Gear Container"
+    },
+    {
+      "label": "Amplifier",
+      "value": "Musicman",
+      "flag": "public",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "Gear",
+      "subtype": "Amplifier",
+      "alias": "",
+      "realname": "Bass Amp"
+    },
+    {
+      "label": "Amplifier",
+      "value": "Marshall",
+      "flag": "",
+      "todo": "Check the fan noise",
+      "links": "",
+      "comment": "Heavy, dont use for gigs",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    }
+  ]
+}

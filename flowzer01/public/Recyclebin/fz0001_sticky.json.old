@@ -1,0 +1,27 @@
+{
+  "sticky": [
+    {
+      "stickytype": "Cooking",
+      "note": "3 course meals preferred when cooking for guests",
+      "links": "",
+      "flag": "secret"
+    },
+    {
+      "stickytype": "Medication",
+      "note": "[Allergy] (for [Pia], avoid [Livocab], use [Vividrin], reason: better tolerance)",
+      "links": "Dr. Schwinn",
+      "flag": "secret"
+    },
+    {
+      "stickytype": "Food",
+      "note": "No Cilantro, No Red Peppers",
+      "links": "Restaurant LInks",
+      "flag": "secret"
+    },
+    {
+      "stickytype": "Food",
+      "note": "Loves Mushrooms, but CHHO cannot eat",
+      "links": "Restaurant Links"
+    }
+  ]
+}
