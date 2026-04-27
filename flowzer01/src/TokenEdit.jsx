@@ -1,3 +1,14 @@
+// Utility to load config.json
+async function getFZ_GPATH() {
+  try {
+    const res = await fetch('/config.json');
+    if (!res.ok) throw new Error();
+    const cfg = await res.json();
+    return cfg.FZ_GPATH || '.\\Gestalt';
+  } catch {
+    return '.\\Gestalt';
+  }
+}
 // Use a constant for the profile description field
 const PROFILE_DESCRIPTION_LABEL = "description";
 
@@ -18,12 +29,15 @@ export default function TokenEdit() {
       fetchUserIndex()
         .then(async (data) => {
           setUserIndex(data);
+          const FZ_GPATH = await getFZ_GPATH();
+          const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
           // Fetch each profile file and extract a display label
           const labels = await Promise.all(
             data.map(async (profile, idx) => {
               const tokenFile = profile.fileName.replace(/\.json$/, "_token.json");
               try {
-                const res = await fetch(`/Gestalt/${profile.fileName}`);
+                const gestaltPath = `/${gestaltDir}/${profile.fileName}`.replace(/\\/g, '/');
+                const res = await fetch(gestaltPath);
                 if (!res.ok) throw new Error();
                 const json = await res.json();
                 const arr = json.profile || [];
@@ -65,8 +79,8 @@ export default function TokenEdit() {
 
   // Load JSON file by fileName (from user index)
   const handleProfileSelect = async (e) => {
-    const idx = e.target.value;
-    if (idx === "") return;
+    const idx = Number(e.target.value);
+    if (isNaN(idx)) return;
     const profile = userIndex[idx];
     // Guess token file name
     const tokenFile = profile.fileName.replace(/\.json$/, "_token.json");
@@ -75,7 +89,10 @@ export default function TokenEdit() {
     const labelObj = profileLabels.find(l => l.idx == idx);
     setSelectedProfile(labelObj || null);
     try {
-      const res = await fetch(`/Gestalt/${tokenFile}`);
+      const FZ_GPATH = await getFZ_GPATH();
+      const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
+      const gestaltPath = `/${gestaltDir}/${tokenFile}`.replace(/\\/g, '/');
+      const res = await fetch(gestaltPath);
       if (!res.ok) throw new Error("Failed to load file");
       const data = await res.json();
       setJsonData(data);
@@ -199,7 +216,7 @@ export default function TokenEdit() {
           <span style={{ width: 220 }}>Usage</span>
           <span style={{ width: 90 }}>Flag</span>
         </div>
-        {tokenArr.map((entry, idx) => (
+        {tokenArr && tokenArr.filter(entry => visibility === "secret" || (entry.flag || "secret") === visibility).map((entry, idx) => (
           <div key={idx} style={{ marginBottom: 10, display: "flex", gap: 8 }}>
             <input
               type="text"

@@ -1,3 +1,14 @@
+// Utility to load config.json
+async function getFZ_GPATH() {
+  try {
+    const res = await fetch('/config.json');
+    if (!res.ok) throw new Error();
+    const cfg = await res.json();
+    return cfg.FZ_GPATH || '.\\Gestalt';
+  } catch {
+    return '.\\Gestalt';
+  }
+}
 import React, { useState, useEffect } from "react";
 import { fetchUserIndex } from "./userIndexUtil";
 
@@ -20,14 +31,20 @@ export default function GestaltViewer() {
       }, 0);
       return;
     }
-    const base = selectedProfile.replace('.json', '');
-    Promise.all([
-      fetch(`/${base}_token.json`).then(r => r.json()).catch(() => null),
-      fetch(`/${base}_sticky.json`).then(r => r.json()).catch(() => null)
-    ]).then(([token, sticky]) => {
+    const fetchData = async () => {
+      const base = selectedProfile.replace('.json', '');
+      const FZ_GPATH = await getFZ_GPATH();
+      const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
+      const tokenUrl = `/${gestaltDir}/${base}_token.json`.replace(/\\/g, '/');
+      const stickyUrl = `/${gestaltDir}/${base}_sticky.json`.replace(/\\/g, '/');
+      const [token, sticky] = await Promise.all([
+        fetch(tokenUrl).then(r => r.json()).catch(() => null),
+        fetch(stickyUrl).then(r => r.json()).catch(() => null)
+      ]);
       setTokenData(Array.isArray(token?.FZ_Tokens) ? token.FZ_Tokens : []);
       setStickyData(Array.isArray(sticky?.sticky) ? sticky.sticky : []);
-    });
+    };
+    fetchData();
     // No direct setState in effect body after async
   }, [selectedProfile]);
 

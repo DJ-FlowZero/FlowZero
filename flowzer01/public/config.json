@@ -1,4 +1,4 @@
 {
-  // TODO: Planned refactor—move all Gestalt directory references to a single FZ_GPATH variable here for unified path management.
+  "FZ_GPATH": ".\\Gestalt",
   "XS_01_Title": "FlowZero Systematik Version 0.1"
 }

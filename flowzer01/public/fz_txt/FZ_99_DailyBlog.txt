@@ -1,0 +1,3 @@
+26-04-2026 Today I learned that having a proper directory structure is a killer feature before your actually write a single line of code
+27-04-2026 Today I dedicated the model needs a defined service level contract which needs to be refreshed to keep the gyroscope of collaboration spinning. The file is called FZ_ServCon.txt
+27-04-2026 not outsourcing string and path dependencies to config files is a huge load later source of bugs and effort

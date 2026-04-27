@@ -7,7 +7,16 @@ const PORT = 3001;
 app.use(express.json({ limit: '5mb' }));
 
 const PUBLIC_DIR = path.join(__dirname, 'public');
-const GESTALT_DIR = path.join(PUBLIC_DIR, 'Gestalt');
+const CONFIG_PATH = path.join(PUBLIC_DIR, 'config.json');
+let FZ_GPATH = '.\\Gestalt';
+try {
+  const configRaw = fs.readFileSync(CONFIG_PATH, 'utf8');
+  const config = JSON.parse(configRaw);
+  if (config.FZ_GPATH) FZ_GPATH = config.FZ_GPATH;
+} catch (e) {
+  console.warn('[Config] Could not load FZ_GPATH from config.json, using default:', e);
+}
+const GESTALT_DIR = path.join(PUBLIC_DIR, FZ_GPATH);
 const FILENAME = 'text_text.txt';
 
 

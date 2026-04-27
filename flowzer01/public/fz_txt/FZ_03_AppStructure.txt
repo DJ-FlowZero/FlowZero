@@ -1,4 +1,10 @@
 
+## [2026-04-27] Directory Path Management
+
+- All code now references the Gestalt directory via the FZ_GPATH variable in config.json.
+- Changing the Gestalt directory only requires updating config.json and restarting servers.
+- This pattern is recommended for all future directory or file path dependencies.
+
 FlowZero App Structure (custom project files and directories)
 
 Top-level Directories:

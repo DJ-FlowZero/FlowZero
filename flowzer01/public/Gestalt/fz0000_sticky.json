@@ -29,6 +29,16 @@
       "note": "The [JazzBox] can come to gigs in safe places, where the stage is not accessible by the public",
       "links": "JazzBox, Gibson L5",
       "flag": "secret"
+    },
+    {
+      "stickytype": "Banker",
+      "note": "Stefan Schott Unicredit München (replacement Frau Unterhuber)",
+      "links": "+49 17915 206"
+    },
+    {
+      "stickytype": "",
+      "note": "",
+      "links": ""
     }
   ]
 }

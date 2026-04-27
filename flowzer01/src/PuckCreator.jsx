@@ -1,3 +1,14 @@
+// Utility to load config.json
+async function getFZ_GPATH() {
+  try {
+    const res = await fetch('/config.json');
+    if (!res.ok) throw new Error();
+    const cfg = await res.json();
+    return cfg.FZ_GPATH || '.\\Gestalt';
+  } catch {
+    return '.\\Gestalt';
+  }
+}
 
 import React, { useState, useEffect } from "react";
 import { fetchUserIndex } from "./userIndexUtil";
@@ -33,12 +44,18 @@ export default function PuckCreator() {
 
   useEffect(() => {
     if (!selectedProfile) return;
-    const base = selectedProfile.replace('.json', '');
-    Promise.all([
-      fetch(`/Gestalt/${base}.json`).then(r => r.json()).catch(() => null),
-      fetch(`/Gestalt/${base}_token.json`).then(r => r.json()).catch(() => null),
-      fetch(`/Gestalt/${base}_sticky.json`).then(r => r.json()).catch(() => null)
-    ]).then(([profile, token, sticky]) => {
+    const fetchData = async () => {
+      const base = selectedProfile.replace('.json', '');
+      const FZ_GPATH = await getFZ_GPATH();
+      const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
+      const profileUrl = `/${gestaltDir}/${base}.json`.replace(/\\/g, '/');
+      const tokenUrl = `/${gestaltDir}/${base}_token.json`.replace(/\\/g, '/');
+      const stickyUrl = `/${gestaltDir}/${base}_sticky.json`.replace(/\\/g, '/');
+      const [profile, token, sticky] = await Promise.all([
+        fetch(profileUrl).then(r => r.json()).catch(() => null),
+        fetch(tokenUrl).then(r => r.json()).catch(() => null),
+        fetch(stickyUrl).then(r => r.json()).catch(() => null)
+      ]);
       const profileArr = Array.isArray(profile?.profile) ? profile.profile : [];
       const tokenArr = Array.isArray(token?.FZ_Tokens) ? token.FZ_Tokens : [];
       const stickyArr = Array.isArray(sticky?.sticky) ? sticky.sticky : [];
@@ -50,7 +67,8 @@ export default function PuckCreator() {
         selectedTokenRows: tokenArr.length > 0 ? tokenArr.map((_, idx) => idx) : [],
         selectedStickyRows: stickyArr.length > 0 ? stickyArr.map((_, idx) => idx) : []
       });
-    });
+    };
+    fetchData();
   }, [selectedProfile]);
 
 
@@ -151,7 +169,10 @@ export default function PuckCreator() {
     // Fetch the loader readme text
     let loaderText = '';
     try {
-      const res = await fetch('/Gestalt/FZ_PUCK_loader_readme.txt');
+      const FZ_GPATH = await getFZ_GPATH();
+      const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
+      const loaderUrl = `/${gestaltDir}/FZ_PUCK_loader_readme.txt`.replace(/\\/g, '/');
+      const res = await fetch(loaderUrl);
       loaderText = await res.text();
     } catch {
       loaderText = 'FZ_PUCK_loader_readme.txt missing or failed to load.';

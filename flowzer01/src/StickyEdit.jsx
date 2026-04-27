@@ -1,3 +1,14 @@
+// Utility to load config.json
+async function getFZ_GPATH() {
+  try {
+    const res = await fetch('/config.json');
+    if (!res.ok) throw new Error();
+    const cfg = await res.json();
+    return cfg.FZ_GPATH || '.\\Gestalt';
+  } catch {
+    return '.\\Gestalt';
+  }
+}
 
 import React, { useState, useEffect } from "react";
 import { fetchUserIndex } from "./userIndexUtil";
@@ -33,12 +44,15 @@ export default function StickyEdit() {
     fetchUserIndex()
       .then(async (data) => {
         setUserIndex(data);
+        const FZ_GPATH = await getFZ_GPATH();
+        const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
         // Fetch each profile file and extract a display label
         const labels = await Promise.all(
           data.map(async (profile, idx) => {
             const stickyFile = profile.fileName.replace(/\.json$/, "_sticky.json");
             try {
-              const res = await fetch(`/Gestalt/${profile.fileName}`);
+              const gestaltPath = `/${gestaltDir}/${profile.fileName}`.replace(/\\/g, '/');
+              const res = await fetch(gestaltPath);
               if (!res.ok) throw new Error();
               const json = await res.json();
               const arr = json.profile || [];
@@ -74,8 +88,8 @@ export default function StickyEdit() {
 
   // Load sticky file by profile selection
   const handleProfileSelect = async (e) => {
-    const idx = e.target.value;
-    if (idx === "") return;
+    const idx = Number(e.target.value);
+    if (isNaN(idx)) return;
     const profile = userIndex[idx];
     const stickyFile = profile.fileName.replace(/\.json$/, "_sticky.json");
     setFilename(stickyFile);
@@ -83,7 +97,10 @@ export default function StickyEdit() {
     const labelObj = profileLabels.find(l => l.idx == idx);
     setSelectedProfile(labelObj || null);
     try {
-      const res = await fetch(`/Gestalt/${stickyFile}`);
+      const FZ_GPATH = await getFZ_GPATH();
+      const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
+      const gestaltPath = `/${gestaltDir}/${stickyFile}`.replace(/\\/g, '/');
+      const res = await fetch(gestaltPath);
       if (!res.ok) throw new Error("Failed to load file");
       const data = await res.json();
       setJsonData(data);
@@ -206,7 +223,7 @@ export default function StickyEdit() {
           <span style={{ width: 200 }}>Links</span>
           <span style={{ width: 90 }}>Flag</span>
         </div>
-        {stickyArr.map((entry, idx) => (
+        {stickyArr.filter(entry => visibility === "secret" || (entry.flag || "secret") === visibility).map((entry, idx) => (
           <div key={idx} style={{ marginBottom: 10, display: "flex", gap: 8 }}>
             <input
               type="text"

@@ -1,4 +1,11 @@
 #
+# [2026-04-27] Directory and Path Refactor
+#
+# All hard-coded references to the Gestalt directory have been removed from both backend and frontend code.
+# The path is now controlled by the FZ_GPATH variable in config.json. To change the Gestalt directory, update FZ_GPATH and restart the servers.
+# This makes the app robust to directory renames and reduces future maintenance effort.
+#
+#
 
 ## Profile/Group Creation, Staging, and Publishing (2026-04)
 

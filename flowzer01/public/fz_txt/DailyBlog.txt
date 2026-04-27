@@ -1,1 +1,0 @@
-Today I learned that having a proper directory structure is a killer feature before your actually write a single line of code

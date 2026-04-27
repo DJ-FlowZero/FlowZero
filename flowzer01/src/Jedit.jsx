@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { fetchUserIndex } from "./userIndexUtil";
 
+// Utility to load config.json
+async function getFZ_GPATH() {
+  try {
+    const res = await fetch('/config.json');
+    if (!res.ok) throw new Error();
+    const cfg = await res.json();
+    return cfg.FZ_GPATH || '.\\Gestalt';
+  } catch {
+    return '.\\Gestalt';
+  }
+}
+
 // Jedit: JSON Editor Component
 export default function Jedit() {
   const [jsonData, setJsonData] = useState(null);
@@ -51,13 +63,15 @@ export default function Jedit() {
 
   // Load JSON file by fileName (from user index)
   const handleProfileSelect = async (e) => {
-    const idx = e.target.value;
-    if (idx === "") return;
-    const profile = userIndex[idx];
-    setFilename(profile.fileName);
+    const fileName = e.target.value;
+    if (!fileName) return;
+    setFilename(fileName);
+    const profile = userIndex.find(p => p.fileName === fileName);
     setSelectedProfile(profile ? { profileId: profile.profileId, description: profile.description } : null);
     try {
-      const res = await fetch(`/Gestalt/${profile.fileName}`);
+      const FZ_GPATH = await getFZ_GPATH();
+      const gestaltPath = `${FZ_GPATH.replace(/^[.\\/]+/, '')}/${fileName}`.replace(/\\/g, '/');
+      const res = await fetch(`/${gestaltPath}`);
       if (!res.ok) throw new Error("Failed to load file");
       const data = await res.json();
       setJsonData(data);
@@ -117,6 +131,7 @@ export default function Jedit() {
 
 
   if (error) return <div style={{ color: "red" }}>{error}</div>;
+
   if (!jsonData) {
     return (
       <div style={{ border: "1px solid #ccc", padding: 16, borderRadius: 8, maxWidth: 700 }}>
@@ -130,8 +145,8 @@ export default function Jedit() {
         ) : (
           <select onChange={handleProfileSelect} defaultValue="">
             <option value="">-- Select Profile --</option>
-            {userIndex.map((profile, idx) => (
-              <option key={profile.profileId} value={idx}>
+            {userIndex.map((profile) => (
+              <option key={profile.profileId} value={profile.fileName}>
                 {profile.profileId} - {profile.description}
               </option>
             ))}
@@ -145,23 +160,21 @@ export default function Jedit() {
             </span>
           </div>
         )}
-        <div style={{ margin: "16px 0 8px 0", color: "#888", fontSize: "0.95em" }}>or open a file manually:</div>
-        <label style={{ margin: 0 }}>
-          <input type="file" accept=".json,application/json" onChange={handleOpen} style={{ marginRight: 8 }} />
-          <span style={{ color: '#555', fontSize: '0.97em', fontStyle: 'italic' }}>{filename}</span>
-        </label>
+        {filename && (
+          <div style={{ marginTop: 10, color: '#007', fontSize: '1em' }}>
+            <b>Loaded file:</b> {filename}
+          </div>
+        )}
       </div>
     );
   }
 
+  // --- Editable Profile Table UI ---
   const profileKey = Object.keys(jsonData)[0];
   const profileArr = jsonData[profileKey];
-  // Filter records based on visibility
-  // No sort/delete UI. Just render the array as before.
+
   return (
     <div style={{ border: "1px solid #ccc", padding: 16, borderRadius: 8, maxWidth: 700 }}>
-      {saveStatus && <div style={{ color: saveStatus.startsWith("Saved") ? "green" : "#b00", marginBottom: 8 }}>{saveStatus}</div>}
-      {/* Show selected profile label/description at the top */}
       {selectedProfile && (
         <div style={{ marginBottom: 18, padding: 8, background: '#f0f7ff', borderRadius: 6, border: '1px solid #b3d1ff', fontSize: '1.1em', fontWeight: 500 }}>
           <span style={{color:'#003366'}}>
@@ -171,11 +184,7 @@ export default function Jedit() {
         </div>
       )}
       <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 16 }}>
-        <label style={{ margin: 0 }}>
-          <input type="file" accept=".json,application/json" onChange={handleOpen} style={{ marginRight: 8 }} />
-          <span style={{ color: '#555', fontSize: '0.97em', fontStyle: 'italic' }}>{filename}</span>
-        </label>
-        <label style={{ marginLeft: 16 }}>
+        <label style={{ marginLeft: 0 }}>
           Visibility:
           <select value={visibility} onChange={e => setVisibility(e.target.value)} style={{ marginLeft: 8 }}>
             <option value="public">Public</option>
@@ -190,58 +199,66 @@ export default function Jedit() {
           handleSaveAs();
         }}
       >
-        <div style={{ display: "flex", gap: 8, fontWeight: 'bold', marginBottom: 4 }}>
-          <span style={{ width: 100 }}>Label</span>
-          <span style={{ width: 100 }}>Value</span>
-          <span style={{ width: 80 }}>Flag</span>
-          <span style={{ width: 120 }}>Todo</span>
-          <span style={{ width: 120 }}>Comment</span>
+        <div style={{ display: "flex", gap: 8, fontWeight: "bold", marginBottom: 4 }}>
+          <span style={{ width: 120 }}>Label</span>
+          <span style={{ width: 180 }}>Value</span>
+          <span style={{ width: 90 }}>Flag</span>
+          <span style={{ width: 120 }}>Type</span>
+          <span style={{ width: 120 }}>Subtype</span>
+          <span style={{ width: 120 }}>Alias</span>
         </div>
-        {profileArr.map((entry, profileIdx) => (
-          <div key={profileIdx} style={{ marginBottom: 10, display: "flex", gap: 8, flexWrap: 'wrap' }}>
+        {profileArr.filter(entry => visibility === "secret" || (entry.flag || "secret") === visibility).map((entry, idx) => (
+          <div key={idx} style={{ marginBottom: 10, display: "flex", gap: 8 }}>
             <input
               type="text"
               value={entry.label}
-              onChange={(e) => handleFieldChange(profileIdx, "label", e.target.value)}
-              style={{ width: 100 }}
-              placeholder="label"
+              onChange={(e) => handleFieldChange(idx, "label", e.target.value)}
+              style={{ width: 120 }}
+              placeholder="Label"
             />
             <input
               type="text"
               value={entry.value}
-              onChange={(e) => handleFieldChange(profileIdx, "value", e.target.value)}
-              style={{ width: 100 }}
-              placeholder="value"
+              onChange={(e) => handleFieldChange(idx, "value", e.target.value)}
+              style={{ width: 180 }}
+              placeholder="Value"
             />
             <select
-              value={entry.flag || "public"}
-              onChange={e => handleFieldChange(profileIdx, "flag", e.target.value)}
-              style={{ width: 80 }}
+              value={entry.flag || "secret"}
+              onChange={e => handleFieldChange(idx, "flag", e.target.value)}
+              style={{ width: 90 }}
             >
-              <option value="secret">secret</option>
-              <option value="private">private</option>
               <option value="public">public</option>
+              <option value="private">private</option>
+              <option value="secret">secret</option>
             </select>
             <input
               type="text"
-              value={entry.todo || ""}
-              onChange={(e) => handleFieldChange(profileIdx, "todo", e.target.value)}
+              value={entry.type || ""}
+              onChange={(e) => handleFieldChange(idx, "type", e.target.value)}
               style={{ width: 120 }}
-              placeholder="todo"
+              placeholder="Type"
             />
             <input
               type="text"
-              value={entry.comment || ""}
-              onChange={(e) => handleFieldChange(profileIdx, "comment", e.target.value)}
+              value={entry.subtype || ""}
+              onChange={(e) => handleFieldChange(idx, "subtype", e.target.value)}
               style={{ width: 120 }}
-              placeholder="comment"
+              placeholder="Subtype"
+            />
+            <input
+              type="text"
+              value={entry.alias || ""}
+              onChange={(e) => handleFieldChange(idx, "alias", e.target.value)}
+              style={{ width: 120 }}
+              placeholder="Alias"
             />
           </div>
         ))}
         <button type="button" onClick={handleAddItem} style={{ marginTop: 8, marginRight: 8 }}>
           Add Record
         </button>
-        <button type="submit" style={{ marginTop: 8, marginLeft: 8 }}>
+        <button type="button" onClick={handleSaveAs} style={{ marginTop: 8, marginLeft: 8 }}>
           Save As
         </button>
       </form>

@@ -1,3 +1,14 @@
+// Utility to load config.json
+async function getFZ_GPATH() {
+  try {
+    const res = await fetch('/config.json');
+    if (!res.ok) throw new Error();
+    const cfg = await res.json();
+    return cfg.FZ_GPATH || '.\\Gestalt';
+  } catch {
+    return '.\\Gestalt';
+  }
+}
 import React, { useState, useEffect } from "react";
 import { fetchUserIndex } from "./userIndexUtil"
 // Styled button for Gestalt (white on blue)
@@ -244,13 +255,18 @@ function App() {
   // Load gestalt when profile or visibility changes
   useEffect(() => {
     if (!selectedProfile) return;
-    // Fetch profile, token, sticky from Gestalt directory
-    const base = selectedProfile.replace('.json', '');
-    Promise.all([
-      fetch(`/Gestalt/${base}.json`).then(r => r.json()).catch(() => null),
-      fetch(`/Gestalt/${base}_token.json`).then(r => r.json()).catch(() => null),
-      fetch(`/Gestalt/${base}_sticky.json`).then(r => r.json()).catch(() => null)
-    ]).then(([profile, token, sticky]) => {
+    const fetchData = async () => {
+      const base = selectedProfile.replace('.json', '');
+      const FZ_GPATH = await getFZ_GPATH();
+      const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
+      const profileUrl = `/${gestaltDir}/${base}.json`.replace(/\\/g, '/');
+      const tokenUrl = `/${gestaltDir}/${base}_token.json`.replace(/\\/g, '/');
+      const stickyUrl = `/${gestaltDir}/${base}_sticky.json`.replace(/\\/g, '/');
+      const [profile, token, sticky] = await Promise.all([
+        fetch(profileUrl).then(r => r.json()).catch(() => null),
+        fetch(tokenUrl).then(r => r.json()).catch(() => null),
+        fetch(stickyUrl).then(r => r.json()).catch(() => null)
+      ]);
       let gestalt = '';
       // Visibility filter logic
       const allowedFlags = gestaltVisibility === "secret" ? ["secret", "private", "public"] : gestaltVisibility === "private" ? ["private", "public"] : ["public"];
@@ -284,7 +300,8 @@ function App() {
         }
       }
       setGestaltText(gestalt.trim());
-    });
+    };
+    fetchData();
   }, [selectedProfile, showGestalt, gestaltVisibility]);
 
   useEffect(() => {
