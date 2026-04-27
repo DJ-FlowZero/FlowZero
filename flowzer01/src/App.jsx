@@ -1,16 +1,5 @@
-// Utility to load config.json
-async function getFZ_GPATH() {
-  try {
-    const res = await fetch('/config.json');
-    if (!res.ok) throw new Error();
-    const cfg = await res.json();
-    return cfg.FZ_GPATH || '.\\Gestalt';
-  } catch {
-    return '.\\Gestalt';
-  }
-}
 import React, { useState, useEffect } from "react";
-import { fetchUserIndex } from "./userIndexUtil"
+import { fetchUserIndex, getFZ_GPATH } from "./userIndexUtil"
 // Styled button for Gestalt (white on blue)
 function GestaltButton({ children, onClick, ...props }) {
   return (

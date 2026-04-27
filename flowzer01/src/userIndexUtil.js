@@ -1,5 +1,5 @@
-// Utility to load config.json
-async function getFZ_GPATH() {
+// Utility to load config.json — exported so all components share one copy
+export async function getFZ_GPATH() {
   try {
     const res = await fetch('/config.json');
     if (!res.ok) throw new Error();

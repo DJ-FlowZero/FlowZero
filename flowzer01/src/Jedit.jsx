@@ -1,17 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchUserIndex } from "./userIndexUtil";
-
-// Utility to load config.json
-async function getFZ_GPATH() {
-  try {
-    const res = await fetch('/config.json');
-    if (!res.ok) throw new Error();
-    const cfg = await res.json();
-    return cfg.FZ_GPATH || '.\\Gestalt';
-  } catch {
-    return '.\\Gestalt';
-  }
-}
+import { fetchUserIndex, getFZ_GPATH } from "./userIndexUtil";
 
 // Jedit: JSON Editor Component
 export default function Jedit() {
@@ -20,7 +8,6 @@ export default function Jedit() {
   const [error, setError] = useState("");
   const [userIndex, setUserIndex] = useState([]);
   const [loadingIndex, setLoadingIndex] = useState(true);
-  const [saveStatus] = useState("");
   const [visibility, setVisibility] = useState("secret"); // visibility filter
   const [selectedProfile, setSelectedProfile] = useState(null); // {profileId, description}
 

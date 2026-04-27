@@ -17,17 +17,7 @@ async function publishGroupFiles(profileNum) {
 }
 
 
-// Utility to load config.json
-async function getFZ_GPATH() {
-  try {
-    const res = await fetch('/config.json');
-    if (!res.ok) throw new Error();
-    const cfg = await res.json();
-    return cfg.FZ_GPATH || '.\\Gestalt';
-  } catch {
-    return '.\\Gestalt';
-  }
-}
+import { getFZ_GPATH } from "./userIndexUtil";
 
 // Utility to fetch and parse fz_profile_index.json
 async function fetchProfileIndex() {

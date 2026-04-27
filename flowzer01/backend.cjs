@@ -17,7 +17,20 @@ try {
   console.warn('[Config] Could not load FZ_GPATH from config.json, using default:', e);
 }
 const GESTALT_DIR = path.join(PUBLIC_DIR, FZ_GPATH);
+const NEWSTATE_DIR = path.join(PUBLIC_DIR, 'NewState');
 const FILENAME = 'text_text.txt';
+
+// Resolves a client-supplied filename safely within a base directory.
+// Returns the resolved absolute path, or null if it would escape the base.
+function safeFilePath(base, filename) {
+  if (!filename || typeof filename !== 'string') return null;
+  // Reject filenames with directory separators to prevent traversal
+  if (/[\\/]/.test(filename)) return null;
+  const resolved = path.resolve(base, filename);
+  const baseFull = path.resolve(base);
+  if (!resolved.startsWith(baseFull + path.sep) && resolved !== baseFull) return null;
+  return resolved;
+}
 
 
 // Endpoint to save (stage) a profile JSON file to NewState with backup
@@ -27,7 +40,10 @@ app.post('/api/save-profile', (req, res) => {
     if (!filename) {
       return res.status(400).json({ status: 'error', message: 'Missing filename.' });
     }
-    const profilePath = path.join(GESTALT_DIR, filename);
+    const profilePath = safeFilePath(GESTALT_DIR, filename);
+    if (!profilePath) {
+      return res.status(400).json({ status: 'error', message: 'Invalid filename.' });
+    }
     const backupPath = profilePath + '.bck';
     if (fs.existsSync(profilePath)) {
       try {
@@ -44,16 +60,19 @@ app.post('/api/save-profile', (req, res) => {
   }
 });
 
-// Endpoint to refresh (publish) a profile file from NewState to public
+// Endpoint to refresh (publish) a profile file — confirms it exists in Gestalt dir
 app.post('/api/refresh-profile', (req, res) => {
   try {
     const { filename } = req.body;
     if (!filename) {
       return res.status(400).json({ status: 'error', message: 'Missing filename.' });
     }
-    const src = path.join(GESTALT_DIR, filename);
-    const dest = path.join(GESTALT_DIR, filename); // publish stays in Gestalt
+    const dest = safeFilePath(GESTALT_DIR, filename);
+    if (!dest) {
+      return res.status(400).json({ status: 'error', message: 'Invalid filename.' });
+    }
     const backupPath = dest + '.bck';
+    const src = dest; // file is already in GESTALT_DIR after save-profile
     if (!fs.existsSync(src)) {
       return res.status(404).json({ status: 'error', message: 'No staged profile found.' });
     }
@@ -75,11 +94,14 @@ app.post('/api/refresh-profile', (req, res) => {
 });
 
 
-// Endpoint to save (stage) the file to NewState with timestamp
+// Endpoint to save a text file in Gestalt dir with backup
 app.post('/api/save-text', (req, res) => {
   const file = req.body.filename || FILENAME;
   const content = req.body.content || "";
-  const filePath = path.join(GESTALT_DIR, file);
+  const filePath = safeFilePath(GESTALT_DIR, file);
+  if (!filePath) {
+    return res.status(400).json({ status: 'error', message: 'Invalid filename.' });
+  }
   const backupPath = filePath + '.bck';
   if (fs.existsSync(filePath)) {
     try { fs.copyFileSync(filePath, backupPath); } catch {}
@@ -88,26 +110,28 @@ app.post('/api/save-text', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// Endpoint to refresh (publish) the file from NewState to public
+// Endpoint to refresh (publish) a text file from NewState staging to Gestalt dir
 app.post('/api/refresh-text', (req, res) => {
   const file = req.body.filename || FILENAME;
-  const src = path.join(NEWSTATE_DIR, file);
-  const dest = path.join(PUBLIC_DIR, 'fz_txt', file);
-  const backupPath = dest + '.bck';
-  if (!fs.existsSync(src)) {
-    return res.status(404).json({ status: 'error', message: 'No staged file found.' });
+  const safeStaged = safeFilePath(NEWSTATE_DIR, file);
+  const safeDest = safeFilePath(GESTALT_DIR, file);
+  if (!safeStaged || !safeDest) {
+    return res.status(400).json({ status: 'error', message: 'Invalid filename.' });
   }
-  // Backup the current fz_txt file before overwrite
-  if (fs.existsSync(dest)) {
-    try { fs.copyFileSync(dest, backupPath); } catch {} 
+  if (!fs.existsSync(safeStaged)) {
+    return res.status(404).json({ status: 'error', message: 'No staged file found in NewState.' });
   }
-  fs.copyFileSync(src, dest);
-  res.json({ status: 'ok', message: 'File refreshed to fz_txt.' });
+  const backupPath = safeDest + '.bck';
+  if (fs.existsSync(safeDest)) {
+    try { fs.copyFileSync(safeDest, backupPath); } catch {}
+  }
+  fs.copyFileSync(safeStaged, safeDest);
+  res.json({ status: 'ok', message: 'File refreshed from NewState to Gestalt.' });
 });
-
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);
 });
+
 // Endpoint to save (stage and publish) fz_profile_index.json with backup
 app.post('/api/save-profile-index', (req, res) => {
   try {
