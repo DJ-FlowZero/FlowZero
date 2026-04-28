@@ -1,3 +1,8 @@
 26-04-2026 Today I learned that having a proper directory structure is a killer feature before your actually write a single line of code
 27-04-2026 Today I dedicated the model needs a defined service level contract which needs to be refreshed to keep the gyroscope of collaboration spinning. The file is called FZ_ServCon.txt
 27-04-2026 not outsourcing string and path dependencies to config files is a huge load later source of bugs and effort
+28-04-2026 Consolidated all Gestalt path construction into a single utility (getGestaltFileUrl) — 6 files cleaned up, one duplicate function deleted. MAP principle applied: one source of truth beats elegant repetition.
+28-04-2026 The ServCon is just a profile whose subject happens to be an AI. The same data primitives (profile/token/sticky) cover behavioral preferences for people, places, and AI interaction style equally. No special editor needed.
+28-04-2026 A PUCK compiler needs render targets — same data, different outputs (AI prompt vs human brief vs decision input). Data model stays generic; compilation is where the target-specific logic lives.
+28-04-2026 The right mental model for HUM/AI collaboration is Tennis Doubles — same side, shared score, situational roles, peer level. ServCon is the pre-match agreement. PUCK is the court briefing. HUM provides positioning, AI provides range. Neither wins alone.
+28-04-2026 To restart just the backend without killing context: Get-NetTCPConnection -LocalPort 3001 | OwningProcess | Stop-Process, then Start-Process cmd with node backend.cjs

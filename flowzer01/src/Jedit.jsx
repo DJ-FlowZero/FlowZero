@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchUserIndex, getFZ_GPATH } from "./userIndexUtil";
+import { fetchUserIndex, getGestaltFileUrl } from "./userIndexUtil";
 
 // Jedit: JSON Editor Component
 export default function Jedit() {
@@ -56,9 +56,8 @@ export default function Jedit() {
     const profile = userIndex.find(p => p.fileName === fileName);
     setSelectedProfile(profile ? { profileId: profile.profileId, description: profile.description } : null);
     try {
-      const FZ_GPATH = await getFZ_GPATH();
-      const gestaltPath = `${FZ_GPATH.replace(/^[.\\/]+/, '')}/${fileName}`.replace(/\\/g, '/');
-      const res = await fetch(`/${gestaltPath}`);
+      const gestaltPath = await getGestaltFileUrl(fileName);
+      const res = await fetch(gestaltPath);
       if (!res.ok) throw new Error("Failed to load file");
       const data = await res.json();
       setJsonData(data);

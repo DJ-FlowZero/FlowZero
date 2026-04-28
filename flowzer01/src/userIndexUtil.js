@@ -10,6 +10,12 @@ export async function getFZ_GPATH() {
   }
 }
 
+// Utility to build a Gestalt-dir-relative fetch URL for any file
+export async function getGestaltFileUrl(filename) {
+  const FZ_GPATH = await getFZ_GPATH();
+  return `/${FZ_GPATH.replace(/^[.\\/]+/, '')}/${filename}`.replace(/\\/g, '/');
+}
+
 // Utility to fetch and parse fz_profile_index.json
 export async function fetchUserIndex() {
   const FZ_GPATH = await getFZ_GPATH();

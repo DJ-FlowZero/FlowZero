@@ -1,50 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function TextFileBackandSave() {
   const [status, setStatus] = useState("");
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState("");
-  const [filename, setFilename] = useState("text_text.txt");
+  const [filename, setFilename] = useState("");
+  const [txtFiles, setTxtFiles] = useState([]);
+  const [loadingList, setLoadingList] = useState(true);
+  const [selectedFetchPath, setSelectedFetchPath] = useState("");
 
-  // Load the current file content for editing
-  const loadText = async (fname = filename) => {
+  useEffect(() => {
+    fetch('/api/list-txt-files')
+      .then(r => r.json())
+      .then(data => { setTxtFiles(data); setLoadingList(false); })
+      .catch(() => { setTxtFiles([]); setLoadingList(false); });
+  }, []);
+
+  const loadText = async (fetchPath, fname) => {
     setStatus("Loading...");
     try {
-      const res = await fetch(`/${fname}?_=` + Date.now());
-      if (!res.ok) throw new Error("File not found");
+      const res = await fetch(`/${fetchPath}?_=` + Date.now());
+      if (!res.ok) throw new Error("File not found at /" + fetchPath);
       const data = await res.text();
       setText(data);
       setFilename(fname);
       setEditing(true);
       setStatus("");
     } catch (e) {
-      setStatus("Error loading file: " + e.message);
+      setStatus("Error: " + e.message);
     }
   };
 
-  // Save edited text to NewState
-  const saveToNewState = async () => {
+  const handleDropdownChange = (e) => {
+    const fetchPath = e.target.value;
+    setSelectedFetchPath(fetchPath);
+    if (!fetchPath) return;
+    const file = txtFiles.find(f => f.fetchPath === fetchPath);
+    if (file) loadText(file.fetchPath, file.name);
+  };
+
+  const saveToGestalt = async () => {
     setStatus("Saving...");
-    const content = text;
-    // Always use the React state for filename
     const res = await fetch("/api/save-text", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content, filename })
+      body: JSON.stringify({ content: text, filename })
     });
     const result = await res.json();
-    setStatus(result.message);
+    setStatus(result.message || "Saved.");
     setEditing(false);
+    setSelectedFetchPath("");
   };
 
-
-  // Refresh (publish) from NewState to public with confirmation
-  const refreshToPublic = async () => {
-    if (!window.confirm("Are you sure you want to overwrite the public file with the staged version?")) {
-      setStatus("Refresh cancelled.");
+  const publishFromNewState = async () => {
+    if (!filename) { setStatus("Select a file first."); return; }
+    if (!window.confirm(`Copy NewState/${filename} → Gestalt/${filename}?`)) {
+      setStatus("Cancelled.");
       return;
     }
-    setStatus("Refreshing...");
+    setStatus("Publishing...");
     const res = await fetch("/api/refresh-text", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -55,39 +69,49 @@ export default function TextFileBackandSave() {
   };
 
   return (
-    <div style={{ border: "1px solid #aaa", padding: 16, borderRadius: 8, maxWidth: 500, margin: 24 }}>
-      <h3>Generic Text edit-save-backup-refresh</h3>
+    <div style={{ border: "1px solid #aaa", padding: 16, borderRadius: 8, margin: 24 }}>
+      <h3 style={{ marginTop: 0 }}>Text File Editor</h3>
       {!editing ? (
         <>
-          <div style={{ marginBottom: 8 }}>
-            <label>
-              Filename:
-              <input
-                type="text"
-                value={filename}
-                onChange={e => setFilename(e.target.value)}
-                style={{ marginLeft: 8, width: 180 }}
-                placeholder="text_text.txt"
-              />
-              <button onClick={() => loadText(filename)} style={{ marginLeft: 8 }}>Load</button>
-            </label>
+          <div style={{ marginBottom: 12 }}>
+            <label style={{ fontWeight: 'bold', marginRight: 8 }}>Choose file:</label>
+            {loadingList ? (
+              <span style={{ color: '#888' }}>Loading...</span>
+            ) : txtFiles.length === 0 ? (
+              <span style={{ color: 'red' }}>No files found — backend may need restart</span>
+            ) : (
+              <select
+                value={selectedFetchPath}
+                onChange={handleDropdownChange}
+                style={{ minWidth: 240, fontSize: '1em', padding: '4px 8px' }}
+              >
+                <option value="">-- select --</option>
+                {txtFiles.map(f => (
+                  <option key={f.fetchPath} value={f.fetchPath}>{f.name}</option>
+                ))}
+              </select>
+            )}
           </div>
-          <button onClick={refreshToPublic} style={{ marginRight: 12 }}>[Refresh] to Public</button>
-          <input
-            type="file"
-            accept=".txt,text/plain"
-            style={{ marginLeft: 12 }}
-            onChange={e => {
-              const file = e.target.files[0];
-              if (!file) return;
-              file.text().then(data => {
-                setText(data);
-                setFilename(file.name);
-                setEditing(true);
-                setStatus("");
-              });
-            }}
-          />
+          <div style={{ marginBottom: 12, color: '#666', fontSize: '0.9em' }}>
+            Or open a local file:&nbsp;
+            <input
+              type="file"
+              accept=".txt,text/plain"
+              onChange={e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                file.text().then(data => {
+                  setText(data);
+                  setFilename(file.name);
+                  setEditing(true);
+                  setStatus("");
+                });
+              }}
+            />
+          </div>
+          <button onClick={publishFromNewState} style={{ fontSize: '0.95em', padding: '6px 14px' }}>
+            Publish NewState → Gestalt
+          </button>
         </>
       ) : (
         <>
@@ -98,16 +122,13 @@ export default function TextFileBackandSave() {
             value={text}
             onChange={e => setText(e.target.value)}
             rows={18}
-            style={{ width: '98vw', maxWidth: '100%', minWidth: 400, marginBottom: 12, fontSize: '0.9em', lineHeight: '1.4' }}
+            style={{ width: '100%', minWidth: 400, marginBottom: 12, fontSize: '0.9em', lineHeight: '1.4', boxSizing: 'border-box' }}
           />
-          <button onClick={saveToNewState} style={{ marginRight: 12 }}>Save to NewState</button>
-          <button onClick={() => setEditing(false)}>Cancel</button>
+          <button onClick={saveToGestalt} style={{ marginRight: 12 }}>Save to Gestalt</button>
+          <button onClick={() => { setEditing(false); setSelectedFetchPath(""); }}>Cancel</button>
         </>
       )}
       <div style={{ marginTop: 16, color: '#007' }}>{status}</div>
-      <div style={{ marginTop: 24, fontSize: '0.95em', color: '#888' }}>
-        This function accepts a an input file prompt, and allows edit, backed-up save and re-publish to the \Public directory from \Newstate
-      </div>
     </div>
   );
 }

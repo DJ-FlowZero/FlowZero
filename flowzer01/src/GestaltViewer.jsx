@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchUserIndex, getFZ_GPATH } from "./userIndexUtil";
+import { fetchUserIndex, getGestaltFileUrl } from "./userIndexUtil";
 
 export default function GestaltViewer() {
   const [userIndex, setUserIndex] = useState([]);
@@ -22,10 +22,10 @@ export default function GestaltViewer() {
     }
     const fetchData = async () => {
       const base = selectedProfile.replace('.json', '');
-      const FZ_GPATH = await getFZ_GPATH();
-      const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
-      const tokenUrl = `/${gestaltDir}/${base}_token.json`.replace(/\\/g, '/');
-      const stickyUrl = `/${gestaltDir}/${base}_sticky.json`.replace(/\\/g, '/');
+      const [tokenUrl, stickyUrl] = await Promise.all([
+        getGestaltFileUrl(`${base}_token.json`),
+        getGestaltFileUrl(`${base}_sticky.json`),
+      ]);
       const [token, sticky] = await Promise.all([
         fetch(tokenUrl).then(r => r.json()).catch(() => null),
         fetch(stickyUrl).then(r => r.json()).catch(() => null)

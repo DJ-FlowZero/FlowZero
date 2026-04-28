@@ -128,6 +128,24 @@ app.post('/api/refresh-text', (req, res) => {
   fs.copyFileSync(safeStaged, safeDest);
   res.json({ status: 'ok', message: 'File refreshed from NewState to Gestalt.' });
 });
+
+// Endpoint to list .txt files available for editing (from Gestalt and fz_txt dirs)
+app.get('/api/list-txt-files', (req, res) => {
+  const FZ_TXT_DIR = path.join(PUBLIC_DIR, 'fz_txt');
+  const results = [];
+  try {
+    fs.readdirSync(GESTALT_DIR)
+      .filter(f => f.endsWith('.txt'))
+      .forEach(f => results.push({ name: f, fetchPath: `Gestalt/${f}` }));
+  } catch {}
+  try {
+    fs.readdirSync(FZ_TXT_DIR)
+      .filter(f => f.endsWith('.txt'))
+      .forEach(f => results.push({ name: f, fetchPath: `fz_txt/${f}` }));
+  } catch {}
+  res.json(results);
+});
+
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);
 });

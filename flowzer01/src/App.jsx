@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchUserIndex, getFZ_GPATH } from "./userIndexUtil"
+import { fetchUserIndex, getGestaltFileUrl } from "./userIndexUtil"
 // Styled button for Gestalt (white on blue)
 function GestaltButton({ children, onClick, ...props }) {
   return (
@@ -246,11 +246,11 @@ function App() {
     if (!selectedProfile) return;
     const fetchData = async () => {
       const base = selectedProfile.replace('.json', '');
-      const FZ_GPATH = await getFZ_GPATH();
-      const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
-      const profileUrl = `/${gestaltDir}/${base}.json`.replace(/\\/g, '/');
-      const tokenUrl = `/${gestaltDir}/${base}_token.json`.replace(/\\/g, '/');
-      const stickyUrl = `/${gestaltDir}/${base}_sticky.json`.replace(/\\/g, '/');
+      const [profileUrl, tokenUrl, stickyUrl] = await Promise.all([
+        getGestaltFileUrl(`${base}.json`),
+        getGestaltFileUrl(`${base}_token.json`),
+        getGestaltFileUrl(`${base}_sticky.json`),
+      ]);
       const [profile, token, sticky] = await Promise.all([
         fetch(profileUrl).then(r => r.json()).catch(() => null),
         fetch(tokenUrl).then(r => r.json()).catch(() => null),

@@ -1,4 +1,58 @@
 
+# [2026-04-28] ServCon — Keep as .txt for Now
+
+ServCon (FZ_01_AI_ServCon.txt) stays as a free-text file intentionally.
+Reason: still in learning mode — the right fields, values, and structures are not yet
+known. Free text allows discovery without premature schema lock-in.
+
+Future migration trigger: when interaction patterns stabilize and recurring config
+combinations emerge (e.g. always using the same mode + rules for coding sessions),
+convert to structured JSON config files with selectable values.
+
+Target end state:
+  - Named collab profiles as separate JSON files: Playmode.json, Analysis.json, Debug.json, etc.
+  - Each file holds a set of ServCon parameters (mode, rules active, signals, escalation level)
+  - User picks a profile at session start; system compiles it into the upload-ready .txt format
+  - Editor: same Jedit-style panel, no special UI needed
+
+Do not migrate until at least 3-4 stable "modes" have been used repeatedly in practice.
+Premature structuring of fluid preference data is a known failure mode.
+
+---
+
+# [2026-04-28] PUCK Compiler — Future Requirement Note
+
+## Compilation Target Separation
+
+The PUCK compiler currently exports a raw data dump.
+Future requirement: the compiler needs to support named *render targets* — the same
+profile data compiled differently depending on intended use.
+
+Examples:
+  - target: "ai_prompt"      → renders as behavioral instructions for LLM priming
+  - target: "human_brief"    → renders as plain-language summary for a person
+  - target: "decision_input" → renders as constraint list for a task (e.g. restaurant selection)
+
+This is a compiler concern, NOT a data model concern.
+The underlying profile/token/sticky primitives do not change.
+A profile describing AI interaction style and a profile describing a person's dietary
+preferences use the same data shape — only the render target differs.
+
+No code change needed now. Revisit when PUCK export is beyond partial status.
+
+---
+
+# [2026-04-28] Path Utility Refactor Complete
+
+- Added getGestaltFileUrl(filename) to userIndexUtil.js — single source of truth for
+  building any Gestalt-directory fetch URL.
+- Removed inline 3-line path construction from: App.jsx, Jedit.jsx, TokenEdit.jsx,
+  StickyEdit.jsx, GestaltViewer.jsx, PuckCreator.jsx.
+- Removed duplicate fetchProfileIndex() from IndexEdit.jsx; now uses fetchUserIndex().
+- All imports updated from getFZ_GPATH → getGestaltFileUrl where applicable.
+
+---
+
 # [2026-04-27] Path Refactor Complete
 
 - All Gestalt directory references are now centralized in config.json (FZ_GPATH).

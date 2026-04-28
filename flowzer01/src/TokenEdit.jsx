@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchUserIndex, getFZ_GPATH } from "./userIndexUtil";
+import { fetchUserIndex, getGestaltFileUrl } from "./userIndexUtil";
 
 // Use a constant for the profile description field
 const PROFILE_DESCRIPTION_LABEL = "description";
@@ -18,14 +18,12 @@ export default function TokenEdit() {
       fetchUserIndex()
         .then(async (data) => {
           setUserIndex(data);
-          const FZ_GPATH = await getFZ_GPATH();
-          const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
           // Fetch each profile file and extract a display label
           const labels = await Promise.all(
             data.map(async (profile, idx) => {
               const tokenFile = profile.fileName.replace(/\.json$/, "_token.json");
               try {
-                const gestaltPath = `/${gestaltDir}/${profile.fileName}`.replace(/\\/g, '/');
+                const gestaltPath = await getGestaltFileUrl(profile.fileName);
                 const res = await fetch(gestaltPath);
                 if (!res.ok) throw new Error();
                 const json = await res.json();
@@ -78,9 +76,7 @@ export default function TokenEdit() {
     const labelObj = profileLabels.find(l => l.idx == idx);
     setSelectedProfile(labelObj || null);
     try {
-      const FZ_GPATH = await getFZ_GPATH();
-      const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
-      const gestaltPath = `/${gestaltDir}/${tokenFile}`.replace(/\\/g, '/');
+      const gestaltPath = await getGestaltFileUrl(tokenFile);
       const res = await fetch(gestaltPath);
       if (!res.ok) throw new Error("Failed to load file");
       const data = await res.json();

@@ -17,16 +17,7 @@ async function publishGroupFiles(profileNum) {
 }
 
 
-import { getFZ_GPATH } from "./userIndexUtil";
-
-// Utility to fetch and parse fz_profile_index.json
-async function fetchProfileIndex() {
-  const FZ_GPATH = await getFZ_GPATH();
-  const gestaltPath = `${FZ_GPATH.replace(/^[.\\/]+/, '')}/fz_profile_index.json`.replace(/\\/g, '/');
-  const res = await fetch(`/${gestaltPath}`);
-  if (!res.ok) throw new Error("Failed to load profile index");
-  return await res.json();
-}
+import { fetchUserIndex } from "./userIndexUtil";
 
 export default function IndexEdit() {
   const [indexData, setIndexData] = useState([]);
@@ -35,7 +26,7 @@ export default function IndexEdit() {
   const [saveStatus, setSaveStatus] = useState("");
 
   useEffect(() => {
-    fetchProfileIndex()
+    fetchUserIndex()
       .then((data) => {
         setIndexData(Array.isArray(data) ? data : []);
         setLoading(false);

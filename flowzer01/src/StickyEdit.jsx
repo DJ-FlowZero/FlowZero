@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchUserIndex, getFZ_GPATH } from "./userIndexUtil";
+import { fetchUserIndex, getGestaltFileUrl } from "./userIndexUtil";
 
 export default function StickyEdit() {
   const [jsonData, setJsonData] = useState(null);
@@ -32,14 +32,12 @@ export default function StickyEdit() {
     fetchUserIndex()
       .then(async (data) => {
         setUserIndex(data);
-        const FZ_GPATH = await getFZ_GPATH();
-        const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
         // Fetch each profile file and extract a display label
         const labels = await Promise.all(
           data.map(async (profile, idx) => {
             const stickyFile = profile.fileName.replace(/\.json$/, "_sticky.json");
             try {
-              const gestaltPath = `/${gestaltDir}/${profile.fileName}`.replace(/\\/g, '/');
+              const gestaltPath = await getGestaltFileUrl(profile.fileName);
               const res = await fetch(gestaltPath);
               if (!res.ok) throw new Error();
               const json = await res.json();
@@ -85,9 +83,7 @@ export default function StickyEdit() {
     const labelObj = profileLabels.find(l => l.idx == idx);
     setSelectedProfile(labelObj || null);
     try {
-      const FZ_GPATH = await getFZ_GPATH();
-      const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
-      const gestaltPath = `/${gestaltDir}/${stickyFile}`.replace(/\\/g, '/');
+      const gestaltPath = await getGestaltFileUrl(stickyFile);
       const res = await fetch(gestaltPath);
       if (!res.ok) throw new Error("Failed to load file");
       const data = await res.json();
