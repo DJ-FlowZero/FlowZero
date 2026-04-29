@@ -1,4 +1,83 @@
 
+# [2026-04-29] Next Steps — V1 Enhancement Plan
+
+## Step 1: Sticky Type Convention — "gap" and "fault" ✓ COMPLETE (2026-04-29)
+- No code change. Convention only.
+- Reserved stickytype values defined: "gap" (missing/unverified info), "fault" (active incident).
+- Documented in FZ_02_Appdocu.txt (Main Components section) and FZ_88_App_Glossary.txt.
+- StickyEdit UI already supports free-text stickytype — no UI change needed.
+
+## Step 2: PUCK Save to fz_PUCK_data/
+- Add backend endpoint: POST /api/save-puck — writes .txt file to public/fz_PUCK_data/.
+- Add backend endpoint: GET /api/list-puck-files — lists .txt files in fz_PUCK_data/.
+- PuckCreator: add [Save to Library] button alongside existing [Export] (download) button.
+- No UI redesign. Single new button, single new file write.
+
+## Step 3: PUCK Library Index
+- Create fz_puck_index.json in public/fz_PUCK_data/: array of { name, sourceProfiles[], visibility, date, filename }.
+- Add backend endpoint: POST /api/save-puck-index.
+- PuckCreator writes index entry on [Save to Library].
+- No new UI screen yet — index is infrastructure for Step 4.
+
+## Step 4: JobPUCK Composer Screen
+- New component: JobPuckComposer.jsx.
+- UI: multi-select from PUCK Library (populated from fz_puck_index.json) + free-text task sticky + visibility selector + [Compile JobPUCK] button.
+- Compiler: merges selected profile/token/sticky arrays, deduplicates, appends task sticky, exports as single .txt.
+- Add to toolbar Row 2 or as a new Row 3.
+
+## Step 5: CCML Token Field in Token Editor
+- Add optional "ccml" field to token data model: { Token, Meaning, Usage, ccml, flag }.
+- TokenEdit.jsx: add input for CCML expression alongside existing fields.
+- No backend change — field rides in existing fzXXXX_token.json.
+- PUCK export includes ccml field if present. AI can use it for precise entity resolution.
+
+---
+
+# [2026-04-28] PuckCreator — Flow Calibration Integration Complete
+
+- Added `includeFlowConfig` checkbox and `flowConfig` state to PuckCreator.jsx.
+- On mount, loads FZ_Flow_Config.json via getGestaltFileUrl. Checkbox disabled with note if file missing.
+- handleExport now: uses getGestaltFileUrl for loader readme; builds a FLOW CALIBRATION plain-text block
+  (param label: value, one per line) if checkbox checked; concatenates loader + flow block + JSON.
+- Export format: human + AI readable. No API dependency. Works in any AI session by paste.
+
+---
+
+# [2026-04-28] UI Toolbar Restructure — PUCK Workflow Row
+
+- Moved "Calibrate Flow" and "Show Gestalt" out of the main editor button row.
+- New Row 2: [Show Config] → [Show Gestalt] → [Create PUCK] — left-to-right workflow progression.
+- Show Config and Show Gestalt: solid #15396a blue (white text). Create PUCK: light blue fill (dark text).
+- Removed PuckCreatorWrapper import from App.jsx; PUCK panel now rendered inline with showPuck state.
+- PuckCreatorWrapper.jsx still exists but is no longer used by App.jsx (can be deleted in future cleanup).
+
+---
+
+# [2026-04-28] MAP — Design Goal Tightened
+
+Munchhausen Architecture Principle design goal (locked):
+  "Compress definitions until reconstruction becomes trivial."
+
+This is an optimization target, not just a description. It means:
+- If a cold reader (human or AI) must infer anything to reconstruct the system, the artifact is underspecified.
+- fz_txt/ is the MAP artifact store. Every non-obvious decision must have a trace here or in config.json.
+- Reconstruction requires zero prior context — only assembly.
+
+Apply this criterion when reviewing or updating any fz_txt/ file:
+  Q: Can someone with no history rebuild this from only the artifact set?
+  If no → compress and specify further.
+
+---
+
+# [2026-04-28] BioLogic — Term Locked
+
+- BioLogic = the explicit, portable operating system beneath prompts.
+- Made machine-readable via Flow Calibration (FZ_Flow_Config.json) + PUCK export.
+- AI-agnostic by design: any model can ingest it cold. Not tied to API memory, personas, or fine-tuning.
+- Contrast: most "AI personalization" is platform-side. BioLogic travels with the person, not the platform.
+
+---
+
 # [2026-04-28] ServCon — Keep as .txt for Now
 
 ServCon (FZ_01_AI_ServCon.txt) stays as a free-text file intentionally.

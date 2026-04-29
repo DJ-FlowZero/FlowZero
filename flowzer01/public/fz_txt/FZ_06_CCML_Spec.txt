@@ -1,0 +1,219 @@
+================================================================================
+FZ_06_CCML_Spec.txt | Context Configuration Markup Language — Specification 1.0
+Version:  1.0-draft
+Date:     2026-04-29
+Purpose:  Minimal viable spec for CCML — human-to-machine context protocol
+Scope:    MAP artifact | Open spec — FlowZero implements, does not own
+================================================================================
+
+---
+
+# WHAT IS CCML
+
+CCML (Context Configuration Markup Language) is a minimal markup language for
+encoding human context in a form that is:
+  - Human-writable without tooling
+  - AI-parseable without a schema
+  - Language-neutral (natural language inside primitives is intentional)
+  - Platform-agnostic (no dependency on any AI system, API, or app)
+
+Design reference: HTML in its original form — legible in source, meaningful without
+a renderer, small enough to write by hand.
+
+CCML is a protocol for intent markup, not a programming language.
+It does not enforce data types, validation, or structure beyond primitive syntax.
+The AI reading CCML is expected to resolve meaning from context, not from a parser.
+
+FlowZero is the first CCML-implementing tool. FlowZero does not own the standard.
+
+---
+
+# CCML 1.0 — PRIMITIVE SET (MINIMAL VIABLE)
+
+Five primitives. All are optional and combinable. Order is flexible.
+
+---
+
+## 1. [token] — Named Entity Handle
+
+Syntax:   [EntityName]
+Purpose:  A fixed, locally-meaningful name for any entity — person, place, object,
+          concept, skill, or role. The token is the person's own word, preserved exactly.
+
+Rules:
+  - Case-sensitive as written by the author.
+  - No spaces inside brackets. Use camelCase or underscore for multi-word: [BlueSocks]
+  - The token itself carries no inherent meaning — meaning is assigned via ::.
+  - A token without :: is a bare reference; valid, but unresolved until defined elsewhere.
+
+Examples:
+  [Schlappen]
+  [MitchB]
+  [HVAC]
+  [FloorEightAC]
+
+---
+
+## 2. {type} — Entity Classifier
+
+Syntax:   {typename}
+Purpose:  Declares the semantic category of the preceding or associated token.
+          Guides AI disambiguation — distinguishes [Meds]{object} from [Meds]{person}.
+
+Reserved types (extensible — these are conventions, not enforced):
+  {person}    a human individual
+  {place}     a physical location (room, building, area)
+  {object}    a physical item
+  {skill}     a capability or certification
+  {role}      a functional position or responsibility
+  {event}     a time-bound occurrence
+  {concept}   an abstract idea or policy
+
+Rules:
+  - Follows the token it classifies: [Schlappen]{object}
+  - Can be omitted when type is unambiguous from context.
+  - Custom types are allowed: {medication}, {vendor}, {preference}.
+
+Examples:
+  [MitchB]{person}
+  [Floor8AC]{object}
+  [HVAC]{skill}
+  [Stammkunde]{concept}
+
+---
+
+## 3. :: — Binding Operator (Definition / Mapping)
+
+Syntax:   [token] :: "natural language definition"
+Purpose:  Assigns meaning to a token. The definition is free-form natural language.
+          CCML does not constrain the content — the AI resolves it.
+
+Rules:
+  - Definition is enclosed in double quotes.
+  - Quotes are required to delimit the definition boundary.
+  - Multiple languages within the definition are valid and intentional.
+  - A token may have more than one :: binding (e.g., in different profiles or contexts).
+    The most specific or most recent binding takes precedence — the AI judges.
+  - :: without a preceding token is not valid syntax.
+
+Examples:
+  [Schlappen]{object} :: "linkes Regal, Flurschrank unten, nur im Winter"
+  [MitchB]{person}    :: "Mitch Brauer, project manager, works remotely Fri"
+  [HVAC]{skill}       :: "certified Carrier and Daikin systems, valid 2026"
+
+---
+
+## 4. <flag> — Visibility or Status Marker
+
+Syntax:   <flagname>
+Purpose:  Attaches a visibility level or status signal to the statement.
+          Controls what is exported in a PUCK and signals certainty or urgency to the AI.
+
+Reserved flags (extensible):
+  <public>    visible to any reader — safe for external export
+  <private>   visible to trusted parties only — excluded from public PUCK
+  <secret>    visible to owner only — never exported
+  <gap>       information is missing, unverified, or uncertain
+  <fault>     active incident or known problem
+  <todo>      action required — not yet resolved
+
+Rules:
+  - Follows the token or statement it qualifies.
+  - Multiple flags on one statement are valid: [Meds]{object} :: "..." <private> <todo>
+  - When no flag is set, default visibility is implementation-defined (FlowZero default: private).
+
+Examples:
+  [Schlappen]{object} :: "linkes Regal" <public>
+  [Meds]{object}      :: "Badezimmerschrank" <private>
+  [Floor8AC]{object}  :: "location unconfirmed" <gap>
+  stickytype: "fault" :: "AC floor 8 offline 09:42" <fault>
+
+---
+
+## 5. //note — Inline Situational Modifier
+
+Syntax:   //free text note
+Purpose:  Attaches a contextual annotation to the statement. Situational, not definitional.
+          Does not redefine the token — modifies the context of its use.
+
+Rules:
+  - Appended to the end of a CCML statement.
+  - Free text after // to end of line.
+  - Multiple //notes on a statement are not supported in 1.0. Use one per line.
+  - Intended for runtime conditions, exceptions, or reminders.
+
+Examples:
+  [Schlappen]{object} :: "linkes Regal" <public> //nur im Winter
+  [MitchB]{person}    :: "project manager" <private> //currently on leave until May
+  [Floor8AC]{object}  :: "Carrier 034-X" <public> //warranty active — call KlimaTech first
+
+---
+
+# CCML STATEMENT — FULL FORM
+
+A complete CCML statement combines all five primitives:
+
+  [Token]{type} :: "natural language definition" <flag> //situational note
+
+All components except [token] are optional. Minimal valid statement:
+
+  [Token]
+
+Most expressive statement:
+
+  [Schlappen]{object} :: "linkes Regal, Flurschrank unten, erste Reihe" <public> //nur im Winter
+
+---
+
+# WHAT CCML IS NOT
+
+- Not a query language. CCML marks up context; querying is done by the AI.
+- Not a programming language. No logic, loops, or conditionals.
+- Not a schema enforcement layer. Validity is semantic, not syntactic.
+- Not a replacement for natural language. Natural language lives inside :: definitions.
+- Not platform-specific. Any AI, any tool, any language can read CCML.
+
+---
+
+# CCML AND THE FLEXICON
+
+The Flexicon is a person's personal CCML dictionary — their set of [token] :: definitions.
+It is the primary mechanism for preserving the person's own vocabulary while
+making it machine-resolvable.
+
+The Flexicon does not normalize language. A person who says "Schlappen" keeps "Schlappen"
+as their token. The definition maps it to structured meaning. A reader in any language
+queries the AI, which resolves through the token definition regardless of input language.
+
+This makes CCML + Flexicon a cross-language semantic bridge, not just a shorthand system.
+
+---
+
+# IMPLEMENTATION IN FLOWZERO (V1)
+
+CCML primitives map to FlowZero data structures as follows:
+
+| CCML Primitive | FlowZero Field         | Location                  |
+|----------------|------------------------|---------------------------|
+| [token]        | Token                  | fzXXXX_token.json         |
+| {type}         | (implicit in label)    | fzXXXX_token.json         |
+| ::             | Meaning + Usage        | fzXXXX_token.json         |
+| <flag>         | flag                   | all .json files           |
+| //note         | stickytype + note      | fzXXXX_sticky.json        |
+
+V1 does not render CCML syntax in the UI. CCML is expressed in the PUCK export as
+structured JSON fields. The AI reading the PUCK resolves CCML semantics from field values.
+
+Full CCML syntax rendering in the UI is a future enhancement (Step 5 in CodePlan).
+
+---
+
+# VERSIONING AND GOVERNANCE
+
+CCML 1.0 is a draft specification. It is intentionally minimal.
+Primitives may not be removed in future versions without a major version bump.
+New primitives may be added as minor versions (1.1, 1.2) only if they cannot be
+expressed by combining existing primitives.
+
+FlowZero tracks CCML version implemented in config.json (future field: FZ_CCML_VERSION).
+This spec lives in fz_txt/ as a MAP artifact — reconstructable without prior context.

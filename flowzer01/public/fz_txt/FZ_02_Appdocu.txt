@@ -1,3 +1,6 @@
+# NOTE TO READER: This file opens with patch history followed by the main documentation.
+# Start at "FlowZero Baseline App Documentation" below for system understanding.
+# Patch history is preserved above it for change traceability.
 #
 # [2026-04-27] Directory and Path Refactor
 #
@@ -65,6 +68,7 @@ FlowZero Baseline App Documentation
 	 - Run: `npm run dev`
 	 - This launches both the backend (Express, on http://localhost:3001) and the frontend (Vite/React, on http://localhost:5173) together.
 	 - The app will be available at [http://localhost:5173/](http://localhost:5173/)
+	 - **Session shortcut:** `start meup` in terminal runs `meup.bat`, which wraps `npm run dev`. Standard session startup command.
 
 ## Scripts (package.json)
 
@@ -77,9 +81,10 @@ FlowZero Baseline App Documentation
 ## Configuration
 
 - **Backend:**
-	- Main file: `backend.cjs` (Express server, API endpoints for profile, sticky, and token management)
+	- Main file: `backend.cjs` (Express server, API endpoints for profile, sticky, token, and text file management)
 	- Port: 3001
-	- Serves and manages files in `public/` and `public/NewState/`
+	- Serves and manages files in `public/`, `public/Gestalt/`, `public/NewState/`, and `public/fz_txt/`
+	- Key endpoints: `/api/save-profile`, `/api/refresh-profile`, `/api/save-text`, `/api/refresh-text`, `/api/save-profile-index`, `/api/list-fz-files`, `/api/list-txt-files`
 - **Frontend:**
 	- React app (src/), served by Vite
 	- Port: 5173
@@ -100,10 +105,17 @@ FlowZero Baseline App Documentation
 FlowZero is a zero-resistance workflow tool for managing and editing user configuration profiles (PUCKs), sticky notes, and personal tag tokens. The application is built with React and Vite, and operates on local JSON files for privacy and portability.
 
 ### Key Concepts
-- **PUCK (Portable User Configuration Knowledge):** Local user profile JSON files, e.g., `fz0000.json`.
+- **PUCK (Portable Use Case Knowledge):** Pruned, compiled, portable constraint surface exported from a Gestalt. NOT a raw data dump — it is a task-relevant selection of profile/token/sticky rows, optionally including Flow Calibration. Export file: e.g. `PUCK_export_fz0000.txt`.
+- **Gestalt:** The full contextual field of a user — all profiles + tokens + stickies combined.
+- **BioLogic:** The explicit, portable operating system beneath prompts — how a person reasons, what they tolerate, what needs stating vs. implying. Made machine-readable via Flow Calibration parameters. AI-agnostic: readable by any model, no fine-tuning required.
+- **Flow Calibration:** 18 behavioral parameters (response length, tone, challenge level, etc.) stored in `FZ_Flow_Config.json`. Edited via the Calibrate Flow panel. Optionally included in PUCK export as a plain-text block.
 - **Sticky Notes:** Per-profile sticky note arrays, e.g., `fz0000_sticky.json`.
-- **Tokens:** Per-profile tag tokens, e.g., `fz0000_token.json`.
-- **User Index:** `fz_profile_index.json` and `fz_user_index.json` provide metadata and lookup for all profiles.
+- **Tokens:** Per-profile tag tokens (PTAGs), e.g., `fz0000_token.json`.
+- **User Index:** `fz_profile_index.json` provides metadata and lookup for all profiles.
+- **CCML (Context Configuration Markup Language):** 5-primitive markup for encoding human context — `[token]`, `{type}`, `::`, `<flag>`, `//note`. Human-writable, AI-parseable, language-neutral. Full spec: FZ_06_CCML_Spec.txt.
+- **Flexicon:** Personal CCML dictionary — the user's set of [token] :: definitions in their own vocabulary. Preserves the person's exact language. Cross-language semantic bridge.
+- **JobPUCK:** Ephemeral PUCK compiled from multiple profiles + a task sticky for a specific incident or job. Created per task, not stored.
+- **ServCon (Service Contract):** Session-level behavioral agreement between HUM and AI. Defined in FZ_01_AI_ServCon.txt. Upload at session start. AI alias: Loop. Protocol: [LOOP/HUM].
 
 
 
@@ -114,10 +126,18 @@ The FlowZero App UI is a modular, user-friendly admin workbench for managing all
 - **Profile Edit:** Edit the array of fields for any selected profile (PUCK). Add, modify, or remove entries, and save changes as a new JSON file.
 - **Token Edit:** Manage personal tag tokens (PTAGs) for the selected profile, including meanings and usage notes.
 - **Sticky Edit:** Edit sticky notes (contextual notes, links, reminders) for each user profile.
-- **Text File Edit:** Edit any `.txt` file in the system, with backup and safe publishing workflows (automatic backup before overwrite).
+- **Text File Edit:** Edit any `.txt` file in Gestalt/ or fz_txt/. Dropdown populated live from `/api/list-txt-files`. Automatic backup on save. No dummy filename — dropdown resets to `-- select --` after save/cancel.
+- **Calibrate Flow:** Edit the 18 BioLogic behavioral parameters stored in `FZ_Flow_Config.json`. Pill-button radio UI per parameter. Free-text notes area. Save to Gestalt or Download JSON. Parameters include: response length, tone register, challenge level, ambiguity handling, scope discipline, and 13 others.
 - **Index Edit:** View and edit the profile index (`fz_profile_index.json`).
 	- **Create Puck:** The [Create Group] button safely creates a new PUCK (profile/group) with unique numbering, ensuring no overwrites. Associated token and sticky files are created together in `public/NewState/`.
 	- **Publish Group Files:** The [Publish Group Files] button moves staged files to the public directory, always preventing overwrites.
+
+### Toolbar Workflow Layout (2026-04-28)
+- **Row 1 (editors):** Profile Edit · Token Edit · Sticky Edit · Text File Edit · Index Edit
+- **Row 2 (PUCK workflow):** [Show Config] → [Show Gestalt] → [Create PUCK]
+  - Show Config: toggles the Calibrate Flow panel (BioLogic parameters)
+  - Show Gestalt: opens the full Gestalt viewer modal with visibility filter
+  - Create PUCK: toggles the PUCK Creator panel with row-level selection and optional Flow Calibration block
 - **Gestalt Viewer (Show Gestalt):** A modal window that displays a combined, read-only summary of the selected profile's main data (profile fields, tokens, sticky notes)—the full context field (Gestalt) before pruning to a PUCK. This supports the workflow: start with Gestalt, prune to relevant context, and package as a PUCK.
 
 
@@ -150,27 +170,37 @@ The UI is modular and ready for further user-facing development, with clear sepa
 ---
 
 ## File Structure
-- `src/Jedit.jsx`: Profile (PUCK) JSON editor.
-- `src/StickyEdit.jsx`: Sticky note editor for a selected profile.
-- `src/TokenEdit.jsx`: Token/tag editor for a selected profile.
-- `src/userIndexUtil.js`: Utility for loading user index.
-- `public/`: Contains all user data files (JSON), config, and documentation.
+See FZ_03_AppStructure.txt for the full directory and file inventory.
+
+Key `src/` files:
+- `Jedit.jsx`               — Profile JSON editor (label/value/flag/todo)
+- `StickyEdit.jsx`          — Sticky note editor (stickytype/note/links)
+- `TokenEdit.jsx`           — Token editor (Token/Meaning/Usage/flag)
+- `IndexEdit.jsx`           — Profile index admin: create group, publish files
+- `TextFileBackandSave.jsx` — Edit any .txt file in Gestalt/ or fz_txt/ with backup
+- `CalibrateFlow.jsx`       — 18 BioLogic param editor (pill UI, FZ_Flow_Config.json)
+- `GestaltViewer.jsx`       — Modal: read-only combined Gestalt with visibility filter
+- `PuckCreator.jsx`         — PUCK compiler: row selection + Flow Calibration block + export
+- `App.jsx`                 — Root: toolbar, profile selector, component orchestration
+- `userIndexUtil.js`        — `getGestaltFileUrl()`, `fetchUserIndex()` — single source of truth for paths
+- `profileFileUtil.js`      — Profile file utilities
+
+Key `public/` files:
+- `config.json`                        — App config (FZ_GPATH controls Gestalt directory)
+- `Gestalt/fz_profile_index.json`      — Profile index
+- `Gestalt/FZ_Flow_Config.json`        — 18 BioLogic behavioral parameters
+- `Gestalt/FZ_PUCK_loader_readme.txt`  — Prepended to every PUCK export
 
 ## Main Components
-### Jedit.jsx
-- Loads user index and allows selection of a profile JSON file.
-- Edits array of objects (fields: label, value, flag, todo) in the profile.
-- Supports manual file open and save.
+All components follow the same pattern: load profile index via `fetchUserIndex()`, allow profile selection from dropdown, load/edit the corresponding JSON file.
 
-### StickyEdit.jsx
-- Loads user index and allows selection of a profile's sticky note file.
-- Edits array of sticky notes (fields: stickytype, note, links).
-- Supports manual file open and save.
+Data shapes per editor:
+- **Jedit:** `{ profile: [ { label, value, flag, todo } ] }`
+- **StickyEdit:** `{ sticky: [ { stickytype, note, links, flag } ] }` — reserved stickytype values: `"gap"` (unverified info), `"fault"` (active incident)
+- **TokenEdit:** `{ FZ_Tokens: [ { Token, Meaning, Usage, flag } ] }`
+- **CalibrateFlow:** `{ params: [ { id, label, description, options[3], value } ] }` — 18 params in FZ_Flow_Config.json
 
-### TokenEdit.jsx
-- Loads user index and allows selection of a profile's token file.
-- Edits array of tokens (fields: Token, Meaning, Usage).
-- No manual file open; always associated with a profile.
+Path rule: never construct Gestalt paths inline. Always use `getGestaltFileUrl(filename)` from `userIndexUtil.js`.
 
 ## Data Model
 - Each profile file is a JSON object with a single key (profileId or similar) mapping to an array of entries.
@@ -186,7 +216,7 @@ The UI is modular and ready for further user-facing development, with clear sepa
 - Profile: `fzXXXX.json`
 - Sticky: `fzXXXX_sticky.json`
 - Token: `fzXXXX_token.json`
-- User index: `fz_user_index.json`, `fz_profile_index.json`
+- Profile index: `fz_profile_index.json`
 
 ## How to Rebuild
 1. Install dependencies: `npm install`
@@ -195,18 +225,26 @@ The UI is modular and ready for further user-facing development, with clear sepa
 4. Lint code: `npm run lint`
 
 ## Regeneration Guidance for AI
-- Recreate the three main editors (Jedit, StickyEdit, TokenEdit) as React components.
-- Each editor loads a user index, allows profile selection, and loads/edits the corresponding JSON file.
-- Use controlled form inputs for editing arrays of objects.
-- Provide file save (download) and, where appropriate, file open (upload) functionality.
-- All user data is stored in the `public/` directory for local privacy.
-- See this file and the codebase for field names and UI structure.
+- 9 React components in src/ — see File Structure above for full list.
+- All editors follow the same pattern: fetchUserIndex() → profile dropdown → load JSON → controlled form → save.
+- All Gestalt file URLs via getGestaltFileUrl(filename) in userIndexUtil.js — never inline.
+- All saves create .bck backup before overwrite.
+- Visibility filtering (secret/private/public) applied via flag field — UI-enforced, not schema-enforced.
+- Profile/token/sticky files always created together as a group — never independently.
+- Backend (backend.cjs, port 3001) handles all file I/O. Frontend never writes files directly.
+- See FZ_03_AppStructure.txt for data model. See FZ_06_CCML_Spec.txt for token/CCML semantics.
 
 ## Glossary
-- **PUCK:** Portable User Configuration Knowledge (profile JSON)
-- **Sticky:** Per-profile sticky notes
-- **Token:** Per-profile tag tokens
-- **User Index:** List of all profiles
+- **PUCK:** Portable Use Case Knowledge — pruned, compiled, portable constraint surface exported from a Gestalt. NOT a raw profile dump. See Key Concepts.
+- **JobPUCK:** Ephemeral multi-profile PUCK for a specific task or incident. Not stored.
+- **Gestalt:** Full contextual field — all profiles + tokens + stickies for a subject.
+- **BioLogic:** The explicit, portable operating system beneath prompts. Made machine-readable via Flow Calibration.
+- **CCML:** Context Configuration Markup Language — 5-primitive human-to-machine context markup.
+- **Flexicon:** Personal CCML dictionary — user's [token] :: definitions in their own vocabulary.
+- **ServCon:** Session behavioral contract between HUM and AI. See FZ_01_AI_ServCon.txt.
+- **Sticky:** Per-profile situational modifier. Reserved types: "gap" (missing/unverified), "fault" (active incident).
+- **Token (PTAG):** Per-profile named entity handle. Maps personal vocabulary to structured meaning.
+- **Profile Index:** fz_profile_index.json — metadata and lookup for all profiles.
 
 ---
 This documentation is sufficient for an AI (e.g., Codex, Claude) to regenerate the application structure, data model, and main UI flows from scratch.
@@ -220,7 +258,7 @@ All PUCK exports now automatically prepend the loader readme file: `FZ_PUCK_load
 - This file provides import instructions, field limits, and metadata for any system or user importing a PUCK.
 - It is always included as the first section or file in any exported PUCK, ensuring consistent interpretation and safe integration.
 - The loader readme describes the expected JSON structure, field definitions, versioning, and import validation steps.
-- Edit `FZ_PUCK_loader_readme.txt` in the `public/` directory to update import instructions or field policies as the PUCK format evolves.
+- Edit `FZ_PUCK_loader_readme.txt` in `public/Gestalt/` to update import instructions or field policies as the PUCK format evolves.
 
 This guarantees that all exported PUCKs are self-describing and compatible with future systems or workflows.
 
@@ -248,10 +286,19 @@ This separation allows each type to serve its unique purpose, keeps the system e
 
 ---
 
-## Munchhausen Architecture Principle (Design Objective)
+## Munchhausen Architecture Principle (MAP) — LOCKED
 
-The FlowZero system aspires to follow the "Munchhausen Architecture Principle": the ability to bootstrap its logic and structure from its own documentation. This means that, ideally, a future developer or AI could regenerate the system, its data models, and workflows solely from the documentation provided here.
+Design goal: "Compress definitions until reconstruction becomes trivial."
 
-**Note:** This is a guiding design objective, not a hard constraint at this stage. The system is currently in an experimental phase, and frequent changes are expected. However, keeping this principle in mind will help ensure long-term extensibility, maintainability, and self-explanation.
+A cold reader (human or AI) with zero prior context must be able to reconstruct
+the system from only the fz_txt/ artifact set. If reconstruction requires inference,
+the artifact is underspecified.
 
-Developers and contributors are encouraged to update documentation alongside code and data model changes, and to use clear, explicit examples and rationale for all conventions and structures.
+Rules:
+- Every non-obvious architectural decision must have a trace in fz_txt/ or config.json.
+- fz_txt/ is the MAP artifact store — not code comments, not README.
+- Reconstruction requires assembly only — no prior context, no inference.
+
+This is an optimization target, not a soft aspiration. All fz_txt/ files are held to this standard.
+When reviewing or updating any fz_txt/ file, ask: can someone with no history rebuild this from only these files?
+If no → compress and specify further.

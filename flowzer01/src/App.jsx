@@ -147,8 +147,8 @@ import StickyEdit from "./StickyEdit";
 import TextFileBackandSave from "./TextFileBackandSave";
 import IndexEdit from "./IndexEdit";
 import PuckCreator from "./PuckCreator";
-import PuckCreatorWrapper from "./PuckCreatorWrapper";
 import GestaltViewer from "./GestaltViewer";
+import CalibrateFlow from "./CalibrateFlow";
 // ===============================
 // CONFIG / CONSTANTS
 // ===============================
@@ -224,6 +224,8 @@ function App() {
   const [showStickyEdit, setShowStickyEdit] = useState(false)
   const [showTextFileBackandSave, setShowTextFileBackandSave] = useState(false)
   const [showIndexEdit, setShowIndexEdit] = useState(false)
+  const [showCalibrateFlow, setShowCalibrateFlow] = useState(false)
+  const [showPuck, setShowPuck] = useState(false)
   const [uiMode, setUiMode] = useState('public');
 
   // Gestalt state
@@ -339,7 +341,39 @@ function App() {
         {!showIndexEdit && (
           <FzButton onClick={() => setShowIndexEdit(true)}>Index Edit</FzButton>
         )}
-        <GestaltButton onClick={() => setShowGestalt(true)}>Show Gestalt</GestaltButton>
+      </div>
+      {/* PUCK Workflow row: Show Config → Show Gestalt → Create PUCK */}
+      <div style={{marginTop: 16, display: 'flex', gap: 12, alignItems: 'center'}}>
+        <button
+          onClick={() => setShowCalibrateFlow(prev => !prev)}
+          style={{
+            padding: '8px 18px', fontSize: '1em',
+            border: '3px solid #15396a', background: '#15396a',
+            color: '#fff', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer'
+          }}
+        >
+          Show Config
+        </button>
+        <button
+          onClick={() => setShowGestalt(true)}
+          style={{
+            padding: '8px 18px', fontSize: '1em',
+            border: '3px solid #15396a', background: '#15396a',
+            color: '#fff', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer'
+          }}
+        >
+          Show Gestalt
+        </button>
+        <button
+          onClick={() => setShowPuck(prev => !prev)}
+          style={{
+            padding: '8px 18px', fontSize: '1em',
+            border: '3px solid #15396a', background: '#e3eefd',
+            color: '#15396a', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer'
+          }}
+        >
+          Create PUCK
+        </button>
       </div>
       <GestaltModal
         open={showGestalt}
@@ -399,8 +433,26 @@ function App() {
           <TextFileBackandSave />
         </div>
       )}
+      {/* Calibrate Flow */}
+      {showCalibrateFlow && (
+        <div style={{marginTop: 40, marginBottom: 32}}>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16}}>
+            <span style={{fontWeight: 'bold', fontSize: '1.1em'}}>Calibrate Flow</span>
+            <button onClick={() => setShowCalibrateFlow(false)} style={{padding: '4px 12px'}}>Close</button>
+          </div>
+          <CalibrateFlow />
+        </div>
+      )}
       {/* PUCK Creator toggleable section */}
-      <PuckCreatorWrapper />
+      {showPuck && (
+        <div style={{marginTop: 24, marginBottom: 32, border: '2px solid #15396a', borderRadius: 10, padding: 24, background: '#f8faff', maxWidth: 900}}>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12}}>
+            <span style={{fontWeight: 'bold', fontSize: '1.1em', color: '#15396a'}}>Create PUCK</span>
+            <button onClick={() => setShowPuck(false)} style={{fontSize: '1em', background: 'none', border: 'none', cursor: 'pointer', color: '#15396a'}}>✕</button>
+          </div>
+          <PuckCreator />
+        </div>
+      )}
       {/* Demo: Show all three messages for current mode */}
       <div style={{marginTop: 32, textAlign: 'center'}}>
         <FzUI label="fz_05_public_message" as="div" mode={uiMode} style={{fontSize: '1.1em', margin: 8}} />

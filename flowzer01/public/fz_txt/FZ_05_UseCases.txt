@@ -1,0 +1,153 @@
+================================================================================
+FZ_05_UseCases.txt | FlowZero Use Case Documentation
+Version:  0.1
+Date:     2026-04-29
+Purpose:  Reference use cases for validating FlowZero architecture and scope
+Scope:    MAP artifact — reconstructable without prior context
+================================================================================
+
+---
+
+# USE CASE 01 — SeeingAI: Blind Person Care Support
+
+## Context
+A visually impaired person living independently in Germany. Care is provided by a
+fragmented network of carers — often non-native German speakers (Polish, Romanian,
+etc.), with high staff turnover. Each visit may be a different person.
+
+## Problem
+The blind person's environment, preferences, and routines are entirely implicit.
+A new carer arriving has no briefing, no context, and no shared vocabulary.
+Asking the blind person to re-explain every time is exhausting and undignified.
+Standard care documentation (if it exists) is clinical, not operational.
+
+## FlowZero Role
+Profile store + PUCK compiler + transmission vehicle.
+FlowZero does NOT handle voice capture or AI interaction directly.
+Initial Gestalt setup is assisted by a family member, social worker, or trusted carer — one-time effort.
+
+## Primitive Mapping
+- Profile (fzXXXX.json)    → apartment layout, daily routines, preferences
+- Tokens (fzXXXX_token.json) → named entities in the person's own vocabulary
+    [Schlappen]{object} :: "linkes Regal, Flurschrank unten" <public>
+    [Meds]{object}      :: "Badezimmerschrank, oberes Fach, blaue Dose" <private>
+- Stickies               → situational modifiers
+    stickytype: "gap"    :: "shoe box location unconfirmed — verify on next visit"
+    stickytype: "note"   :: "prefers lunch ordered before 11:30"
+
+## Flexicon Role
+The blind person defines entity names in their own dialect or language.
+"Schlappen", "meine schönen Schuhe", "die Tasche" — captured exactly as spoken.
+The PUCK preserves the original term alongside the structured meaning.
+A carer querying the AI in Polish or Romanian resolves through the token, not the term.
+No normalization at capture time — the person's voice is preserved.
+
+## PUCK Export
+Visibility: Public only for standard care visit.
+Private (e.g. medication details) accessible only with elevated permission.
+PUCK loaded cold into any AI. Carer asks: "Wo sind die blauen Socken?"
+AI resolves via token mapping without requiring prior context about the person.
+
+## Feedback Loop
+Carer notices information is wrong or missing.
+Adds a sticky (stickytype: "gap") with note during or after visit.
+Reports back to profile manager. Gestalt updated. New PUCK compiled.
+No structured app access required from the carer — gap reporting is a sticky, not a form.
+
+## Key Insight
+The handover threshold is eliminated for the carer.
+The explanation cost is paid once at Gestalt setup, not at every visit.
+
+## Out of Scope for FlowZero V1
+- Voice capture / speech-to-profile ingestion (separate tool required)
+- Remote Gestalt update by carer (requires auth layer not yet built)
+- Multi-carer access control (visibility layer is currently UI-enforced, not server-enforced)
+
+---
+
+# USE CASE 02 — Building Maintenance: JobPUCK Dispatch
+
+## Context
+A small building maintenance company (~10 staff) providing janitorial and technical
+services to commercial buildings. Staff have different skills, certifications, and
+availability constraints. Buildings have distinct equipment profiles (AC units, fire
+extinguishers, smoke alarms, installed bulb types, warranty status, etc.).
+
+## Problem
+A fault is reported: "AC in floor 8 not working — can you send someone?"
+The dispatcher needs to answer: who is qualified, who is available, what does the
+building need, are there warranty or vendor constraints?
+This information is spread across staff records, building files, and memory.
+Under time pressure, the wrong person gets sent or key context is missed.
+
+## FlowZero Role
+Gestalt store for both building profiles and worker profiles.
+PUCK compiler produces a combined JobPUCK for the specific incident.
+AI loaded with JobPUCK answers dispatch questions in natural language.
+
+## Primitive Mapping
+- Building Profile (fzXXXX.json) → installed equipment, floor layouts, vendor contacts
+    label: "Floor 8 AC Unit"   value: "Carrier 034-X, warranty until 2026-12"
+    label: "Preferred vendor"  value: "KlimaTech GmbH, 0221-4477"
+- Worker Profile (fzXXXX.json) → skills, certifications, constraints
+    label: "HVAC certified"    value: "yes — Carrier systems only"
+    label: "Availability"      value: "Mon-Thu, not before 08:00"
+- Tokens → capability handles
+    [HVAC]{skill}       :: "certified for Carrier and Daikin systems" <public>
+    [FireCert]{skill}   :: "certified fire extinguisher inspection, valid 2026" <public>
+- Stickies → incident record + situational constraints
+    stickytype: "fault"  :: "AC floor 8 offline, reported 2026-04-29 09:42" <public>
+    stickytype: "note"   :: "Floor 8 tenant requests minimum 48h notice for access"
+
+## JobPUCK Composition (future — Step 4 in CodePlan)
+Dispatcher opens JobPUCK composer.
+Selects: BuildingA.puck + Joe.puck + Jack.puck
+Adds task sticky: "AC floor 8 offline, reported 09:42"
+Sets visibility: Public
+Compiles → single .txt export.
+Loads into AI. Asks: "Who should I send for this job?"
+
+## AI Response (expected behavior)
+AI reads: building profile (Carrier unit, warranty active), worker tokens ([HVAC]),
+task sticky (fault type, timestamp). Recommends Joe (HVAC Carrier certified, available
+today). Notes: check warranty first — KlimaTech GmbH may need to be called instead.
+
+## Key Insight
+The JobPUCK is ephemeral — created per incident, not stored as a persistent entity.
+The value is in the compilation, not the artifact.
+Base PUCKs (buildings, workers) are stable and reusable.
+The task sticky is the only incident-specific input.
+
+## PUCK Library (future — Steps 2-3 in CodePlan)
+Pre-compiled base PUCKs stored in fz_PUCK_data/.
+Indexed by fz_puck_index.json: name, source profiles, visibility, date.
+Dispatcher selects from library rather than recompiling from Gestalt each time.
+
+## Out of Scope for FlowZero V1
+- Real-time availability (requires calendar integration)
+- Automated dispatch or notification (SOBA scope, not V1)
+- Multi-company access (single local Gestalt only in V1)
+
+---
+
+# ARCHITECTURAL OBSERVATIONS (cross-case)
+
+## People Layer Principle
+FlowZero operates at the people layer — not machine-to-machine.
+Input is natural, inconsistent, context-laden human language.
+Output is structured, AI-parseable, language-neutral context.
+The front end absorbs the gap. The PUCK is the clean artifact.
+
+## Flexicon as Cross-Language Bridge
+Both use cases demonstrate that the Flexicon is not just personal shorthand.
+It is a semantic bridge across language, dialect, and vocabulary gaps.
+Token mapping is language-neutral — the AI resolves intent, not string matching.
+
+## Handover Threshold
+Both use cases share the same core problem: explanation cost > execution cost.
+FlowZero makes the Gestalt do the explaining. Once. Portably. For any AI. Any language.
+
+## Sticky as Incident Record
+stickytype: "fault" and stickytype: "gap" are reserved conventions (not enforced by schema).
+They give the AI reading the PUCK a signal about certainty and urgency.
+No new data model required — convention on existing primitive.

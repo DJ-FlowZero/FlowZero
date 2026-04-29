@@ -124,6 +124,16 @@
       "Token": "[Rudi]",
       "Meaning": "CHHO Physiotherapist",
       "Usage": "Rudi bought CHHO and Pia Vinyls"
+    },
+    {
+      "Token": "[BioLogic]",
+      "Meaning": "The principle of optimizing a collaboration between humans and AI in a collaborative model",
+      "Usage": "We need to reconfigure the BioLogic of FlowZero"
+    },
+    {
+      "Token": "[FlowZero]",
+      "Meaning": "Product and Company brand developing the FlowZero system, a systematic approach to optimize the collaboration between humans and AI",
+      "Usage": "FlowZero is applying its system to developing the app"
     }
   ]
 }

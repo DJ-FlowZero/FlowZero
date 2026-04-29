@@ -5,6 +5,8 @@ export default function PuckCreator() {
   const [userIndex, setUserIndex] = useState([]);
   const [selectedProfile, setSelectedProfile] = useState("");
   const [visibility, setVisibility] = useState("secret");
+  const [includeFlowConfig, setIncludeFlowConfig] = useState(false);
+  const [flowConfig, setFlowConfig] = useState(null);
   const [puckState, setPuckState] = useState({
     profileData: [],
     tokenData: [],
@@ -16,6 +18,10 @@ export default function PuckCreator() {
 
   useEffect(() => {
     fetchUserIndex().then(setUserIndex);
+    // Load Flow Calibration config
+    getGestaltFileUrl('FZ_Flow_Config.json').then(url =>
+      fetch(url + '?_=' + Date.now()).then(r => r.json()).then(setFlowConfig).catch(() => {})
+    );
   }, []);
 
   // Filter profile, tokens, and stickies by visibility and add _originalIdx for selection
@@ -156,9 +162,7 @@ export default function PuckCreator() {
     // Fetch the loader readme text
     let loaderText = '';
     try {
-      const FZ_GPATH = await getFZ_GPATH();
-      const gestaltDir = FZ_GPATH.replace(/^[.\\/]+/, '');
-      const loaderUrl = `/${gestaltDir}/FZ_PUCK_loader_readme.txt`.replace(/\\/g, '/');
+      const loaderUrl = await getGestaltFileUrl('FZ_PUCK_loader_readme.txt');
       const res = await fetch(loaderUrl);
       loaderText = await res.text();
     } catch {
@@ -174,8 +178,21 @@ export default function PuckCreator() {
     if (puckState.selectedStickyRows.length > 0) {
       exportObj.sticky = puckState.stickyData.filter((_, idx) => puckState.selectedStickyRows.includes(idx));
     }
-    // Combine loader text and PUCK JSON
-    const combined = loaderText + '\n---\n' + JSON.stringify(exportObj, null, 2);
+    // Build flow calibration block if requested
+    let flowBlock = '';
+    if (includeFlowConfig && flowConfig && Array.isArray(flowConfig.params)) {
+      flowBlock = '\n---\nFLOW CALIBRATION\n';
+      flowBlock += `(v${flowConfig.version} · ${flowConfig.date})\n`;
+      for (const p of flowConfig.params) {
+        flowBlock += `${p.label}: ${p.value}\n`;
+      }
+      if (flowConfig.notes && flowConfig.notes.trim()) {
+        flowBlock += `Notes: ${flowConfig.notes.trim()}\n`;
+      }
+      flowBlock += '---\n';
+    }
+    // Combine loader text, flow calibration, and PUCK JSON
+    const combined = loaderText + flowBlock + '\n---\n' + JSON.stringify(exportObj, null, 2);
     const blob = new Blob([combined], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -289,6 +306,26 @@ export default function PuckCreator() {
           ))}
         </div>
       )}
+      {/* Flow Calibration toggle */}
+      <div style={{ border: '1px solid #ccd6e8', borderRadius: 8, padding: '10px 16px', marginBottom: 16, background: '#f8faff', display: 'flex', alignItems: 'center', gap: 14 }}>
+        <input
+          type="checkbox"
+          id="includeFlowConfig"
+          checked={includeFlowConfig}
+          onChange={e => setIncludeFlowConfig(e.target.checked)}
+          disabled={!flowConfig}
+          style={{ width: 18, height: 18, cursor: flowConfig ? 'pointer' : 'not-allowed' }}
+        />
+        <label htmlFor="includeFlowConfig" style={{ fontWeight: 'bold', color: '#15396a', cursor: flowConfig ? 'pointer' : 'not-allowed', userSelect: 'none' }}>
+          Include Flow Calibration
+        </label>
+        {!flowConfig && <span style={{ fontSize: '0.85em', color: '#aaa' }}>FZ_Flow_Config.json not found</span>}
+        {flowConfig && includeFlowConfig && (
+          <span style={{ fontSize: '0.82em', color: '#666' }}>
+            {flowConfig.params.length} parameters · v{flowConfig.version}
+          </span>
+        )}
+      </div>
       <button
         onClick={handleExport}
         disabled={puckState.selectedProfileRows.length + puckState.selectedTokenRows.length + puckState.selectedStickyRows.length === 0}

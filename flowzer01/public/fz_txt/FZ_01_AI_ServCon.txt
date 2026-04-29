@@ -1,5 +1,5 @@
 ================================================================================
-FZ_AI_ServCon.txt | FlowZero AI Service Contract
+FZ_01_AI_ServCon.txt | FlowZero AI Service Contract
 Version:  0.2
 Date:     2026-04-28
 Purpose:  Behavioral priming for HUM/AI collaboration sessions

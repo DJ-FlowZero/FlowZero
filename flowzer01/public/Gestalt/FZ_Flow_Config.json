@@ -1,0 +1,134 @@
+{
+  "version": "0.2",
+  "date": "2026-04-28",
+  "params": [
+    {
+      "id": "response_length",
+      "label": "Response Length",
+      "description": "Default output verbosity from AI",
+      "options": ["compress", "balanced", "expand"],
+      "value": "compress"
+    },
+    {
+      "id": "default_mode",
+      "label": "Default Interaction Mode",
+      "description": "Active mode when none is explicitly set",
+      "options": ["FrenchCafe", "Factory", "Debug"],
+      "value": "FrenchCafe"
+    },
+    {
+      "id": "challenge_level",
+      "label": "Challenge Level",
+      "description": "How hard AI should push back on assumptions",
+      "options": ["low", "medium", "high"],
+      "value": "medium"
+    },
+    {
+      "id": "artifact_gate",
+      "label": "Artifact Generation Gate",
+      "description": "When AI asks before producing artifacts",
+      "options": ["ask always", "ask for large", "generate freely"],
+      "value": "ask always"
+    },
+    {
+      "id": "explanation_depth",
+      "label": "Explanation Depth",
+      "description": "Assumed knowledge level for explanations",
+      "options": ["expert", "intermediate", "beginner"],
+      "value": "expert"
+    },
+    {
+      "id": "ambiguity_handling",
+      "label": "Ambiguity Handling",
+      "description": "What AI does when intent is unclear",
+      "options": ["preserve", "flag", "resolve"],
+      "value": "flag"
+    },
+    {
+      "id": "scope_discipline",
+      "label": "Scope Discipline",
+      "description": "How strictly AI stays within the stated task",
+      "options": ["strict", "moderate", "relaxed"],
+      "value": "strict"
+    },
+    {
+      "id": "coding_strictness",
+      "label": "Coding Strictness",
+      "description": "How conservatively AI approaches code changes",
+      "options": ["strict", "standard", "relaxed"],
+      "value": "strict"
+    },
+    {
+      "id": "confidence_display",
+      "label": "Confidence Display",
+      "description": "How AI signals uncertainty in its outputs",
+      "options": ["always flag", "on request", "suppress"],
+      "value": "always flag"
+    },
+    {
+      "id": "session_close",
+      "label": "Session Close Style",
+      "description": "How AI behaves at session end",
+      "options": ["clean stop", "brief summary", "extended wrap"],
+      "value": "clean stop"
+    },
+    {
+      "id": "initiative_level",
+      "label": "Initiative Level",
+      "description": "Whether AI volunteers next steps or waits",
+      "options": ["reactive only", "offer when relevant", "proactive"],
+      "value": "reactive only"
+    },
+    {
+      "id": "tone_register",
+      "label": "Tone Register",
+      "description": "Relational register of the interaction",
+      "options": ["peer/collegial", "neutral/functional", "formal"],
+      "value": "peer/collegial"
+    },
+    {
+      "id": "formatting_style",
+      "label": "Formatting Style",
+      "description": "How AI structures its output",
+      "options": ["prose", "structured", "minimal"],
+      "value": "minimal"
+    },
+    {
+      "id": "error_recovery",
+      "label": "Error Recovery",
+      "description": "How AI handles its own mistakes",
+      "options": ["flag and correct", "wait for HUM", "self-correct silently"],
+      "value": "flag and correct"
+    },
+    {
+      "id": "context_decay",
+      "label": "Context Decay Handling",
+      "description": "How AI manages coherence in long sessions",
+      "options": ["flag when drifting", "re-prime on signal", "assume continuity"],
+      "value": "flag when drifting"
+    },
+    {
+      "id": "limitation_acknowledgment",
+      "label": "Limitation Acknowledgment",
+      "description": "What AI does when it hits the edge of its knowledge",
+      "options": ["direct / say so", "explore alternatives", "attempt anyway"],
+      "value": "direct / say so"
+    },
+    {
+      "id": "vocabulary_anchoring",
+      "label": "Vocabulary Anchoring",
+      "description": "Whether AI adopts HUM's local terms or uses its own",
+      "options": ["adopt HUM terms", "use standard terms", "mix as needed"],
+      "value": "adopt HUM terms"
+    },
+    {
+      "id": "context_priority",
+      "label": "Context Priority",
+      "description": "What wins when a new prompt conflicts with primed context",
+      "options": ["established context wins", "latest input wins", "flag conflicts"],
+      "value": "flag conflicts"
+    }
+  ],
+  "notes": ""
+}
+

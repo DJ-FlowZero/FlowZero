@@ -1,0 +1,210 @@
+================================================================================
+FZ_88_App_Glossary.txt | FlowZero Term Glossary
+Version:  0.1
+Date:     2026-04-29
+Purpose:  Single reference for all defined terms across the FlowZero system
+Scope:    MAP artifact | Human and AI readable | Update when terms change or lock
+================================================================================
+
+---
+
+term:       BioLogic
+definition: The explicit, portable operating system beneath prompts. How a person
+            reasons, what they tolerate, what needs stating vs. implying. Made
+            machine-readable via Flow Calibration parameters. AI-agnostic — travels
+            with the person, not the platform.
+
+---
+
+term:       CCML (Context Configuration Markup Language)
+definition: A 5-primitive markup language for encoding human context in a form that
+            is human-writable, AI-parseable, and language-neutral. Primitives:
+            [token], {type}, ::, <flag>, //note. FlowZero implements CCML but does
+            not own the standard. Full spec: FZ_06_CCML_Spec.txt.
+
+---
+
+term:       CERO
+definition: Local concierge/orchestrator. Runs the core loop:
+            Configure → Engage → Recurse → Optimise. Not yet built in V1.
+
+---
+
+term:       Digital Air
+definition: The ambient AI/LLM substrate — generic, statistical, context-poor.
+            What an AI is before any context is loaded. FlowZero operates above this
+            layer by injecting structured context (PUCK) before interaction.
+
+---
+
+term:       Flexicon
+definition: A person's personal CCML dictionary. Their set of [token] :: definitions
+            written in their own vocabulary, dialect, or language. Preserves the
+            person's exact words — no normalization. Functions as a cross-language
+            semantic bridge: a carer can query the AI in any language and resolve
+            meaning through the token, not the original term.
+
+---
+
+term:       Flow Calibration
+definition: 18 behavioral parameters stored in FZ_Flow_Config.json that define how
+            an AI should interact with the user. Edited via the Calibrate Flow panel.
+            Parameters include: response length, tone register, challenge level,
+            ambiguity handling, scope discipline, and 13 others. Optionally included
+            in PUCK export as a plain-text block. The machine-readable expression of
+            BioLogic.
+
+---
+
+term:       Flow Mode (FM)
+definition: A named snapshot of "what matters right now" — e.g. "Wednesday mode".
+            Mode > Identity. Not yet built in V1.
+
+---
+
+term:       FZ_GPATH
+definition: Config key in config.json that controls the path to the Gestalt directory.
+            All code resolves Gestalt file paths through getGestaltFileUrl() which
+            reads FZ_GPATH. To move the Gestalt directory, update this key only.
+
+---
+
+term:       Gestalt
+definition: The full contextual field of a subject — all profiles + tokens + stickies
+            combined. The unfiltered, unpruned source of truth before any PUCK export.
+            Viewed in the app via Show Gestalt (modal with visibility filter).
+
+---
+
+term:       Handover Threshold
+definition: The point where explanation cost exceeds execution cost — where briefing
+            a new person takes longer than doing the task yourself. FlowZero becomes
+            useful exactly at this threshold. Use cases: care worker shifts, freelance
+            onboarding, dispatch briefings, AI session starts.
+
+---
+
+term:       HUM
+definition: The human participant in a [LOOP/HUM] session. Chris in the primary
+            development context. The role that provides positioning and intent;
+            Loop (AI) provides range and execution.
+
+---
+
+term:       JITLAG (Just-In-Time Learning and Generation)
+definition: Context injected at runtime rather than pre-trained. The mechanism by
+            which a PUCK primes a cold AI for a specific task without fine-tuning
+            or platform memory.
+
+---
+
+term:       JobPUCK
+definition: An ephemeral PUCK compiled from multiple profiles plus a task sticky
+            for a specific incident, job, or situation. Created per task, not stored.
+            Example: building profile + two worker profiles + fault sticky → one export
+            for dispatcher to load into AI. Not yet built in V1 (Step 4 in CodePlan).
+
+---
+
+term:       LABCOAT
+definition: A context-wearable semantic layer (Laboratory + collaboration). Reusable
+            and mildly protective. Fitted to bespoke contexts.
+
+---
+
+term:       Loop
+definition: The AI alias in a [LOOP/HUM] session. Defined in ServCon
+            (FZ_01_AI_ServCon.txt). Partner role — not assistant. Provides execution
+            range; HUM provides positioning.
+
+---
+
+term:       MAP (Munchhausen Architecture Principle)
+definition: Design goal: "Compress definitions until reconstruction becomes trivial."
+            The system must be reconstructable from its own artifact set (fz_txt/)
+            by a cold reader with zero prior context. If reconstruction requires
+            inference, the artifact is underspecified. Locked — not a soft aspiration.
+
+---
+
+term:       PUCK (Portable Use Case Knowledge)
+definition: A pruned, compiled, portable constraint surface exported from a Gestalt.
+            NOT a raw data dump. Contains a task-relevant selection of profile/token/
+            sticky rows, optionally including a Flow Calibration block. Format: plain
+            text (loader readme + optional flow block + JSON). AI-agnostic — loadable
+            cold into any model. Export file: e.g. PUCK_export_fz0000.txt.
+
+---
+
+term:       PUCK Library
+definition: A store of pre-compiled base PUCKs in fz_PUCK_data/, indexed by
+            fz_puck_index.json. Enables the JobPUCK composer to select from stable
+            pre-built PUCKs rather than recompiling from Gestalt each time.
+            Not yet built in V1 (Steps 2-3 in CodePlan).
+
+---
+
+term:       PTAG (Personal Tagphrase)
+definition: A user-defined shorthand phrase that expands to precise personal meaning.
+            Implemented as a Token in FlowZero. The [token] in CCML notation.
+
+---
+
+term:       RATE
+definition: IQ × FA × PC — Intent Qualification × Familiarity Affordance ×
+            Processing Capacity. A model for evaluating interaction readiness.
+
+---
+
+term:       ServCon (Service Contract)
+definition: Session-level behavioral agreement between HUM and AI. Defines: AI alias,
+            interaction modes, signal vocabulary, response policy, escalation rules.
+            Stored as FZ_01_AI_ServCon.txt. Upload at start of each AI session.
+            Kept as free text intentionally — premature structuring is a failure mode.
+            Future: named collab profiles (e.g. Debug.json, Analysis.json) when
+            3-4 stable modes have been repeatedly used in practice.
+
+---
+
+term:       SKA (Stammkunden-Affordance)
+definition: System behaves like it "knows your usual." Named after the German concept
+            of a regular customer. Interaction quality that FlowZero aims to deliver
+            by pre-loading context rather than requiring re-explanation each session.
+
+---
+
+term:       SOBA (Service On Behalf Of)
+definition: V1 scope — "do this for me" tasks with clear intent and observable outcome.
+            One person defines intent, another executes. No open-ended reasoning, no
+            identity management, no abstract explanation in scope.
+
+---
+
+term:       Sticky Note
+definition: A per-profile situational modifier. Array field in fzXXXX_sticky.json.
+            Fields: stickytype, note, links, flag.
+            Reserved stickytype values:
+              "gap"   = information missing or unverified — flag for follow-up
+              "fault" = active incident or known problem
+              "note"  = general situational context
+
+---
+
+term:       Token
+definition: A per-profile named entity handle (PTAG). Array field in fzXXXX_token.json.
+            Fields: Token, Meaning, Usage, flag.
+            Maps a person's own vocabulary to structured meaning. The primary building
+            block of the Flexicon. In CCML: [token]{type} :: "meaning" <flag>.
+
+---
+
+term:       Visibility Layers
+definition: Three levels controlling PUCK export scope:
+              Public  = safe for any external reader
+              Private = trusted parties only (excluded from public PUCK)
+              Secret  = owner only, never exported
+            Currently UI-enforced (flag field filtering in React). Not server-enforced.
+            For multi-user or remote access scenarios, server-side enforcement is required
+            before adding any remote access layer.
+
+---
