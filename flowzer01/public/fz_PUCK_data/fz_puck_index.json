@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Chris Horak — Public",
+    "filename": "PUCK_export_fz0000.json.txt",
+    "sourceProfiles": "Chris Horak (fz0000)",
+    "visibility": "public",
+    "date": "2026-04-29",
+    "description": "Public PUCK for Chris Horak. AI session priming, general use."
+  },
+  {
+    "name": "Pia — Full",
+    "filename": "PUCK_export_fz0001.json.txt",
+    "sourceProfiles": "Pia (fz0001)",
+    "visibility": "secret",
+    "date": "2026-04-29",
+    "description": "Full PUCK for Pia. Includes profile, tokens (friends, food, household), and stickies."
+  }
+]

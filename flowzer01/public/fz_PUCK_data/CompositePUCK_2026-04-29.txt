@@ -1,0 +1,425 @@
+=== COMPOSITE PUCK ===
+
+Generated: 2026-04-29
+
+
+--- JOB BRIEF ---
+
+find a great restaurant for us for Friday, April 31, 2026
+
+
+--- PUCK: Chris Horak — Public ---
+
+PUCKloader_readme.txt
+=====================
+
+Purpose:
+--------
+This file provides instructions and metadata for any system or user importing a PUCK (Portable User Configuration Knowledge) file. It should always be included as the first section or file when generating or uploading a PUCK, to ensure consistent interpretation and integration.
+
+Contents:
+---------
+- File Structure: Describes the expected JSON structure and required fields for profiles, tokens, and stickies.
+- Field Limits: Specifies the maximum number of items (e.g., 16 profiles, 16 stickies, 64 tokens).
+- Field Definitions: Explains the meaning and expected format for each field (label, value, flag, etc.).
+- Versioning: Indicates the PUCK schema version and any compatibility notes.
+- Import Instructions: Steps for receiving systems to parse and validate the PUCK file.
+- Contact/Support: Where to get help or report issues with PUCK files.
+
+Template (edit as needed):
+-------------------------
+1. PUCK File Structure
+   - { "profile": [ ... ], "FZ_Tokens": [ ... ], "sticky": [ ... ] }
+2. Field Limits
+   - Max 16 label types per profile
+   - Max 64 records per profile
+   - Max 16 stickies per profile
+   - Max 64 tokens per PUCK
+3. Field Definitions
+   - label: string, required for profiles
+   - value: string, required for profiles
+   - flag: "public" | "private" | "secret"
+   - ... (add more as needed)
+4. Version: 1.0.0
+5. Import Instructions
+   - Always read this file first before parsing the PUCK JSON
+   - Validate field limits and required fields
+   - ... (add more as needed)
+6. Contact: [your contact or support info here]
+
+---
+Edit this file to update instructions as your PUCK format evolves.
+---
+{
+  "profile": [
+    {
+      "label": "Code Name",
+      "value": "CHHO",
+      "flag": "secret",
+      "todo": "never reveal real last name",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "User Name",
+      "value": "Choirshark",
+      "flag": "public",
+      "todo": "make sure to use this username on all platforms",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "Hobbies",
+      "value": "Coding in React",
+      "flag": "private",
+      "todo": "do not forget to back up and amend the Appdocumentation",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "Hobbies",
+      "value": "Playing Guitar in the Silocats",
+      "flag": "public",
+      "todo": "Focus the next practice on the set for May",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "Food",
+      "value": "Vegetarian preferred",
+      "flag": "public",
+      "todo": "never forget that Pia does not bear Cilantro or Red Peppers",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "Food",
+      "value": "Omlette or egg dish",
+      "flag": "secret",
+      "todo": "best to skip the extra bread.",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "Instruments",
+      "value": "Fender Telecaster [Mitch]",
+      "flag": "public",
+      "todo": "do not sell, make sure the strings are fresh.  ",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "Instruments",
+      "value": "Gibson L5 Candy Apple Red",
+      "flag": "secret",
+      "todo": "do not sell, make sure the strings are fresh.  ",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "Professionals",
+      "value": "Tax Advisor Alexander Rohrmus, Steuerberater",
+      "flag": "private",
+      "todo": "contact latest in June to prepare the tax declaration for 2023",
+      "links": "",
+      "comment": "",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "Instruments",
+      "value": "Suhr Guthrie Govan",
+      "flag": "secret",
+      "todo": "Add new strings soon",
+      "links": "",
+      "comment": "Govan no longer plays Suhr but has switched to Charvel, reducing the value",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "Instruments",
+      "value": "Suhr Modern Cloudburst",
+      "flag": "secret",
+      "todo": "Add new strings",
+      "comment": "Jazz Box alternative"
+    },
+    {
+      "label": "Locations",
+      "value": "Munich",
+      "flag": "",
+      "todo": "moving in 2026",
+      "links": "",
+      "comment": "From [Zentner] to [Saporta]",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    },
+    {
+      "label": "Projects",
+      "value": "FlowZero",
+      "flag": "",
+      "todo": "test and refine",
+      "links": "",
+      "comment": "Coded in React, collaboation optimization",
+      "type": "",
+      "subtype": "",
+      "alias": ""
+    }
+  ],
+  "FZ_Tokens": [
+    {
+      "Token": "[Skinny Thing]",
+      "Meaning": "Hallway Shelf by the door, with 4 drawers, holding sun glasses",
+      "Usage": "Remember to put the glasses back into the Skinny Thing",
+      "flag": "secret"
+    },
+    {
+      "Token": "[Mitch]",
+      "Meaning": "Fender Telecaster Honduras Mahagony, stored in office, hanging by the bed",
+      "Usage": "Need to take Mitch to the Silocats practice",
+      "flag": "private"
+    },
+    {
+      "Token": "[Silocats]",
+      "Meaning": "SiloCats Band, practicing at the [Kulturprojekt], Allach",
+      "Usage": "Need to go to Silocats practice",
+      "flag": "secret"
+    },
+    {
+      "label": "[new_label]",
+      "value": "",
+      "flag": "private",
+      "Token": "[Kulturprojekt]",
+      "Meaning": "The Collection of Containers in Allach, converted to Band Practice Rooms",
+      "Usage": "I left Mitch at the Kulturprojekt"
+    },
+    {
+      "label": "[new_label]",
+      "value": "",
+      "flag": "secret",
+      "Token": "[Ondrej]",
+      "Meaning": "Ondrej Zadak, Drummer of the [Silocats], married to Luciana, son called Luka",
+      "Usage": "Need to ask Ondrej about joining for concert"
+    },
+    {
+      "Token": "[Kermit]",
+      "Meaning": "Toyota Corolla, E10 Gasoline, 5-seater",
+      "Usage": "Need to fill Kermit",
+      "flag": "private"
+    },
+    {
+      "Token": "[Allach]",
+      "Meaning": "Location of [Kulturprojekt]], North-West Munich",
+      "Usage": "I left [Mitch] in [Allach]",
+      "flag": "secret"
+    },
+    {
+      "Token": "[JazzBox]",
+      "Meaning": "Gibson L5 Cherry Red",
+      "Usage": "Main Semi-Acoustic, not for live gigs, too valuable",
+      "flag": "private"
+    },
+    {
+      "Token": "[NomerPedia]",
+      "Meaning": "Dictionary of FlowZero for Chris Horak / Choirshark",
+      "Usage": "Let's add that to the nomerpedia",
+      "flag": "public"
+    },
+    {
+      "Token": "[SPARC]",
+      "Meaning": "FlowZero Acronym",
+      "Usage": "Science Technology Axiomatic Recursive Constructivism",
+      "flag": "public"
+    },
+    {
+      "Token": "[Uli]",
+      "Meaning": "Best Friend Uli / Pizzeshofen",
+      "Usage": "Guitar ULi, the one married to vera",
+      "flag": "private"
+    },
+    {
+      "Token": "[PUCK]",
+      "Meaning": "Portable User Calibration Knowledge",
+      "Usage": "I will upload my PUCK to calibrate Loop",
+      "flag": "public"
+    },
+    {
+      "Token": "[LHIP]",
+      "Meaning": "Loop to Human Interaction Protocol",
+      "Usage": "I will upload the LHIP to calibrate Loop",
+      "flag": "public"
+    },
+    {
+      "Token": "[Nomerpedia]",
+      "Meaning": "Library of Terms (Nomens) stored in the FlowZero token.json",
+      "Usage": "We have to add this term to the Nomerpedia",
+      "flag": "public"
+    },
+    {
+      "Token": "[EMC]",
+      "Meaning": "Entangled Memory Cosmology",
+      "Usage": "EMC frames key conjectures about how the universe operates with axioms that apply across many domains",
+      "flag": "public"
+    },
+    {
+      "Token": "[PBM]",
+      "Meaning": "PaleoBolic Mindshift",
+      "Usage": "in PBM you trace behavior and culture back to origins in simple paleolithic societies",
+      "flag": "public"
+    },
+    {
+      "Token": "[Noois]",
+      "Meaning": "Normative Ontology of Identity, Integrity and Integration",
+      "Usage": "System to understand individual behaviours"
+    },
+    {
+      "Token": "[Saporta]",
+      "Meaning": "Street where Toby lives",
+      "Usage": "Toby will move from Saporta to Leo206"
+    },
+    {
+      "Token": "[Leo206]",
+      "Meaning": "Street where Toby will live",
+      "Usage": "We bought Leo206 for Toby to move into"
+    },
+    {
+      "Token": "[Tom]",
+      "Meaning": "CHHO best friend",
+      "Usage": "Tom and Chris meet after [Rudi] on Wednesdays"
+    },
+    {
+      "Token": "[Rudi]",
+      "Meaning": "CHHO Physiotherapist",
+      "Usage": "Rudi bought CHHO and Pia Vinyls"
+    }
+  ],
+  "sticky": [
+    {
+      "stickytype": "Behavior",
+      "note": "Likes Flat White in morning",
+      "links": "[Standl20, CoffeeShop]",
+      "flag": "secret"
+    },
+    {
+      "stickytype": "Habit",
+      "note": "Changes Strings on Guitars before Gigs",
+      "links": "Mitch, Jazz Box",
+      "flag": "secret"
+    },
+    {
+      "stickytype": "Flow",
+      "note": "Tea in the Morning, then Pills, then Walk",
+      "links": "Herzogpark Schwabing",
+      "flag": "secret"
+    },
+    {
+      "stickytype": "Flow",
+      "note": "Develop Code Plan, then code",
+      "links": "MS Visual Studio Code",
+      "flag": "secret"
+    },
+    {
+      "stickytype": "Behavior",
+      "note": "The [JazzBox] can come to gigs in safe places, where the stage is not accessible by the public",
+      "links": "JazzBox, Gibson L5",
+      "flag": "secret"
+    }
+  ]
+}
+
+
+--- PUCK: Pia — Full ---
+
+PUCKloader_readme.txt
+=====================
+
+Purpose:
+--------
+This file provides instructions and metadata for any system or user importing a PUCK (Portable User Configuration Knowledge) file. It should always be included as the first section or file when generating or uploading a PUCK, to ensure consistent interpretation and integration.
+
+Contents:
+---------
+- File Structure: Describes the expected JSON structure and required fields for profiles, tokens, and stickies.
+- Field Limits: Specifies the maximum number of items (e.g., 16 profiles, 16 stickies, 64 tokens).
+- Field Definitions: Explains the meaning and expected format for each field (label, value, flag, etc.).
+- Versioning: Indicates the PUCK schema version and any compatibility notes.
+- Import Instructions: Steps for receiving systems to parse and validate the PUCK file.
+- Contact/Support: Where to get help or report issues with PUCK files.
+
+Template (edit as needed):
+-------------------------
+1. PUCK File Structure
+   - { "profile": [ ... ], "FZ_Tokens": [ ... ], "sticky": [ ... ] }
+2. Field Limits
+   - Max 16 label types per profile
+   - Max 64 records per profile
+   - Max 16 stickies per profile
+   - Max 64 tokens per PUCK
+3. Field Definitions
+   - label: string, required for profiles
+   - value: string, required for profiles
+   - flag: "public" | "private" | "secret"
+   - ... (add more as needed)
+4. Version: 1.0.0
+5. Import Instructions
+   - Always read this file first before parsing the PUCK JSON
+   - Validate field limits and required fields
+   - ... (add more as needed)
+6. Contact: [your contact or support info here]
+
+---
+Edit this file to update instructions as your PUCK format evolves.
+
+---
+{
+  "profile": [
+    { "label": "Real Name", "value": "Pia", "flag": "secret" },
+    { "label": "User Name", "value": "Marie", "flag": "secret" },
+    { "label": "Hobby", "value": "Cooking", "flag": "public" },
+    { "label": "Hobby", "value": "Netflix and Chill", "flag": "private" },
+    { "label": "Hobby", "value": "Mahjong", "flag": "public" },
+    { "label": "Best Friends", "value": "Fiona", "flag": "secret" },
+    { "label": "Best Friends", "value": "Sarah", "flag": "secret" },
+    { "label": "Friend", "value": "Theresa", "flag": "private" }
+  ],
+  "FZ_Tokens": [
+    { "Token": "[Sarah]", "Meaning": "Best Friend Sarah, strict vegan, avid walker, husband Norm, scottish, plays Golf", "Usage": "Need to call Sarah to catch up", "flag": "secret" },
+    { "Token": "[Fiona]", "Meaning": "Best Friend Fiona, husband Ross, he rides bikes", "Usage": "Fiona and Ross will never come to invitations together", "flag": "secret" },
+    { "Token": "[Ross]", "Meaning": "Husband to [Fiona], is not social with Pia", "Usage": "Invite Fiona, but assume Ross is not coming", "flag": "secret" },
+    { "Token": "[Kenne]", "Meaning": "Brother, living in Lund, Sweden", "Usage": "Daughter, Mira 22 on May 11, 2026", "flag": "secret" },
+    { "Token": "[Theresa]", "Meaning": "Friend, from Arlington, VA", "Usage": "Theresa is married to Dan, the rocket scientist", "flag": "secret" },
+    { "Token": "[Tofu]", "Meaning": "Demeter Tofu 250g, no flavor, available at Basic and All Natural", "Usage": "Need to buy Tofu for dinner, maybe look for a nice recipe", "flag": "secret" }
+  ],
+  "sticky": [
+    { "stickytype": "Cooking", "note": "3 course meals preferred when cooking for guests", "flag": "secret" },
+    { "stickytype": "Medication", "note": "[Allergy] (for [Pia], avoid [Livocab], use [Vividrin], reason: better tolerance)", "links": "Dr. Schwinn", "flag": "secret" },
+    { "stickytype": "Food", "note": "No Cilantro, No Red Peppers", "links": "Restaurant Links", "flag": "secret" },
+    { "stickytype": "Food", "note": "Loves Mushrooms, but CHHO cannot eat", "links": "Restaurant Links", "flag": "public" }
+  ]
+}

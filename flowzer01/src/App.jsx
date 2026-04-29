@@ -149,6 +149,8 @@ import IndexEdit from "./IndexEdit";
 import PuckCreator from "./PuckCreator";
 import GestaltViewer from "./GestaltViewer";
 import CalibrateFlow from "./CalibrateFlow";
+import PuckLibrary from "./PuckLibrary";
+import JobPackageComposer from "./JobPackageComposer";
 // ===============================
 // CONFIG / CONSTANTS
 // ===============================
@@ -224,6 +226,8 @@ function App() {
   const [showStickyEdit, setShowStickyEdit] = useState(false)
   const [showTextFileBackandSave, setShowTextFileBackandSave] = useState(false)
   const [showIndexEdit, setShowIndexEdit] = useState(false)
+  const [showPuckLibrary, setShowPuckLibrary] = useState(false)
+  const [showJobPackage, setShowJobPackage] = useState(false)
   const [showCalibrateFlow, setShowCalibrateFlow] = useState(false)
   const [showPuck, setShowPuck] = useState(false)
   const [uiMode, setUiMode] = useState('public');
@@ -374,6 +378,26 @@ function App() {
         >
           Create PUCK
         </button>
+        <button
+          onClick={() => setShowPuckLibrary(prev => !prev)}
+          style={{
+            padding: '8px 18px', fontSize: '1em',
+            border: '3px solid #15396a', background: '#e3eefd',
+            color: '#15396a', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer'
+          }}
+        >
+          PUCK Library
+        </button>
+        <button
+          onClick={() => setShowJobPackage(prev => !prev)}
+          style={{
+            padding: '8px 18px', fontSize: '1em',
+            border: '3px solid #15396a', background: '#e3eefd',
+            color: '#15396a', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer'
+          }}
+        >
+          Compose Job Package
+        </button>
       </div>
       <GestaltModal
         open={showGestalt}
@@ -386,6 +410,26 @@ function App() {
         visibility={gestaltVisibility}
         setVisibility={setGestaltVisibility}
       />
+      {/* Job Package Composer */}
+      {showJobPackage && (
+        <div style={{marginTop: 40, marginBottom: 32}}>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+            <span style={{fontWeight: 'bold', fontSize: '1.1em'}}>Compose Job Package</span>
+            <button onClick={() => setShowJobPackage(false)} style={{marginBottom: 8, padding: '4px 12px'}}>Close</button>
+          </div>
+          <JobPackageComposer />
+        </div>
+      )}
+      {/* PUCK Library */}
+      {showPuckLibrary && (
+        <div style={{marginTop: 40, marginBottom: 32}}>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+            <span style={{fontWeight: 'bold', fontSize: '1.1em'}}>PUCK Library</span>
+            <button onClick={() => setShowPuckLibrary(false)} style={{marginBottom: 8, padding: '4px 12px'}}>Close</button>
+          </div>
+          <PuckLibrary />
+        </div>
+      )}
       {/* Toggleable IndexEdit (now below buttons) */}
       {showIndexEdit && (
         <div style={{marginTop: 40, marginBottom: 32}}>

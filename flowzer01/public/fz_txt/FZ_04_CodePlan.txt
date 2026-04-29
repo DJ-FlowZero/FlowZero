@@ -7,29 +7,30 @@
 - Documented in FZ_02_Appdocu.txt (Main Components section) and FZ_88_App_Glossary.txt.
 - StickyEdit UI already supports free-text stickytype — no UI change needed.
 
-## Step 2: PUCK Save to fz_PUCK_data/
-- Add backend endpoint: POST /api/save-puck — writes .txt file to public/fz_PUCK_data/.
-- Add backend endpoint: GET /api/list-puck-files — lists .txt files in fz_PUCK_data/.
-- PuckCreator: add [Save to Library] button alongside existing [Export] (download) button.
-- No UI redesign. Single new button, single new file write.
+## Step 2: PUCK Library + fz_puck_index.json ✓ COMPLETE (2026-04-29)
+- PuckLibrary.jsx created: reads fz_puck_index.json, shows name/visibility/date/description, per-row ↓ Get download.
+- fz_puck_index.json created in public/fz_PUCK_data/ with first entry (Chris Horak — Public).
+- PuckLibrary button added to Row 2, after Create PUCK, matching light blue style.
+- Save Index button: downloads updated fz_puck_index.json after description edits.
+- Note: Save Index still download-only — no backend endpoint yet. Manual file replace to persist.
 
-## Step 3: PUCK Library Index
-- Create fz_puck_index.json in public/fz_PUCK_data/: array of { name, sourceProfiles[], visibility, date, filename }.
-- Add backend endpoint: POST /api/save-puck-index.
-- PuckCreator writes index entry on [Save to Library].
-- No new UI screen yet — index is infrastructure for Step 4.
+## Step 3: Compose Job Package ✓ COMPLETE (2026-04-29)
+- JobPackageComposer.jsx created: free-text job brief textarea + checkbox PUCK selection from library.
+- Generate CompositePUCK: fetches .txt content of each selected PUCK, assembles with job brief, downloads as CompositePUCK_YYYY-MM-DD.txt.
+- Compose Job Package button added to Row 2, after PUCK Library.
+- Tested: Pia (fz0001) PUCK created manually, added to index. Cold AI read food constraints, social dynamics, friend graph correctly with no explanation from user.
+- Validation: refinement loop confirmed — result → refine brief/sticky/token/PUCK selection → better output next session.
 
-## Step 4: JobPUCK Composer Screen
-- New component: JobPuckComposer.jsx.
-- UI: multi-select from PUCK Library (populated from fz_puck_index.json) + free-text task sticky + visibility selector + [Compile JobPUCK] button.
-- Compiler: merges selected profile/token/sticky arrays, deduplicates, appends task sticky, exports as single .txt.
-- Add to toolbar Row 2 or as a new Row 3.
+## Step 4: Backend Save Endpoints (outstanding)
+- POST /api/save-puck — write .txt files directly to public/fz_PUCK_data/ from PuckCreator [Save to Library] button.
+- POST /api/save-puck-index — persist updated fz_puck_index.json server-side (replaces download-and-replace pattern).
+- GET /api/list-puck-files — list .txt files in fz_PUCK_data/.
 
-## Step 5: CCML Token Field in Token Editor
+## Step 5: CCML Token Field in Token Editor (outstanding)
 - Add optional "ccml" field to token data model: { Token, Meaning, Usage, ccml, flag }.
 - TokenEdit.jsx: add input for CCML expression alongside existing fields.
 - No backend change — field rides in existing fzXXXX_token.json.
-- PUCK export includes ccml field if present. AI can use it for precise entity resolution.
+- PUCK export includes ccml field if present.
 
 ---
 

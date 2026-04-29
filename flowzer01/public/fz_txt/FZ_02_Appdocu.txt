@@ -132,12 +132,14 @@ The FlowZero App UI is a modular, user-friendly admin workbench for managing all
 	- **Create Puck:** The [Create Group] button safely creates a new PUCK (profile/group) with unique numbering, ensuring no overwrites. Associated token and sticky files are created together in `public/NewState/`.
 	- **Publish Group Files:** The [Publish Group Files] button moves staged files to the public directory, always preventing overwrites.
 
-### Toolbar Workflow Layout (2026-04-28)
+### Toolbar Workflow Layout (2026-04-29)
 - **Row 1 (editors):** Profile Edit · Token Edit · Sticky Edit · Text File Edit · Index Edit
-- **Row 2 (PUCK workflow):** [Show Config] → [Show Gestalt] → [Create PUCK]
+- **Row 2 (PUCK workflow):** [Show Config] → [Show Gestalt] → [Create PUCK] → [PUCK Library] → [Compose Job Package]
   - Show Config: toggles the Calibrate Flow panel (BioLogic parameters)
   - Show Gestalt: opens the full Gestalt viewer modal with visibility filter
   - Create PUCK: toggles the PUCK Creator panel with row-level selection and optional Flow Calibration block
+  - PUCK Library: shows compiled PUCK registry (fz_puck_index.json) — view, edit descriptions, download individual PUCKs
+  - Compose Job Package: free-text job brief + checkbox PUCK selection → generates CompositePUCK .txt for AI priming
 - **Gestalt Viewer (Show Gestalt):** A modal window that displays a combined, read-only summary of the selected profile's main data (profile fields, tokens, sticky notes)—the full context field (Gestalt) before pruning to a PUCK. This supports the workflow: start with Gestalt, prune to relevant context, and package as a PUCK.
 
 
@@ -181,6 +183,8 @@ Key `src/` files:
 - `CalibrateFlow.jsx`       — 18 BioLogic param editor (pill UI, FZ_Flow_Config.json)
 - `GestaltViewer.jsx`       — Modal: read-only combined Gestalt with visibility filter
 - `PuckCreator.jsx`         — PUCK compiler: row selection + Flow Calibration block + export
+- `PuckLibrary.jsx`         — PUCK Library: reads fz_puck_index.json, editable descriptions, per-row download
+- `JobPackageComposer.jsx`  — Compose Job Package: job brief + PUCK multi-select → CompositePUCK .txt
 - `App.jsx`                 — Root: toolbar, profile selector, component orchestration
 - `userIndexUtil.js`        — `getGestaltFileUrl()`, `fetchUserIndex()` — single source of truth for paths
 - `profileFileUtil.js`      — Profile file utilities
