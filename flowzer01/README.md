@@ -1,16 +1,60 @@
-# React + Vite
+# FlowZero
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A portable context-calibration tool for reducing explanation cost and increasing aligned execution across human and digital systems.
 
-Currently, two official plugins are available:
+**One-liner:** Zero-resistance workflows. Structured context. Any AI. Any language.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Onboarding — Read This First
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This project uses the **MAP principle** (Munchhausen Architecture Principle): the system is reconstructable from its own documentation alone. All architecture decisions, data models, workflows, and terminology are documented in `public/fz_txt/`.
 
-## Expanding the ESLint configuration
+**Start here — read in order:**
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| File | Purpose |
+|------|---------|
+| `FZ_01_AI_ServCon.txt` | AI session contract — how HUM/AI collaboration works in this project |
+| `FZ_02_Appdocu.txt` | Full app documentation — start here for system understanding |
+| `FZ_03_AppStructure.txt` | Directory layout, data model, key utilities, workflows |
+| `FZ_04_CodePlan.txt` | Build history and next steps |
+| `FZ_05_UseCases.txt` | Reference use cases (SeeingAI, BuildingMaintenance) |
+| `FZ_06_CCML_Spec.txt` | CCML 1.0 specification — context markup language |
+| `FZ_88_App_Glossary.txt` | All defined terms — read if a word is unfamiliar |
+| `FZ_99_DailyBlog.txt` | Daily learnings log |
+
+After reading FZ_02 and FZ_03 you have enough to build. The rest is context.
+
+---
+
+## Quick Start
+
+```bash
+npm install
+npm run dev
+```
+
+Or: open a terminal and run `start meup` (runs `meup.bat`, which wraps `npm run dev`).
+
+- Backend: http://localhost:3001
+- Frontend: http://localhost:5173
+
+---
+
+## Stack
+
+- **Frontend:** React + Vite (src/)
+- **Backend:** Node.js + Express (backend.cjs, port 3001)
+- **Data:** Local JSON files in public/Gestalt/
+- **Config:** public/config.json — `FZ_GPATH` controls the Gestalt directory path
+
+---
+
+## Key Concepts
+
+- **Gestalt** — full context field for a subject (profile + tokens + stickies)
+- **PUCK** — pruned, compiled, portable constraint surface exported for AI priming
+- **BioLogic** — explicit behavioral operating system made machine-readable via Flow Calibration
+- **CCML** — 5-primitive markup: `[token]` `{type}` `::` `<flag>` `//note`
+
+Full glossary: `public/fz_txt/FZ_88_App_Glossary.txt`
