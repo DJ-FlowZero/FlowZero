@@ -1,7 +1,7 @@
 ================================================================================
 FZ_06_CCML_Spec.txt | Context Configuration Markup Language — Specification 1.0
-Version:  1.0-draft
-Date:     2026-04-29
+Version:  1.1-draft
+Date:     2026-04-30
 Purpose:  Minimal viable spec for CCML — human-to-machine context protocol
 Scope:    MAP artifact | Open spec — FlowZero implements, does not own
 ================================================================================
@@ -28,9 +28,10 @@ FlowZero is the first CCML-implementing tool. FlowZero does not own the standard
 
 ---
 
-# CCML 1.0 — PRIMITIVE SET (MINIMAL VIABLE)
+# CCML 1.1 — PRIMITIVE SET (HARD-LIMITED CORE)
 
-Five primitives. All are optional and combinable. Order is flexible.
+Seven primitives. All are optional and combinable. Order is flexible.
+CCML Core is permanently capped at seven primitives. Extensions move to XCML.
 
 ---
 
@@ -116,6 +117,7 @@ Reserved flags (extensible):
   <gap>       information is missing, unverified, or uncertain
   <fault>     active incident or known problem
   <todo>      action required — not yet resolved
+  <urgent>    high-priority signal — stackable convention, not schema-enforced
 
 Rules:
   - Follows the token or statement it qualifies.
@@ -149,11 +151,70 @@ Examples:
 
 ---
 
+## 6. @trigger — Temporal or Event Activation
+
+Syntax:   @triggervalue
+Purpose:  Binds the statement to a time or event condition. Enables time-bound
+          and event-bound context delivery. The AI interprets the trigger as a
+          condition — CCML does not enforce execution.
+
+Rules:
+  - No space between @ and trigger value.
+  - Can reference absolute time (@18:00), relative time (@Friday), or event-bound
+    tokens (@before([Gig])).
+  - Multiple @triggers on one statement are valid: @Friday @before([Gig])
+
+Examples:
+  [MorningMeds]{object} :: "blue dose, bathroom cabinet" <private> @07:30
+  [Schlappen]{object}   :: "check if at front door" <public> @before([CarerVisit])
+  [TeamMeeting]{event}  :: "Zoom link in calendar, note quorum needed" <public> @Monday @09:00
+
+---
+
+## 7. #tag — Associative Semantic Linkage
+
+Syntax:   #tagname
+Purpose:  Creates lateral relationships between tokens across domains and profiles.
+          Enables semantic clustering — grouping tokens by theme, project, or context.
+
+Rules:
+  - No space between # and tag name. Use camelCase or underscore: #homeOffice
+  - A statement may carry multiple tags: [Pia]{person} :: "..." #SiloCats #FlowZero
+  - Tags are associative, not hierarchical. No parent/child relationship implied.
+  - Tag namespace is user-defined — no reserved tags in CCML 1.1.
+
+Examples:
+  [Pia]{person}      :: "pianist, FlowZero early tester" <public> #SiloCats #FlowZero
+  [Phil]{person}     :: "bass player, programmer, external technical reviewer" <public> #SiloCats #FlowZero
+  [Floor8AC]{object} :: "Carrier 034-X, warranty 2026-12" <public> #BuildingA #HVAC
+
+---
+
+# CHUNK BOUNDARY — STRUCTURAL CONVENTION (not a primitive)
+
+Delimiter:  ***
+Purpose:    Separates coherent context packets within a CCML document. Prevents
+            context bleed. Signals semantic boundary to AI parsers. Triggers
+            summarization or extraction in capture workflows.
+
+Spoken equivalent: the control word "chunk." In voice workflows, saying "chunk"
+marks the end of a semantic burst and triggers local parsing.
+
+Capture workflow:  speech → chunk → parse → summarize → store
+
+Rules:
+  - Three asterisks (***) on their own line.
+  - Marks the END of the preceding context packet, not the start of the next.
+  - Not a numbered CCML primitive — CCML Core is hard-capped at seven primitives.
+  - Requirements beyond seven primitives move to XCML (Extended Context Markup Language).
+
+---
+
 # CCML STATEMENT — FULL FORM
 
-A complete CCML statement combines all five primitives:
+A complete CCML statement combines all seven primitives:
 
-  [Token]{type} :: "natural language definition" <flag> //situational note
+  [Token]{type} :: "natural language definition" <flag> //situational note @trigger #tag
 
 All components except [token] are optional. Minimal valid statement:
 
@@ -161,7 +222,7 @@ All components except [token] are optional. Minimal valid statement:
 
 Most expressive statement:
 
-  [Schlappen]{object} :: "linkes Regal, Flurschrank unten, erste Reihe" <public> //nur im Winter
+  [Schlappen]{object} :: "linkes Regal, Flurschrank unten, erste Reihe" <public> //nur im Winter @OctoberToMarch #household
 
 ---
 
@@ -200,6 +261,8 @@ CCML primitives map to FlowZero data structures as follows:
 | ::             | Meaning + Usage        | fzXXXX_token.json         |
 | <flag>         | flag                   | all .json files           |
 | //note         | stickytype + note      | fzXXXX_sticky.json        |
+| @trigger       | (not yet mapped)       | future field              |
+| #tag           | (not yet mapped)       | future field              |
 
 V1 does not render CCML syntax in the UI. CCML is expressed in the PUCK export as
 structured JSON fields. The AI reading the PUCK resolves CCML semantics from field values.
@@ -210,10 +273,12 @@ Full CCML syntax rendering in the UI is a future enhancement (Step 5 in CodePlan
 
 # VERSIONING AND GOVERNANCE
 
-CCML 1.0 is a draft specification. It is intentionally minimal.
+CCML 1.1 is a draft specification. The core primitive set is now hard-limited at seven.
 Primitives may not be removed in future versions without a major version bump.
-New primitives may be added as minor versions (1.1, 1.2) only if they cannot be
-expressed by combining existing primitives.
+No new primitives will be added to CCML Core. The seven-primitive cap is architectural,
+not provisional. If a future requirement exceeds the expressive capacity of seven
+primitives, it moves to XCML (Extended Context Markup Language), not into CCML Core.
+This preserves CCML's long-term readability, portability, and cognitive simplicity.
 
 FlowZero tracks CCML version implemented in config.json (future field: FZ_CCML_VERSION).
 This spec lives in fz_txt/ as a MAP artifact — reconstructable without prior context.

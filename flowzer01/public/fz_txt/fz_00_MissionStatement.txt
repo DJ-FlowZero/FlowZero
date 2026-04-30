@@ -1,0 +1,101 @@
+================================================================================
+fz_00_MissionStatement.txt | FlowZero Development Mission
+Version:  0.1
+Date:     2026-04-30
+Purpose:  Strategic framing for development decisions and stakeholder communication
+Scope:    MAP artifact — reconstructable without prior context
+================================================================================
+
+---
+
+# SITUATION
+
+AI language systems have crossed a fluency threshold. They can draft, reason, translate,
+plan, and execute across an enormous range of tasks. Agentic deployment — AI that acts
+on behalf of a user, not just responds to a query — is now technically feasible and
+commercially active.
+
+The dominant use pattern remains the Query Genie: a user types a question, the system
+returns an answer. This is high-value but low-integration. The user provides full context
+with every prompt. The system forgets everything between sessions.
+
+---
+
+# PROBLEM
+
+The bottleneck is not reasoning capacity. It is context transmission.
+
+AI systems are highly fluent and apparently understanding. This creates a false impression
+of shared context. Users assume the system "knows" them. It does not. Every session
+starts cold. Every agent deployed on their behalf starts blind.
+
+The result: AI that is powerful in isolation but unreliable in continuity. An agent
+dispatching a maintenance worker, briefing a care assistant, or executing a household
+task fails not because it cannot reason — but because it does not know who the user is,
+what constraints apply, what vocabulary is in use, or what "usual" means in this context.
+
+This is not a prompting problem. Better prompts do not solve structural absence of context.
+Platform-side memory (OpenAI Memory, Claude Projects) addresses this for single-platform
+users with non-sensitive data. It does not address multi-AI workflows, professional
+handover scenarios, sensitive personal context, or populations whose information cannot
+be entrusted to a single vendor.
+
+---
+
+# IMPLICATION
+
+Agentic AI adoption will stall at the boundary where generic reasoning meets
+person-specific operational reality — unless a context transmission layer exists
+that is portable, user-owned, and AI-agnostic.
+
+The populations most exposed to this boundary are not edge cases:
+- Care workers receiving a new patient with no briefing
+- Dispatchers matching workers to jobs across shifting staff
+- Professionals handing over to colleagues, contractors, or AI agents
+- Households deploying robots or voice agents that do not know their world
+
+For these users, the explanation cost exceeds the execution cost. This is the
+Handover Threshold — the exact point where FlowZero becomes necessary.
+
+---
+
+# NEEDED SOLUTION
+
+A minimal, open, portable context encoding standard and the tooling to create,
+maintain, and transmit context artifacts across people, services, and AI systems.
+
+Design constraints:
+- Context must travel with the person, not the platform. This is a deliberate
+  architectural bet against platform lock-in.
+- The encoding must be human-writable, AI-parseable, and language-neutral.
+  No dependency on any model, API, or vendor.
+- The artifact (PUCK) must be loadable cold into any AI system with no
+  prior configuration, training, or memory.
+- The standard (CCML) must remain small enough to write by hand. Cognitive
+  simplicity is a design constraint, not a nice-to-have.
+
+Strategic niche: FlowZero leans into ephemeral and local rather than persistent and
+general. Platform memory systems (cloud-based, account-bound, vendor-controlled) are
+the persistent-general solution. FlowZero occupies a different space: context that
+exists locally, loads on demand, and dissolves after use. This covers cases where
+platform memory is unavailable, undesirable, or simply the wrong unit of abstraction —
+including the mundane end of the spectrum ("where are my blue socks") where the
+information is too personal for a vendor and too trivial to consciously manage, but
+becomes critical the moment a robot, care worker, or voice agent needs to act in
+your physical space. The niche: hyperlocal, human-specific operational context that
+has no appropriate server home.
+
+FlowZero V1 is the first implementation of this approach. It is a proof-of-concept
+and a dogfooding environment — built using the very collaboration patterns it is
+designed to enable.
+
+The input problem is acknowledged and not yet solved: users who most need context
+transmission are often least able to construct it. Assisted onboarding, voice capture,
+and inference-from-behavior are future work. V1 validates the transmission layer.
+That is the necessary first step.
+
+The long-term aspiration: a contextual transport layer between humans, AI systems,
+services, and robots — analogous to what TCP/IP provided for data networks.
+Not a product. A protocol.
+
+---

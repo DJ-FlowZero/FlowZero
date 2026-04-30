@@ -30,6 +30,26 @@ definition: Local concierge/orchestrator. Runs the core loop:
 
 ---
 
+term:       Check-In
+definition: The canonical term for the temporary contextual onboarding of a generic
+            intelligence through a PUCK. Replaces the inadequate terms "priming"
+            (one-directional) and "login" (implies authentication). Check-In implies
+            temporary authorization, situational alignment, service initiation, and
+            eventual check-out. Digital 2.0 inversion: systems check in with you,
+            not the other way around. Stack position: PUCK → Check-In → FA → Action.
+
+---
+
+term:       Chunk (***)
+definition: The CCML structural convention for separating coherent context packets.
+            Delimiter: three asterisks (***) on their own line. Prevents context
+            bleed between semantic units. Spoken equivalent: the control word "chunk."
+            In voice workflows, saying "chunk" ends a semantic burst and triggers
+            local parsing. Capture workflow: speech → chunk → parse → summarize → store.
+            Not a CCML primitive — a document-level structural convention.
+
+---
+
 term:       Digital Air
 definition: The ambient AI/LLM substrate — generic, statistical, context-poor.
             What an AI is before any context is loaded. FlowZero operates above this
@@ -62,6 +82,16 @@ definition: A named snapshot of "what matters right now" — e.g. "Wednesday mod
 
 ---
 
+term:       Familiarity Affordance (FA)
+definition: Temporary operational familiarity resulting from a Check-In. The system
+            behaves like a trusted regular service partner (Stammkunde model) — not
+            because it has persistent memory, but because it has been checked in with
+            task-relevant context. Distinct from memory: FA is ephemeral and
+            task-scoped. FA is the outcome of a successful PUCK Check-In and the
+            operational state measured by RAITE.
+
+---
+
 term:       FZ_GPATH
 definition: Config key in config.json that controls the path to the Gestalt directory.
             All code resolves Gestalt file paths through getGestaltFileUrl() which
@@ -81,6 +111,16 @@ definition: The point where explanation cost exceeds execution cost — where br
             a new person takes longer than doing the task yourself. FlowZero becomes
             useful exactly at this threshold. Use cases: care worker shifts, freelance
             onboarding, dispatch briefings, AI session starts.
+
+---
+
+term:       Helping AI
+definition: Preferred scope label for AI-assisted elder care and procedural support
+            use cases. Supersedes "Seeing AI" as a use case term. Seeing AI focuses
+            on perception. Helping AI focuses on operational support, procedural
+            memory, and situated assistance — the actual bottleneck in care settings.
+            FlowZero + CCML provide the contextual layer between generic AI and
+            person-specific operational reality.
 
 ---
 
@@ -144,15 +184,42 @@ definition: A store of pre-compiled base PUCKs in fz_PUCK_data/, indexed by
 
 ---
 
+term:       Predictive Context
+definition: The capacity of the Flexicon to surface likely semantic structures around
+            a token based on existing Gestalt data. Distinct from predictive text
+            (statistical next-word guessing). Example: typing [Phil] could surface
+            person, bass player, programmer, SiloCats, FlowZero without explicit
+            lookup. Makes the Flexicon function as a contextual IDE for PUCK creation
+            and narrative generation. Not yet built in V1.
+
+---
+
 term:       PTAG (Personal Tagphrase)
 definition: A user-defined shorthand phrase that expands to precise personal meaning.
             Implemented as a Token in FlowZero. The [token] in CCML notation.
 
 ---
 
-term:       RATE
-definition: IQ × FA × PC — Intent Qualification × Familiarity Affordance ×
-            Processing Capacity. A model for evaluating interaction readiness.
+term:       RAITE
+definition: Resident Activated Intelligence Transaction Efficiency. The measurable
+            interaction efficiency metric for FlowZero interactions. Replaces RATE.
+            Components:
+              Resident     = currently instantiated in the local operational environment
+              Activated    = operationally engaged through Check-In
+              Intelligence = any problem-solving substrate (human, AI, robot,
+                             concierge, caregiver, retrieval engine, algorithm)
+              Transaction  = a bounded, purposeful interaction
+              Efficiency   = useful outcome relative to briefing cost, correction
+                             cost, and execution cost
+            Substrate-neutral by design — "Activated Intelligence" covers any actor.
+            Spelled RAITE (not RATE) for searchability and uniqueness in documentation
+            while sounding naturally like "rate" in speech.
+
+---
+
+term:       RATE (superseded)
+definition: Former acronym: IQ × FA × PC — Intent Qualification × Familiarity
+            Affordance × Processing Capacity. Replaced by RAITE. Kept for reference.
 
 ---
 
@@ -195,6 +262,14 @@ definition: A per-profile named entity handle (PTAG). Array field in fzXXXX_toke
             Fields: Token, Meaning, Usage, flag.
             Maps a person's own vocabulary to structured meaning. The primary building
             block of the Flexicon. In CCML: [token]{type} :: "meaning" <flag>.
+
+---
+
+term:       XCML (Extended Context Markup Language)
+definition: The extension namespace for CCML. Any context encoding requirement that
+            exceeds the seven-primitive CCML Core moves to XCML rather than expanding
+            the core. This preserves CCML's cognitive simplicity, portability, and
+            long-term readability. XCML is not yet specified — reserved namespace only.
 
 ---
 

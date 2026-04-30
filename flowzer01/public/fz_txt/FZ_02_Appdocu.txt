@@ -112,7 +112,7 @@ FlowZero is a zero-resistance workflow tool for managing and editing user config
 - **Sticky Notes:** Per-profile sticky note arrays, e.g., `fz0000_sticky.json`.
 - **Tokens:** Per-profile tag tokens (PTAGs), e.g., `fz0000_token.json`.
 - **User Index:** `fz_profile_index.json` provides metadata and lookup for all profiles.
-- **CCML (Context Configuration Markup Language):** 5-primitive markup for encoding human context — `[token]`, `{type}`, `::`, `<flag>`, `//note`. Human-writable, AI-parseable, language-neutral. Full spec: FZ_06_CCML_Spec.txt.
+- **CCML (Context Configuration Markup Language):** 7-primitive markup for encoding human context — `[token]`, `{type}`, `::`, `<flag>`, `//note`, `@trigger`, `#tag`. Human-writable, AI-parseable, language-neutral. Core is hard-capped at seven primitives; extensions go to XCML. Full spec: FZ_06_CCML_Spec.txt.
 - **Flexicon:** Personal CCML dictionary — the user's set of [token] :: definitions in their own vocabulary. Preserves the person's exact language. Cross-language semantic bridge.
 - **JobPUCK:** Ephemeral PUCK compiled from multiple profiles + a task sticky for a specific incident or job. Created per task, not stored.
 - **ServCon (Service Contract):** Session-level behavioral agreement between HUM and AI. Defined in FZ_01_AI_ServCon.txt. Upload at session start. AI alias: Loop. Protocol: [LOOP/HUM].
@@ -222,6 +222,166 @@ Path rule: never construct Gestalt paths inline. Always use `getGestaltFileUrl(f
 - Token: `fzXXXX_token.json`
 - Profile index: `fz_profile_index.json`
 
+## Backend API Contract
+
+All endpoints are served by backend.cjs on port 3001.
+All POST bodies are JSON (Content-Type: application/json).
+All responses are JSON.
+Path traversal is prevented server-side via safeFilePath() — filenames with directory
+separators are rejected with 400.
+
+---
+
+### POST /api/save-profile
+Writes a profile, token, or sticky JSON file to the Gestalt directory. Creates a .bck
+backup of the existing file before overwrite.
+
+Request body:
+  { "filename": "fz0001.json", "content": "<JSON string>" }
+
+  filename  required  Target filename (no path separators). Must exist within Gestalt dir.
+  content   required  Full file content as a string (already serialized JSON).
+
+Success response (200):
+  { "status": "ok", "message": "...", "timestamp": "YYYY-MM-DD HH:MM:SS" }
+
+Error responses:
+  400  { "status": "error", "message": "Missing filename." }
+  400  { "status": "error", "message": "Invalid filename." }
+  500  { "status": "error", "message": "Failed to save profile." }
+
+---
+
+### POST /api/refresh-profile
+Confirms a profile exists in the Gestalt directory (no-op copy in current impl).
+Backup created before overwrite. Used by the Publish workflow in IndexEdit.
+
+Request body:
+  { "filename": "fz0001.json" }
+
+  filename  required  Target filename (no path separators).
+
+Success response (200):
+  { "status": "ok", "message": "Profile refreshed to public (backup created if previous version existed)." }
+
+Error responses:
+  400  { "status": "error", "message": "Missing filename." }
+  400  { "status": "error", "message": "Invalid filename." }
+  404  { "status": "error", "message": "No staged profile found." }
+  500  { "status": "error", "message": "Failed to refresh profile." }
+
+---
+
+### POST /api/save-text
+Writes a .txt file to the Gestalt directory with .bck backup. Used by TextFileBackandSave.
+Defaults to "text_text.txt" if filename is not provided (avoid relying on this default).
+
+Request body:
+  { "filename": "FZ_01_AI_ServCon.txt", "content": "<file text>" }
+
+  filename  optional  Defaults to "text_text.txt". Must be a bare filename, no slashes.
+  content   optional  Defaults to empty string.
+
+Success response (200):
+  { "status": "ok" }
+
+Error responses:
+  400  { "status": "error", "message": "Invalid filename." }
+  500  (implicit — unhandled write errors propagate as 500 with no body)
+
+---
+
+### POST /api/refresh-text
+Copies a .txt file from NewState/ to Gestalt/. Creates .bck backup of Gestalt file
+before overwrite. Used by the Refresh-to-Public workflow in TextFileBackandSave.
+
+Request body:
+  { "filename": "FZ_99_DailyBlog.txt" }
+
+  filename  optional  Defaults to "text_text.txt".
+
+Success response (200):
+  { "status": "ok", "message": "File refreshed from NewState to Gestalt." }
+
+Error responses:
+  400  { "status": "error", "message": "Invalid filename." }
+  404  { "status": "error", "message": "No staged file found in NewState." }
+  500  (implicit)
+
+---
+
+### POST /api/save-profile-index
+Saves fz_profile_index.json directly to Gestalt/ with .bck backup. Path is hard-coded
+to Gestalt/fz_profile_index.json — no filename parameter.
+
+Request body:
+  { "content": "<JSON string>" }
+
+  content  required  Full serialized JSON of the index array.
+
+Success response (200):
+  { "status": "ok", "message": "Profile index saved and backup created." }
+
+Error responses:
+  400  { "status": "error", "message": "Missing content." }
+  500  { "status": "error", "message": "Failed to save profile index." }
+
+---
+
+### GET /api/list-txt-files
+Returns a list of all .txt files available for editing. Scans both Gestalt/ and fz_txt/.
+
+No request body.
+
+Success response (200):
+  [
+    { "name": "FZ_01_AI_ServCon.txt", "fetchPath": "fz_txt/FZ_01_AI_ServCon.txt" },
+    { "name": "FZ_Flow_Config.json.txt", "fetchPath": "Gestalt/FZ_Flow_Config.json.txt" }
+  ]
+
+  name       display name (bare filename)
+  fetchPath  path relative to public/ — use as fetch URL directly: /Gestalt/filename or /fz_txt/filename
+
+Errors: returns empty array silently if directories are unreadable.
+
+---
+
+### GET /api/list-fz-files  ← NOT YET IMPLEMENTED
+Called by IndexEdit.jsx to get existing fzXXXX.json numbers for safe profile numbering.
+Frontend degrades gracefully if this endpoint is absent (falls back to index-only count).
+
+Expected response (to implement):
+  { "numbers": [0, 1, 2, 3] }
+
+  numbers  array of integers parsed from fzXXXX.json filenames in Gestalt/ dir.
+
+See FZ_04_CodePlan.txt Step 4 for implementation spec.
+
+---
+
+## Error Handling Policy
+
+Frontend components follow this contract for all API calls:
+
+1. Non-OK HTTP status (4xx/5xx): display the `message` field from the response JSON
+   as a user-visible status string. Fall back to the HTTP status text if no body.
+2. Network failure (fetch throws): display a generic "Connection error — is the backend
+   running?" message. Do not swallow silently.
+3. Backup failures (logged server-side): do not surface to the user unless the primary
+   write also fails.
+4. Missing file on read: display "File not found" status. Do not crash the component.
+5. All status messages are transient — they disappear on the next user action.
+   No persistent error state in components.
+
+Backend follows this contract:
+- 400 for missing or invalid request parameters.
+- 404 for missing target files.
+- 500 for unexpected I/O errors.
+- All errors return { "status": "error", "message": "..." }.
+- Backup failures are logged to console but do not fail the primary operation.
+
+---
+
 ## How to Rebuild
 1. Install dependencies: `npm install`
 2. Start dev server: `npm run dev`
@@ -243,7 +403,7 @@ Path rule: never construct Gestalt paths inline. Always use `getGestaltFileUrl(f
 - **JobPUCK:** Ephemeral multi-profile PUCK for a specific task or incident. Not stored.
 - **Gestalt:** Full contextual field — all profiles + tokens + stickies for a subject.
 - **BioLogic:** The explicit, portable operating system beneath prompts. Made machine-readable via Flow Calibration.
-- **CCML:** Context Configuration Markup Language — 5-primitive human-to-machine context markup.
+- **CCML:** Context Configuration Markup Language — 7-primitive human-to-machine context markup. Core hard-capped at seven. Extensions → XCML.
 - **Flexicon:** Personal CCML dictionary — user's [token] :: definitions in their own vocabulary.
 - **ServCon:** Session behavioral contract between HUM and AI. See FZ_01_AI_ServCon.txt.
 - **Sticky:** Per-profile situational modifier. Reserved types: "gap" (missing/unverified), "fault" (active incident).

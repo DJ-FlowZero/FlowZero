@@ -8,12 +8,16 @@ Scope:    MAP artifact — reconstructable without prior context
 
 ---
 
-# USE CASE 01 — SeeingAI: Blind Person Care Support
+# USE CASE 01 — Helping AI: Elder Care and Procedural Support
 
 ## Context
 A visually impaired person living independently in Germany. Care is provided by a
 fragmented network of carers — often non-native German speakers (Polish, Romanian,
 etc.), with high staff turnover. Each visit may be a different person.
+
+Note: "Helping AI" is the preferred scope label. Seeing AI focuses on perception;
+Helping AI focuses on operational support, procedural memory, and situated assistance
+— the actual bottleneck in this scenario.
 
 ## Problem
 The blind person's environment, preferences, and routines are entirely implicit.
@@ -151,3 +155,74 @@ FlowZero makes the Gestalt do the explaining. Once. Portably. For any AI. Any la
 stickytype: "fault" and stickytype: "gap" are reserved conventions (not enforced by schema).
 They give the AI reading the PUCK a signal about certainty and urgency.
 No new data model required — convention on existing primitive.
+
+---
+
+# USE CASE 03 — Trust-Weighted Recommendations: Social Context Layer
+
+## Context
+A person chooses a restaurant, service provider, or product. Generic review platforms
+(Yelp, Google Reviews) provide crowd-sourced ratings with no context about who is
+rating, what their preferences are, or whether their profile matches the query.
+
+## Problem
+A 4.2-star rating from an unknown stranger is less useful than a recommendation from
+a trusted friend with known tastes. Platform ratings strip context. The signal-to-noise
+ratio is high at scale but low for individual decisions.
+
+## FlowZero Role
+Profile store for trusted contacts. Each contact's relevant preferences encoded as
+Gestalt (food constraints, taste profiles, occasion fit). PUCK compiled per contact
+on request. AI loaded with PUCK answers the query against the contact's known parameters.
+
+## Primitive Mapping
+- Token [Pia]{person}   :: "vegetarian, no garlic, prefers quiet atmosphere" <public>
+- Token [Phil]{person}  :: "fish only, dislikes loud venues, prefers booths" <public>
+- Sticky stickytype: "note" :: "Pia vetoed the Thai place on Hauptstraße, too noisy"
+
+## Key Insight
+Relational trust + personal context > crowd-sourced volume. The recommendation's value
+is a function of how well the recommender's profile matches the query. FlowZero makes
+this function explicit and queryable rather than implicit and forgotten.
+
+## Out of Scope for FlowZero V1
+- Direct PUCK sharing between users (visibility model handles what to share, not how)
+- Real-time platform data integration
+
+---
+
+# USE CASE 04 — Household Robotics: Contextual Ontology Layer
+
+## Context
+General-purpose household robots become operational. The robot is a capable actuator
+but has no local semantic context. Terms like [Schlappen], [Pia's tea], [the good knife]
+are meaningful to household members but opaque to any generic system.
+
+## Problem
+Without contextual grounding, voice commands to household robots require fully explicit
+instruction every time. The robot cannot resolve ambiguity, preserve household vocabulary,
+or act on implicit shared knowledge.
+
+## FlowZero Role
+CCML and the Flexicon provide the operational ontology layer between human intention and
+robotic execution. The household Gestalt stores named entities and their meanings. A PUCK
+loaded into the robot's context layer resolves terms before execution.
+
+## Primitive Mapping
+  [GoodKnife]{object}  :: "black handle, third drawer left, chef's knife" <private>
+  [PiasTea]{object}    :: "rooibos, second shelf, pantry — no milk" <private>
+  [Schlappen]{object}  :: "linkes Regal, Flurschrank unten" <public>
+
+## Command Integrity Protocol (future)
+Human command → robot parse → CCML readback → human confirmation → execution.
+This is a checksum model: the robot reflects its understanding before acting, allowing
+the human to confirm or correct before irreversible action.
+
+## Key Insight
+FlowZero/CCML is the operational ontology layer — not a new robot capability. The
+context problem precedes the robotics problem. Solving context first means any capable
+robot can be grounded without retraining or custom vocabulary.
+
+## Out of Scope for FlowZero V1
+- Actual robot integration (future layer, requires hardware interface)
+- Real-time command parsing (requires dedicated implementation beyond PUCK export)

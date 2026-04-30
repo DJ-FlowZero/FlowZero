@@ -1,4 +1,105 @@
 
+# [2026-04-30] PROTOCOL — Strategic Architecture Frame
+
+PROTOCOL is a retrospective backronym describing FlowZero's emergent identity as a
+protocol layer for human context — not just a profile management tool.
+
+  Portable        context travels with the person, not trapped in platforms
+  Reliable        transmitted context survives transfer without distortion
+  Open            no dependency on single vendor, model, or ecosystem
+  Transactional   most useful interactions are bounded exchanges with clear intent
+  Operational     context exists to enable action, not archival storage
+  Context         context is the actual payload — not UI, not features
+  Orchestration   intelligence (human, AI, robotic, procedural) coordinated against local reality
+  Layer           FlowZero sits above Digital Air, tuning generic intelligence into local familiarity
+
+Long-term aspiration: a common contextual transport layer between humans, AI systems,
+services, and robots — analogous to TCP/IP for networks.
+
+This frame emerged from Demo V1.0. It was not the starting vision in explicit form.
+In retrospect, it may have been the shape of it all along.
+
+---
+
+# Test Scope
+
+No formal test framework is specified for V1. Minimal required validation per feature:
+
+| Feature                  | Validation method                                              |
+|--------------------------|----------------------------------------------------------------|
+| Profile/Token/Sticky edit | Manual: edit a field, save, reload, confirm value persisted    |
+| Backup on save           | Manual: confirm .bck file created in Gestalt/ after save       |
+| PUCK export              | Manual: download .txt, paste into AI session, verify cold-read |
+| API endpoints            | Manual: use browser or curl to hit each endpoint with valid and invalid inputs |
+| Visibility filter        | Manual: set flag, filter by Public, confirm <private> rows excluded from export |
+| Safe file numbering      | Manual: create two groups in sequence, confirm no number collision |
+
+For V1.1 and beyond: consider Vitest for React component unit tests and
+Supertest for backend endpoint integration tests. No coverage target set.
+
+---
+
+# Future Development (not in V1 scope)
+
+These items are recognized architectural needs. They are not planned for V1.
+Document here to prevent re-discovery. Implement when operational need justifies it.
+
+## Encryption layer
+PUCKs are portable context artifacts. If exported over untrusted channels or stored
+in shared environments, they may contain private or sensitive data. Future need:
+public/private key encryption for PUCK export and selective disclosure.
+Aligns naturally with the existing Public/Private/Secret visibility model.
+Recommended approach when scoped: standard asymmetric encryption (e.g. libsodium)
+wrapped as an optional export step in PuckCreator.jsx.
+
+## Server-enforced visibility
+Current visibility filtering is UI-enforced only — any client can request any file.
+For multi-user or shared deployments, visibility rules must move to the backend:
+requests for private/secret files require auth tokens; the backend filters before serving.
+Not needed for single-user local deployment.
+
+## Auth layer
+No authentication in V1. Single-user, local deployment. If FlowZero is deployed as
+a shared or remote service, an auth layer is required before the API contract is
+exposed on a network. Suggested: JWT or session tokens per user, scoped to profile group.
+
+## XCML (Extended Context Markup Language)
+If CCML Core (7-primitive, hard-capped) is insufficient for a future requirement,
+that requirement moves to XCML rather than expanding CCML. XCML is currently an
+unspecified reserved namespace. Scope when a concrete requirement exceeds CCML 1.x.
+
+## Predictive Context / Flexicon IDE
+The Flexicon functions as a static glossary in V1. Future: when a token is referenced
+in a field, the UI surfaces known context from the Gestalt (type, usage, linked profiles,
+tags). Makes PUCK creation and narrative generation faster. Requires a lightweight
+in-memory index of all token definitions across all loaded profiles.
+
+## Flow Mode (FM)
+Named snapshots of active operational context (e.g. "Wednesday mode", "dispatch mode").
+Not yet architected. When scoped: a FM is a named set of sticky activations + visibility
+presets. Store in FZ_Flow_Config.json or as a separate flow_modes.json.
+
+## Check-In protocol (machine-to-machine)
+The current Check-In is human-initiated (paste PUCK into AI session). Future:
+a structured protocol for automated PUCK delivery to AI agents or robotic systems.
+CCML chunk boundaries (***) already provide the segmentation primitive for this.
+
+---
+
+# [2026-04-29] DEMO V1.0 — FEATURE COMPLETE
+
+All planned Demo V1.0 features built and validated. Mode shift: CONTENT only.
+No new features until V1.1 planning. Code changes only for bugs.
+
+What's locked:
+- Row 1: Profile Edit, Token Edit, Sticky Edit, Text File Edit, Index Edit
+- Row 2: Show Config, Show Gestalt, Create PUCK, PUCK Library, Compose Job Package
+- Validated end-to-end: Pia PUCK → PUCK Library → CompositePUCK → cold AI read → correct constraints surfaced
+
+Next mode: refine Gestalt data, improve PUCK content, expand fz_puck_index.json, sharpen fz_txt/ documentation.
+
+---
+
 # [2026-04-29] Next Steps — V1 Enhancement Plan
 
 ## Step 1: Sticky Type Convention — "gap" and "fault" ✓ COMPLETE (2026-04-29)
@@ -22,15 +123,86 @@
 - Validation: refinement loop confirmed — result → refine brief/sticky/token/PUCK selection → better output next session.
 
 ## Step 4: Backend Save Endpoints (outstanding)
-- POST /api/save-puck — write .txt files directly to public/fz_PUCK_data/ from PuckCreator [Save to Library] button.
-- POST /api/save-puck-index — persist updated fz_puck_index.json server-side (replaces download-and-replace pattern).
-- GET /api/list-puck-files — list .txt files in fz_PUCK_data/.
+
+Three endpoints to add to backend.cjs. Pattern matches existing endpoints.
+All follow the error policy in FZ_02_Appdocu.txt (Error Handling Policy section).
+
+### GET /api/list-fz-files
+Scans Gestalt/ for files matching the pattern fzXXXX.json (4+ digit number).
+Returns the numeric portion of each matching filename as an integer array.
+Used by IndexEdit.jsx to determine the next safe profile number.
+Degrades gracefully: IndexEdit falls back to index-only count if endpoint is absent.
+
+  Response (200): { "numbers": [0, 1, 2, 3] }
+  Error (500):    { "status": "error", "message": "Failed to list files." }
+
+Implementation note: use safeFilePath pattern — only read from GESTALT_DIR, no user-supplied paths.
+
+### POST /api/save-puck
+Writes a compiled PUCK .txt file to public/fz_PUCK_data/.
+Called from PuckCreator.jsx [Save to Library] button (not yet wired in UI).
+Backup existing file before overwrite (matching save-profile pattern).
+
+  Request body: { "filename": "PUCK_export_fz0001.txt", "content": "<full PUCK text>" }
+  filename  required  Bare filename, no path separators, must end in .txt.
+  content   required  Full PUCK text content (loader readme + optional flow block + JSON).
+
+  Response (200): { "status": "ok", "message": "PUCK saved to library." }
+  Error (400):    { "status": "error", "message": "Missing filename." }
+  Error (400):    { "status": "error", "message": "Invalid filename." }
+  Error (500):    { "status": "error", "message": "Failed to save PUCK." }
+
+Target dir: path.join(PUBLIC_DIR, 'fz_PUCK_data'). Create dir if absent.
+
+### POST /api/save-puck-index
+Persists the updated fz_puck_index.json to public/fz_PUCK_data/.
+Replaces the current download-and-replace workflow in PuckLibrary.jsx [Save Index] button.
+Path is hard-coded (no user-supplied path). Backup before overwrite.
+
+  Request body: { "content": "<JSON string>" }
+  content  required  Full serialized JSON of the PUCK index array.
+
+  Response (200): { "status": "ok", "message": "PUCK index saved." }
+  Error (400):    { "status": "error", "message": "Missing content." }
+  Error (500):    { "status": "error", "message": "Failed to save PUCK index." }
+
+UI change required: PuckLibrary.jsx [Save Index] button — replace download trigger with
+fetch POST to /api/save-puck-index, show status message on response.
+
+### GET /api/list-puck-files
+Scans fz_PUCK_data/ for .txt files. Returns filename list for UI enumeration.
+
+  Response (200): { "files": ["PUCK_export_fz0000.txt", "PUCK_export_fz0001.txt"] }
+  Error (500):    { "status": "error", "message": "Failed to list PUCK files." }
+
+Note: This endpoint is optional for V1.1 — fz_puck_index.json already tracks the library.
+Only needed if the UI needs to discover PUCKs not yet registered in the index.
 
 ## Step 5: CCML Token Field in Token Editor (outstanding)
-- Add optional "ccml" field to token data model: { Token, Meaning, Usage, ccml, flag }.
-- TokenEdit.jsx: add input for CCML expression alongside existing fields.
-- No backend change — field rides in existing fzXXXX_token.json.
-- PUCK export includes ccml field if present.
+
+Add an optional `ccml` field to the token data model and expose it in TokenEdit.jsx.
+No backend change required — the field rides in existing fzXXXX_token.json.
+
+### Data model change
+Current:   { Token, Meaning, Usage, flag }
+New:       { Token, Meaning, Usage, ccml, flag }
+
+The `ccml` field is optional. Existing token files without it remain valid.
+Value is a CCML-syntax string, e.g.: [MitchB]{person} :: "..." <public>
+
+### TokenEdit.jsx change
+- Add a text input labelled "CCML Expression" below the Usage field.
+- Bind to the ccml field in component state (same controlled-form pattern as other fields).
+- On save, include ccml in the output JSON if non-empty; omit if empty (no null fields).
+- Placeholder text: [Token]{type} :: "definition" <flag>
+
+### PuckCreator.jsx change
+- If a token row has a ccml field, include it in the PUCK export JSON alongside other fields.
+- No display change needed — the JSON export preserves all fields present in the data.
+
+### Validation
+- No schema enforcement. The field is free text. The AI reading the PUCK resolves it.
+- UI should not validate CCML syntax — preservation of user intent takes priority.
 
 ---
 
