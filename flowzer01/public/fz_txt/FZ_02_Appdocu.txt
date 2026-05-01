@@ -10,29 +10,17 @@
 #
 #
 
-## Profile/Group Creation, Staging, and Publishing (2026-04)
+## Profile/Group Creation, Staging, and Publishing (2026-04) [SUPERSEDED]
 
-
-### New Features & Learnings (2026-04-23)
-- The Index Edit window now guarantees that new group/profile files will never overwrite existing files:
-	- When you click [Create Group], the app calls a backend API to list all existing `fzXXXX.json` files in the `public/` folder and picks the next available number, even if files were added outside the UI.
-	- This ensures that all new group/profile, token, and sticky files are always created with a unique, incremental number.
-	- The [Publish Group Files] button is also safe and will never overwrite an existing group file.
-- The Add Entry and Download buttons have been removed to prevent accidental or incomplete additions.
-- Only the [Create Group] and [Publish Group Files] buttons can add new groups, ensuring all associated files (profile, token, sticky) are created together.
-- The profileId and fileName fields in the directory are now read-only to protect directory integrity; only description and extra fields are editable.
-- A new [Save Changes] button allows you to persist edits to descriptions/comments in `fz_profile_index.json` by downloading/overwriting the file.
-- All changes to the index are reflected in selectors and other UI components immediately after saving/publishing.
-- UI improvements: clearer modal/box titles, increased spacing, and consistent button styling for a more user-friendly admin workbench.
-- The workflow is now robust against accidental data loss or corruption and is ready for further user-facing UI development.
-
-
-#### Example Group Creation & Publishing Workflow (Safe Numbering)
-1. Click [Create Group] in Index Edit. The app checks all existing group/profile files in `public/` and always picks the next available number (e.g., `fz0003.json` if `fz0002.json` exists, even if files were added manually).
-2. Three new files are created in `public/NewState/` with this unique number: profile, token, and sticky.
-3. Edit the new group/profile as needed.
-4. Click [Publish Group Files] to copy the staged files to `public/` (no overwrite risk).
-5. Download and/or publish the updated `fz_profile_index.json` as needed.
+# STALE HISTORY — quarantined 2026-05-01. Preserved for change traceability only.
+# Live model as of 2026-05-01: FlowSet (not Group), direct-to-Gestalt write, no NewState staging step.
+# Current workflow documented below under FlowSet Index section.
+#
+# The following described a now-retired two-step workflow:
+# Create Group → stage in public/NewState/ → Publish Group Files → copy to public/
+# This was replaced by direct server-write to Gestalt/ via /api/save-profile et al.
+# Terminology change: Group → FlowSet, Token Edit → Flexicon Edit.
+# Do not treat anything in this section as current system behaviour.
 
 ---
 
@@ -81,10 +69,11 @@ FlowZero Baseline App Documentation
 ## Configuration
 
 - **Backend:**
-	- Main file: `backend.cjs` (Express server, API endpoints for profile, sticky, token, and text file management)
+	- Main file: `backend.cjs` (Express server, all file persistence)
 	- Port: 3001
-	- Serves and manages files in `public/`, `public/Gestalt/`, `public/NewState/`, and `public/fz_txt/`
-	- Key endpoints: `/api/save-profile`, `/api/refresh-profile`, `/api/save-text`, `/api/refresh-text`, `/api/save-profile-index`, `/api/list-fz-files`, `/api/list-txt-files`
+	- Serves and manages files in `public/`, `public/Gestalt/`, `public/fz_txt/`, `public/fz_md/`, `public/fz_PUCK_data/`
+  - Key endpoints: `/api/save-profile`, `/api/txt/load`, `/api/txt/save`, `/api/txt/restore`, `/api/list-txt-files`, `/api/list-md-files`, `/api/save-puck`, `/api/save-puck-index`, `/api/profile/backups`, `/api/profile/restore`, `/api/health`, `/api/list-fz-files`
+	- Backup pattern: timestamped .bck.YYYY-MM-DDTHH-MM-SS in backups/ subdirectory next to source file; last 10 kept per file
 - **Frontend:**
 	- React app (src/), served by Vite
 	- Port: 5173
@@ -105,42 +94,56 @@ FlowZero Baseline App Documentation
 FlowZero is a zero-resistance workflow tool for managing and editing user configuration profiles (PUCKs), sticky notes, and personal tag tokens. The application is built with React and Vite, and operates on local JSON files for privacy and portability.
 
 ### Key Concepts
-- **PUCK (Portable Use Case Knowledge):** Pruned, compiled, portable constraint surface exported from a Gestalt. NOT a raw data dump — it is a task-relevant selection of profile/token/sticky rows, optionally including Flow Calibration. Export file: e.g. `PUCK_export_fz0000.txt`.
-- **Gestalt:** The full contextual field of a user — all profiles + tokens + stickies combined.
+- **FlowSet:** The stored unit of context in FlowZero. Three linked files for a single entity (person, place, object, AI, environment): Profile (fzXXXX.json) + Flexicon (fzXXXX_token.json) + Sticky (fzXXXX_sticky.json). A FlowSet is the source — a Gestalt is what you get when you compile it.
+- **Gestalt:** The compiled output of a FlowSet at a given visibility level (Public/Private/Secret). The unfiltered, unpruned context field before any PUCK export. Viewed via Show Gestalt modal.
+- **PUCK (Portable Use Case Knowledge):** Pruned, compiled, portable constraint surface exported from a Gestalt. NOT a raw data dump — a task-relevant row selection, optionally including Flow Calibration. Export file: e.g. `PUCK_export_fz0000.txt`.
+- **Job Package (CompositePUCK):** A job brief + one or more PUCKs combined into a single priming document. Generated by Compose Job Package. Ephemeral — created per task, not stored.
 - **BioLogic:** The explicit, portable operating system beneath prompts — how a person reasons, what they tolerate, what needs stating vs. implying. Made machine-readable via Flow Calibration parameters. AI-agnostic: readable by any model, no fine-tuning required.
 - **Flow Calibration:** 18 behavioral parameters (response length, tone, challenge level, etc.) stored in `FZ_Flow_Config.json`. Edited via the Calibrate Flow panel. Optionally included in PUCK export as a plain-text block.
-- **Sticky Notes:** Per-profile sticky note arrays, e.g., `fz0000_sticky.json`.
-- **Tokens:** Per-profile tag tokens (PTAGs), e.g., `fz0000_token.json`.
-- **User Index:** `fz_profile_index.json` provides metadata and lookup for all profiles.
+- **Profile:** The stable-facts member of a FlowSet. Label/value pairs: name, constraints, preferences, background. File: `fzXXXX.json`.
+- **Flexicon:** The meaning-handle member of a FlowSet. Personal CCML dictionary — the user's set of [token] :: definitions in their own vocabulary. File: `fzXXXX_token.json`. (Was called Token/Token Edit.)
+- **Sticky:** The runtime-modifier member of a FlowSet. What is different right now: situation, active incidents, flags. File: `fzXXXX_sticky.json`.
 - **CCML (Context Configuration Markup Language):** 7-primitive markup for encoding human context — `[token]`, `{type}`, `::`, `<flag>`, `//note`, `@trigger`, `#tag`. Human-writable, AI-parseable, language-neutral. Core is hard-capped at seven primitives; extensions go to XCML. Full spec: FZ_06_CCML_Spec.txt.
-- **Flexicon:** Personal CCML dictionary — the user's set of [token] :: definitions in their own vocabulary. Preserves the person's exact language. Cross-language semantic bridge.
-- **JobPUCK:** Ephemeral PUCK compiled from multiple profiles + a task sticky for a specific incident or job. Created per task, not stored.
 - **ServCon (Service Contract):** Session-level behavioral agreement between HUM and AI. Defined in FZ_01_AI_ServCon.txt. Upload at session start. AI alias: Loop. Protocol: [LOOP/HUM].
 
 
 
 ## Application UI and Capabilities
 
-The FlowZero App UI is a modular, user-friendly admin workbench for managing all aspects of user configuration profiles (PUCKs), sticky notes, and tokens. The UI is organized around the core FlowZero loop: **Gestalt → Prune → PUCK → Prime → Prompt → Loop/Live**. Main features and components include:
+The FlowZero App UI is a modular admin workbench organized around the core chain:
+**FlowSet → Gestalt → Prune → PUCK → Job Package → Prime AI**
 
-- **Profile Edit:** Edit the array of fields for any selected profile (PUCK). Add, modify, or remove entries, and save changes as a new JSON file.
-- **Token Edit:** Manage personal tag tokens (PTAGs) for the selected profile, including meanings and usage notes.
-- **Sticky Edit:** Edit sticky notes (contextual notes, links, reminders) for each user profile.
-- **Text File Edit:** Edit any `.txt` file in Gestalt/ or fz_txt/. Dropdown populated live from `/api/list-txt-files`. Automatic backup on save. No dummy filename — dropdown resets to `-- select --` after save/cancel.
+Main features and components:
+
+- **FlowSet Definition:** Create a FlowSet. [Create FlowSet] writes all three member files to Gestalt/ immediately and updates the index. ? opens help.
+- **Profile Editor:** Edit the stable-facts array for any selected FlowSet. Label/value/flag/todo entries.
+- **Flexicon Editor:** Manage the meaning-handle tokens for the selected FlowSet. Token/Meaning/Usage/flag entries. (Was Token Edit.)
+- **Sticky Edit:** Edit runtime modifiers for each FlowSet. Stickytype/note/links/flag entries.
+- **Text File Editor:** Edit any `.txt` file in Gestalt/ or fz_txt/. Dropdown populated live from `/api/list-txt-files`. Automatic timestamped backup on every save. Version history panel shows last 10 backups with Restore.
+- **MD Editor:** Edit any `.md` file in fz_md/ (or fz_txt/). Raw/Preview toggle — Preview renders markdown inline. Same chrome as Text File Editor (unsaved pill, Reload, Save, Version History). Populated from `/api/list-md-files`.
+- **Help System:** Two modes — (1) HelpModal overlay triggered by ? HelpBtn buttons inline with each toolbar button when Onscreen Help is On. Loads any fz_md/ file and renders as a formatted doc. (2) Application Overview inline panel below the top bar (toggleable pill button). All help content is editable in MD Editor without code changes.
 - **Calibrate Flow:** Edit the 18 BioLogic behavioral parameters stored in `FZ_Flow_Config.json`. Pill-button radio UI per parameter. Free-text notes area. Save to Gestalt or Download JSON. Parameters include: response length, tone register, challenge level, ambiguity handling, scope discipline, and 13 others.
-- **Index Edit:** View and edit the profile index (`fz_profile_index.json`).
-	- **Create Puck:** The [Create Group] button safely creates a new PUCK (profile/group) with unique numbering, ensuring no overwrites. Associated token and sticky files are created together in `public/NewState/`.
-	- **Publish Group Files:** The [Publish Group Files] button moves staged files to the public directory, always preventing overwrites.
 
-### Toolbar Workflow Layout (2026-04-29)
-- **Row 1 (editors):** Profile Edit · Token Edit · Sticky Edit · Text File Edit · Index Edit
-- **Row 2 (PUCK workflow):** [Show Config] → [Show Gestalt] → [Create PUCK] → [PUCK Library] → [Compose Job Package]
-  - Show Config: toggles the Calibrate Flow panel (BioLogic parameters)
-  - Show Gestalt: opens the full Gestalt viewer modal with visibility filter
-  - Create PUCK: toggles the PUCK Creator panel with row-level selection and optional Flow Calibration block
-  - PUCK Library: shows compiled PUCK registry (fz_puck_index.json) — view, edit descriptions, download individual PUCKs
-  - Compose Job Package: free-text job brief + checkbox PUCK selection → generates CompositePUCK .txt for AI priming
-- **Gestalt Viewer (Show Gestalt):** A modal window that displays a combined, read-only summary of the selected profile's main data (profile fields, tokens, sticky notes)—the full context field (Gestalt) before pruning to a PUCK. This supports the workflow: start with Gestalt, prune to relevant context, and package as a PUCK.
+### Toolbar Workflow Layout (2026-05-01, final layout — toolbar is a linear workflow guide)
+The toolbar rows follow the user journey in order. Each row is a phase, not a feature menu.
+All button labels are externalized to `App_UI_ext.json` and editable without code changes.
+
+- **Row 1 — FlowSet Definition [?]:** Create a FlowSet. [Create FlowSet] writes all three member files to Gestalt/ immediately and updates the index. ? opens help.
+- **Row 2 — Populate members:** Profile Editor · Flexicon Editor · Sticky Editor
+  - All editors share the same chrome: unsaved pill, status bar, ↺ Reload, Save, Backup/Version History panel
+- **Row 3 — Calibrate and review:** Calibrate Flow · Gestalt Viewer
+  - Calibrate Flow: edit the 18 BioLogic behavioral params in FZ_Flow_Config.json (was "Show Config")
+  - Gestalt Viewer: modal — compiles the FlowSet at a chosen visibility level (Public/Private/Secret)
+- **Row 4 — Build and deliver the PUCK:** Create PUCK [?] · PUCK Library · Compose Job Package [?]
+  - Create PUCK: row-select from compiled Gestalt + optional Flow Calibration → exports .txt + saves to library
+  - PUCK Library: confirm the PUCK landed; view, edit descriptions, download — then proceed to compose
+  - Compose Job Package: job brief + checkbox PUCK selection → CompositePUCK .txt ready to prime any AI
+- **Row 5 — Notes and repeat:** Text File Editor · MD Editor
+  - Self-documentation, spec notes, daily blog, help content — closes the loop for the next iteration
+- **Top bar (left to right):**
+  - **UI Mode** [Public/Private/Secret] — global visibility selector
+  - **Application Overview** (pill button) — toggles inline panel showing FZ_help_AppOverview.md below the top bar
+  - **Onscreen Help [On][Off]** — segmented toggle. Off (default) = ? buttons hidden, clean UI. On = ? HelpBtn appears next to every toolbar button.
 
 
 ### Visibility Filtering (2026-04-25)
@@ -175,22 +178,27 @@ The UI is modular and ready for further user-facing development, with clear sepa
 See FZ_03_AppStructure.txt for the full directory and file inventory.
 
 Key `src/` files:
-- `Jedit.jsx`               — Profile JSON editor (label/value/flag/todo)
-- `StickyEdit.jsx`          — Sticky note editor (stickytype/note/links)
-- `TokenEdit.jsx`           — Token editor (Token/Meaning/Usage/flag)
+- `Jedit.jsx`               — Profile JSON editor (label/value/flag/todo) with chrome
+- `StickyEdit.jsx`          — Sticky note editor (stickytype/note/links) with chrome
+- `TokenEdit.jsx`           — Token editor (Token/Meaning/Usage/flag) with chrome
 - `IndexEdit.jsx`           — Profile index admin: create group, publish files
-- `TextFileBackandSave.jsx` — Edit any .txt file in Gestalt/ or fz_txt/ with backup
+- `TextFileBackandSave.jsx` — Edit any .txt file in Gestalt/ or fz_txt/ with chrome + version history
+- `MdFileEditor.jsx`        — Edit any .md file in fz_md/ with Raw/Preview toggle + chrome + version history
+- `HelpModal.jsx`           — Reusable overlay: loads any fz_md/ file, renders markdown, closes on backdrop/Escape
 - `CalibrateFlow.jsx`       — 18 BioLogic param editor (pill UI, FZ_Flow_Config.json)
-- `GestaltViewer.jsx`       — Modal: read-only combined Gestalt with visibility filter
+- `GestaltViewer.jsx`       — Modal: read-only combined Gestalt with visibility filter (now called Gestalt Viewer in UI)
 - `PuckCreator.jsx`         — PUCK compiler: row selection + Flow Calibration block + export
 - `PuckLibrary.jsx`         — PUCK Library: reads fz_puck_index.json, editable descriptions, per-row download
 - `JobPackageComposer.jsx`  — Compose Job Package: job brief + PUCK multi-select → CompositePUCK .txt
 - `App.jsx`                 — Root: toolbar, profile selector, component orchestration
+  - Also contains: `HelpBtn` component (reusable ? circle button), `renderMd()` (inline markdown renderer),
+    `uiStr(key)` helper, `helpVisible` / `showTopHelp` / `topHelpMd` / `uiStrings` state
 - `userIndexUtil.js`        — `getGestaltFileUrl()`, `fetchUserIndex()` — single source of truth for paths
 - `profileFileUtil.js`      — Profile file utilities
 
 Key `public/` files:
 - `config.json`                        — App config (FZ_GPATH controls Gestalt directory)
+- `App_UI_ext.json`                    — Externalized UI strings. All `fz_btn_*` keys hold toolbar button labels and header text. Loaded once on mount via `uiStr(key)` helper. Edit here to rename labels without touching code. Missing/empty value → shows `⚠ Load Error`.
 - `Gestalt/fz_profile_index.json`      — Profile index
 - `Gestalt/FZ_Flow_Config.json`        — 18 BioLogic behavioral parameters
 - `Gestalt/FZ_PUCK_loader_readme.txt`  — Prepended to every PUCK export
@@ -233,8 +241,8 @@ separators are rejected with 400.
 ---
 
 ### POST /api/save-profile
-Writes a profile, token, or sticky JSON file to the Gestalt directory. Creates a .bck
-backup of the existing file before overwrite.
+Writes a profile, token, or sticky JSON file to the Gestalt directory. Creates a
+timestamped backup in Gestalt/backups/ before overwrite. Prunes to last 10 backups.
 
 Request body:
   { "filename": "fz0001.json", "content": "<JSON string>" }
@@ -243,7 +251,7 @@ Request body:
   content   required  Full file content as a string (already serialized JSON).
 
 Success response (200):
-  { "status": "ok", "message": "...", "timestamp": "YYYY-MM-DD HH:MM:SS" }
+  { "status": "ok", "message": "Saved at YYYY-MM-DD HH:MM:SS", "backups": ["fz0001.json.bck.2026-05-01T12-00-00", ...] }
 
 Error responses:
   400  { "status": "error", "message": "Missing filename." }
@@ -252,79 +260,89 @@ Error responses:
 
 ---
 
-### POST /api/refresh-profile
-Confirms a profile exists in the Gestalt directory (no-op copy in current impl).
-Backup created before overwrite. Used by the Publish workflow in IndexEdit.
+### GET /api/profile/backups
+Returns the list of timestamped backups for a given file in Gestalt/backups/.
 
-Request body:
-  { "filename": "fz0001.json" }
-
-  filename  required  Target filename (no path separators).
+Query params:
+  filename  required  Bare filename (e.g. fz0001.json)
 
 Success response (200):
-  { "status": "ok", "message": "Profile refreshed to public (backup created if previous version existed)." }
-
-Error responses:
-  400  { "status": "error", "message": "Missing filename." }
-  400  { "status": "error", "message": "Invalid filename." }
-  404  { "status": "error", "message": "No staged profile found." }
-  500  { "status": "error", "message": "Failed to refresh profile." }
+  { "status": "ok", "backups": ["fz0001.json.bck.2026-05-01T12-00-00", ...] }
 
 ---
 
-### POST /api/save-text
-Writes a .txt file to the Gestalt directory with .bck backup. Used by TextFileBackandSave.
-Defaults to "text_text.txt" if filename is not provided (avoid relying on this default).
+### GET /api/profile/restore
+Reads a backup file content from Gestalt/backups/.
 
-Request body:
-  { "filename": "FZ_01_AI_ServCon.txt", "content": "<file text>" }
-
-  filename  optional  Defaults to "text_text.txt". Must be a bare filename, no slashes.
-  content   optional  Defaults to empty string.
+Query params:
+  filename  required  Bare source filename (e.g. fz0001.json)
+  file      required  Backup filename (e.g. fz0001.json.bck.2026-05-01T12-00-00)
 
 Success response (200):
-  { "status": "ok" }
+  { "status": "ok", "content": "<file text>" }
 
 Error responses:
-  400  { "status": "error", "message": "Invalid filename." }
-  500  (implicit — unhandled write errors propagate as 500 with no body)
+  400  { "status": "error", "message": "Invalid parameters." }
+  404  { "status": "error", "message": "Backup not found." }
 
 ---
 
-### POST /api/refresh-text
-Copies a .txt file from NewState/ to Gestalt/. Creates .bck backup of Gestalt file
-before overwrite. Used by the Refresh-to-Public workflow in TextFileBackandSave.
+### GET /api/txt/load
+Loads a text or markdown file for editing. Accepts fetchPath in dir/filename format.
+Supported dirs: fz_txt, Gestalt, fz_md.
 
-Request body:
-  { "filename": "FZ_99_DailyBlog.txt" }
-
-  filename  optional  Defaults to "text_text.txt".
+Query params:
+  fetchPath  required  e.g. "fz_txt/FZ_99_DailyBlog.txt" or "fz_md/FZ_10_ProductPitch.md"
 
 Success response (200):
-  { "status": "ok", "message": "File refreshed from NewState to Gestalt." }
+  { "status": "ok", "content": "<file text>", "backups": ["filename.bck.2026-05-01T12-00-00", ...] }
 
 Error responses:
-  400  { "status": "error", "message": "Invalid filename." }
-  404  { "status": "error", "message": "No staged file found in NewState." }
-  500  (implicit)
+  400  { "status": "error", "message": "Invalid path." }
+  404  { "status": "error", "message": "File not found." }
 
 ---
 
-### POST /api/save-profile-index
-Saves fz_profile_index.json directly to Gestalt/ with .bck backup. Path is hard-coded
-to Gestalt/fz_profile_index.json — no filename parameter.
+### POST /api/txt/save
+Writes a text or markdown file. Timestamped backup in backups/ subdirectory before write.
 
 Request body:
-  { "content": "<JSON string>" }
-
-  content  required  Full serialized JSON of the index array.
+  { "fetchPath": "fz_txt/FZ_99_DailyBlog.txt", "content": "<file text>" }
 
 Success response (200):
-  { "status": "ok", "message": "Profile index saved and backup created." }
+  { "status": "ok", "message": "Saved at YYYY-MM-DD HH:MM:SS", "backups": [...] }
 
 Error responses:
-  400  { "status": "error", "message": "Missing content." }
-  500  { "status": "error", "message": "Failed to save profile index." }
+  400  { "status": "error", "message": "Missing fetchPath or content." }
+  400  { "status": "error", "message": "Invalid path." }
+  500  { "status": "error", "message": "Failed to save." }
+
+---
+
+### GET /api/txt/restore
+Reads a backup file for txt/md. Returns content only — caller must Save to apply.
+
+Query params:
+  fetchPath  required  e.g. "fz_txt/FZ_99_DailyBlog.txt"
+  file       required  Backup filename (e.g. FZ_99_DailyBlog.txt.bck.2026-05-01T12-00-00)
+
+Success response (200):
+  { "status": "ok", "content": "<file text>" }
+
+---
+
+### GET /api/list-md-files
+Returns list of .md files available for editing. Scans fz_md/ first (sorted), then fz_txt/.
+
+No request body.
+
+Success response (200):
+  [ { "name": "FZ_10_ProductPitch.md", "fetchPath": "fz_md/FZ_10_ProductPitch.md" }, ... ]
+
+  name       display name (bare filename)
+  fetchPath  pass as fetchPath to /api/txt/load or /api/txt/save
+
+Errors: returns empty array silently if directories are unreadable.
 
 ---
 
@@ -336,11 +354,11 @@ No request body.
 Success response (200):
   [
     { "name": "FZ_01_AI_ServCon.txt", "fetchPath": "fz_txt/FZ_01_AI_ServCon.txt" },
-    { "name": "FZ_Flow_Config.json.txt", "fetchPath": "Gestalt/FZ_Flow_Config.json.txt" }
+    { "name": "FZ_Flow_Config.json", "fetchPath": "Gestalt/FZ_Flow_Config.json" }
   ]
 
   name       display name (bare filename)
-  fetchPath  path relative to public/ — use as fetch URL directly: /Gestalt/filename or /fz_txt/filename
+  fetchPath  pass as fetchPath to /api/txt/load or /api/txt/save
 
 Errors: returns empty array silently if directories are unreadable.
 
@@ -402,16 +420,15 @@ Error responses:
 
 ---
 
-### GET /api/list-fz-files  ← NOT YET IMPLEMENTED
+### GET /api/list-fz-files  ✓ IMPLEMENTED (2026-05-01)
 Called by IndexEdit.jsx to get existing fzXXXX.json numbers for safe profile numbering.
 Frontend degrades gracefully if this endpoint is absent (falls back to index-only count).
 
-Expected response (to implement):
+Response (200):
   { "numbers": [0, 1, 2, 3] }
 
   numbers  array of integers parsed from fzXXXX.json filenames in Gestalt/ dir.
-
-See FZ_04_CodePlan.txt Step 4 for implementation spec.
+Error (500): { "status": "error", "message": "Failed to list files." }
 
 ---
 
@@ -469,6 +486,67 @@ Backend follows this contract:
 ---
 This documentation is sufficient for an AI (e.g., Codex, Claude) to regenerate the application structure, data model, and main UI flows from scratch.
 - The title is displayed in an <h1>.
+
+---
+
+## UI String Externalization — App_UI_ext.json (2026-05-01)
+
+All toolbar button labels and visible UI header strings are stored in `public/App_UI_ext.json`.
+
+Key pattern: each entry is `{ "value": "Display Text", "flag": "public" }`.
+Key naming: `fz_btn_<identifier>` for all toolbar buttons. E.g. `fz_btn_profile_edit`.
+
+Loading pattern in App.jsx:
+1. `uiStrings` state initialized to `null`.
+2. `useEffect` on mount: `fetch('/App_UI_ext.json')` → sets `uiStrings`.
+3. `uiStr(key)` helper: if `uiStrings` null → returns `'…'` (loading). If key missing/empty → returns `'⚠ Load Error'`. Otherwise returns `value`.
+4. All `<FzButton>` labels in the toolbar call `uiStr('fz_btn_*')`.
+
+Current fz_btn_* keys (2026-05-01):
+- `fz_btn_flowset_index`  → "FlowSet Definition"
+- `fz_btn_profile_edit`   → "Profile Editor"
+- `fz_btn_flexicon_edit`  → "Flexicon Editor"
+- `fz_btn_sticky_edit`    → "Sticky Editor"
+- `fz_btn_calibrate_flow` → "Flow Calibration"
+- `fz_btn_show_gestalt`   → "Gestalt Viewer"
+- `fz_btn_create_puck`    → "Create PUCK"
+- `fz_btn_puck_library`   → "PUCK Library"
+- `fz_btn_compose_job`    → "Compose Job Package"
+- `fz_btn_text_file_edit` → "Text File Editor"
+- `fz_btn_md_edit`        → "MD Editor"
+
+Edit `App_UI_ext.json` in Text File Editor in-app to rename any label without touching code.
+
+---
+
+## Onscreen Help System (2026-05-01)
+
+Two complementary in-app help surfaces:
+
+### 1. HelpBtn + HelpModal (per-button help)
+- `HelpBtn`: 24px circle ? button in App.jsx. Props: `onClick`, `title`.
+- All 11 toolbar buttons have a corresponding `HelpBtn` that opens `HelpModal` with the relevant fz_md/ file.
+- Gated by `helpVisible` state: `{helpVisible && <HelpBtn onClick={...} title="..." />}`.
+- Default `helpVisible = false` (clean UI). Toggled by Onscreen Help [On][Off] in the top bar.
+- HelpModal renders the md file as formatted HTML and closes on backdrop click or Escape.
+
+### 2. Application Overview (top-bar inline panel)
+- `showTopHelp` state controls visibility of an inline panel below the top bar.
+- Panel renders `FZ_help_AppOverview.md` via `renderMd()` (local function in App.jsx).
+- `topHelpMd` state loaded once on mount via `/api/txt/load?fetchPath=fz_md/FZ_help_AppOverview.md`.
+- Toggle: "Application Overview" pill button in the top bar.
+
+### renderMd()
+- Minimal inline markdown renderer defined locally in App.jsx.
+- Handles: headings (H1-H3), bold, unordered lists, tables, blockquote, horizontal rule.
+- Same implementation pattern as HelpModal.jsx — kept local to avoid coupling.
+
+### Top bar layout (left to right)
+- **UI Mode** selector [Public | Private | Secret]
+- Divider
+- **Application Overview** pill button (toggles inline overview panel)
+- Divider
+- **Onscreen Help** label + **[On]** and **[Off]** segmented pill buttons
 ---
 
 ## PUCK Loader Readme and Export Metadata (2026-04-26)
@@ -522,3 +600,261 @@ Rules:
 This is an optimization target, not a soft aspiration. All fz_txt/ files are held to this standard.
 When reviewing or updating any fz_txt/ file, ask: can someone with no history rebuild this from only these files?
 If no → compress and specify further.
+
+---
+
+## IN-APP HELP CONTENT (fz_md/) — Complete Briefing Set (2026-05-01)
+
+All help text rendered in the app is stored as editable MD files in `public/fz_md/`.
+Content below is the verbatim text of each file as of 2026-05-01.
+To update: use MD Editor in-app, or edit the file directly. No code changes required.
+
+---
+
+### FILE: fz_md/FZ_help_AppOverview.md
+
+# FlowZero — Workflow Overview
+
+> **FlowZero** is a context-calibration system. It reduces the cost of explaining yourself to AI, colleagues, and services — every session, every handover.
+
+The app is a linear workflow guide. Each row below the header is a step, in order.
+
+---
+
+## The Chain
+
+```
+FlowSet → Gestalt → Prune → PUCK → Job Package → Prime AI
+```
+
+---
+
+## Row 1 — FlowSet Definition
+**Start here.** Create the entity — person, place, object, environment.
+A FlowSet is three linked files: **Profile** (stable facts) + **Flexicon** (vocabulary) + **Sticky** (what's different now).
+
+## Row 2 — Populate members
+Fill in the three members of the FlowSet you just created.
+- **Profile Editor** — label/value facts that rarely change
+- **Flexicon Editor** — personal vocabulary and meaning handles
+- **Sticky Editor** — situational modifiers, active flags, gaps
+
+## Row 3 — Calibrate and review
+- **Flow Calibration** — set the 18 BioLogic behavioral parameters (tone, challenge level, response style…)
+- **Gestalt Viewer** — read-only compiled view at chosen visibility level (Public / Private / Secret)
+
+## Row 4 — Build and deliver the PUCK
+- **Create PUCK** — select rows from the Gestalt, optionally add Flow Calibration, export as `.txt`
+- **PUCK Library** — confirm the PUCK landed; manage the registry
+- **Compose Job Package** — combine a task brief + one or more PUCKs → single priming document for any AI
+
+## Row 5 — Document and repeat
+- **Text File Editor** — spec docs, glossary, code plan, daily blog
+- **MD Editor** — help files, marketing content, presentations
+
+---
+
+## UI Mode
+
+Controls the visibility filter applied across the app.
+
+| Mode | Shows |
+|------|-------|
+| **Public** | Safe-to-share rows only |
+| **Private** | Public + private rows |
+| **Secret** | Everything — full context |
+
+---
+
+### FILE: fz_md/FZ_help_ProfileEdit.md
+
+# Profile Editor
+
+> The **Profile** holds the stable facts about a person, place, or entity — things that rarely change.
+
+Each entry is a label/value pair with a visibility flag. Think of it as a structured background briefing — name, constraints, preferences, background.
+
+---
+
+## Fields
+
+| Field | Purpose |
+|-------|---------|
+| **Label** | What the fact is — e.g. "Dietary constraint", "Location" |
+| **Value** | The fact itself |
+| **Flag** | Visibility — `public`, `private`, or `secret` |
+| **Todo** | Optional follow-up note for incomplete or unverified entries |
+
+## When to use
+
+Fill in Profile first — it is the stable foundation. Stickies override it at runtime. The Flexicon names the things referenced inside it.
+
+---
+
+### FILE: fz_md/FZ_help_FlexiconEdit.md
+
+# Flexicon Editor
+
+> The **Flexicon** is a personal vocabulary — a dictionary of named things that matter to this entity, written in their own words.
+
+Each token is a locally-fixed meaning handle: a name mapped to a structured definition. The token preserves the entity's exact language — no normalisation at capture time.
+
+---
+
+## Fields
+
+| Field | Purpose |
+|-------|---------|
+| **Token** | The name in the entity's own words — `[Schlappen]`, `[Leo206]`, `[Wednesday]` |
+| **Meaning** | What it resolves to — free text, any language |
+| **Usage** | Where or when this token appears |
+| **Flag** | Visibility — `public`, `private`, or `secret` |
+
+## Why it matters
+
+The Flexicon turns personal shorthand into AI-parseable context. A carer querying in Polish resolves `[Schlappen]` through the token, not the original word. Cross-language semantic bridge — built by one person, readable by any.
+
+---
+
+### FILE: fz_md/FZ_help_StickyEdit.md
+
+# Sticky Editor
+
+> **Stickies** are runtime modifiers — what is different *right now* about this entity.
+
+Use stickies for anything situational, temporary, or currently active. They supplement or override the Profile for the current task without altering the stable base.
+
+---
+
+## Fields
+
+| Field | Purpose |
+|-------|---------|
+| **Type** | Category — `note`, `gap`, `fault`, or any custom label |
+| **Note** | The situational content |
+| **Links** | Optional references — URLs, file paths |
+| **Flag** | Visibility — `public`, `private`, or `secret` |
+
+## Reserved types
+
+| Type | Meaning |
+|------|---------|
+| `gap` | Information that is missing or unverified — flag for follow-up |
+| `fault` | Active incident or known problem — visible in every PUCK until resolved |
+
+---
+
+### FILE: fz_md/FZ_help_CalibrateFlow.md
+
+# Flow Calibration
+
+> **Flow Calibration** is the machine-readable expression of BioLogic — how this entity thinks, communicates, and prefers to work.
+
+18 behavioral parameters stored in `FZ_Flow_Config.json`. Each is a pill-button radio selector with three options. A free-text notes area captures anything the params don't cover.
+
+---
+
+## Parameters include
+
+- Response length and formatting style
+- Tone register and challenge level
+- Ambiguity handling and scope discipline
+- Initiative level, error recovery, and context priority
+
+## In a PUCK
+
+Flow Calibration can be optionally included in any PUCK export as a plain-text block. Any AI reads it cold — no fine-tuning, no platform memory, no configuration required.
+
+---
+
+### FILE: fz_md/FZ_help_GestaltViewer.md
+
+# Gestalt Viewer
+
+> The **Gestalt** is the compiled view of a FlowSet — all three members (Profile + Flexicon + Sticky) rendered together at a chosen visibility level.
+
+Use this to verify exactly what a PUCK will draw from before you build one. What you see here is what gets exported.
+
+---
+
+## Visibility levels
+
+| Level | What you see |
+|-------|-------------|
+| **Public** | Only public-flagged rows — safe to share openly |
+| **Private** | Public + private rows — for trusted collaborators |
+| **Secret** | All rows — full personal context, nothing hidden |
+
+## This is read-only
+
+The Gestalt is generated, not stored. Edit the source members (Profile / Flexicon / Sticky), then return here to review the result. The chain: **FlowSet → Gestalt → Prune → PUCK**.
+
+---
+
+### FILE: fz_md/FZ_help_PuckLibrary.md
+
+# PUCK Library
+
+> The **PUCK Library** is the registry of all compiled PUCKs — indexed by name, source profiles, visibility, and date.
+
+PUCKs land here automatically when exported via **Create PUCK**. No manual step required.
+
+---
+
+## Actions
+
+| Action | What it does |
+|--------|-------------|
+| **↓ Get** | Downloads the PUCK file for direct AI priming or Job Package use |
+| **Edit description** | Annotate what the PUCK is for; press **Save Index** to persist |
+| **↺ Refresh** | Re-reads the server index — use if another session added entries |
+
+## Next step
+
+Select PUCKs from here in **Compose Job Package** to combine them with a task brief into a single priming document.
+
+---
+
+### FILE: fz_md/FZ_help_TextFileEdit.md
+
+# Text File Editor
+
+> Edit any `.txt` file in `fz_txt/` — spec docs, glossary, code plan, daily blog — directly in the app, with automatic backup on every save.
+
+Version History panel shows the last 10 saves. Restore any of them with one click.
+
+---
+
+## Workflow
+
+1. Select a file from the dropdown
+2. Edit in the text area
+3. **Save** — writes to server, creates a timestamped backup
+4. **↺ Reload** — discards local draft, re-fetches from server
+
+## Typical use
+
+Daily blog entries (`FZ_99_DailyBlog.txt`), spec updates, glossary additions — anything that belongs in the MAP artifact store. The file that closes the loop for the next session.
+
+---
+
+### FILE: fz_md/FZ_help_MdEdit.md
+
+# MD Editor
+
+> Edit any `.md` file in `fz_md/` — marketing content, help docs, product pitch, presentations.
+
+Raw/Preview toggle renders markdown inline. Same backup chrome and version history as Text File Editor.
+
+---
+
+## Workflow
+
+1. Select a file from the dropdown
+2. Toggle between **Raw** (edit) and **Preview** (rendered markdown)
+3. **Save** — writes to server with timestamped backup
+4. **↺ Reload** — discards changes, re-fetches from server
+
+## Help content lives here
+
+The `?` button docs you are reading now are `.md` files in `fz_md/`. Edit them here — no code changes needed. Content and UI are fully decoupled.

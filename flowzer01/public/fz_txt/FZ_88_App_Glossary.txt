@@ -17,10 +17,14 @@ definition: The explicit, portable operating system beneath prompts. How a perso
 ---
 
 term:       CCML (Context Configuration Markup Language)
-definition: A 5-primitive markup language for encoding human context in a form that
-            is human-writable, AI-parseable, and language-neutral. Primitives:
-            [token], {type}, ::, <flag>, //note. FlowZero implements CCML but does
-            not own the standard. Full spec: FZ_06_CCML_Spec.txt.
+definition: A 7-primitive markup language for encoding human context in a form that
+            is human-writable, AI-parseable, and language-neutral. Core primitives:
+            [token], {type}, ::, <flag>, //note, @trigger, #tag.
+            V1 implementation: first 5 primitives active. @trigger and #tag are
+            specced (FZ_06_CCML_Spec.txt §6–7) but have no storage mapping yet —
+            flagged as future fields. Core is hard-capped at 7; extensions → XCML.
+            FlowZero implements CCML but does not own the standard.
+            Full spec: FZ_06_CCML_Spec.txt.
 
 ---
 
@@ -58,11 +62,12 @@ definition: The ambient AI/LLM substrate — generic, statistical, context-poor.
 ---
 
 term:       Flexicon
-definition: A person's personal CCML dictionary. Their set of [token] :: definitions
-            written in their own vocabulary, dialect, or language. Preserves the
-            person's exact words — no normalization. Functions as a cross-language
-            semantic bridge: a carer can query the AI in any language and resolve
-            meaning through the token, not the original term.
+definition: The token/meaning-handle member of a FlowSet. A person's personal CCML
+            dictionary — their set of [token] :: definitions written in their own
+            vocabulary, dialect, or language. Preserves the person's exact words —
+            no normalization. Functions as a cross-language semantic bridge: a carer
+            can query the AI in any language and resolve meaning through the token,
+            not the original term. In the app: edited via Flexicon Edit (was Token Edit).
 
 ---
 
@@ -99,10 +104,21 @@ definition: Config key in config.json that controls the path to the Gestalt dire
 
 ---
 
+term:       FlowSet
+definition: The stored unit of context in FlowZero. Three linked files for a single
+            entity (person, place, object, AI, environment): Profile (fzXXXX.json),
+            Flexicon (fzXXXX_token.json), Sticky (fzXXXX_sticky.json). A FlowSet is
+            the source — a Gestalt is what you get when you compile it at a given
+            visibility level. Formerly called "Group" in the UI. The chain:
+            FlowSet → Gestalt → Prune → PUCK → Prime → Prompt → Loop.
+
+---
+
 term:       Gestalt
-definition: The full contextual field of a subject — all profiles + tokens + stickies
-            combined. The unfiltered, unpruned source of truth before any PUCK export.
-            Viewed in the app via Show Gestalt (modal with visibility filter).
+definition: The full contextual field of a subject — the compiled output of a FlowSet
+            at a given visibility level (Public / Private / Secret). The unfiltered,
+            unpruned source of truth before any PUCK export. Generated from a FlowSet;
+            viewed in the app via Show Gestalt (modal with visibility filter).
 
 ---
 
@@ -142,7 +158,9 @@ term:       JobPUCK
 definition: An ephemeral PUCK compiled from multiple profiles plus a task sticky
             for a specific incident, job, or situation. Created per task, not stored.
             Example: building profile + two worker profiles + fault sticky → one export
-            for dispatcher to load into AI. Not yet built in V1 (Step 4 in CodePlan).
+            for dispatcher to load into AI. In-app label: Compose Job Package.
+            V1 implementation: ✓ COMPLETE. See JobPackageComposer.jsx.
+            Output format: CompositePUCK .txt (job brief + concatenated named PUCK blocks).
 
 ---
 
@@ -207,9 +225,12 @@ definition: A pruned, compiled, portable constraint surface exported from a Gest
 
 term:       PUCK Library
 definition: A store of pre-compiled base PUCKs in fz_PUCK_data/, indexed by
-            fz_puck_index.json. Enables the JobPUCK composer to select from stable
-            pre-built PUCKs rather than recompiling from Gestalt each time.
-            Not yet built in V1 (Steps 2-3 in CodePlan).
+            fz_puck_index.json. Enables the Job Package composer to select from saved
+            PUCKs without recompiling from Gestalt each time. In-app: PuckLibrary.jsx.
+            V1 implementation: ✓ COMPLETE (2026-04-29). Features: view saved PUCKs,
+            edit descriptions, ↺ Refresh, per-row download. Index managed via
+            /api/save-puck-index. Sits in toolbar Row 4 between Create PUCK and
+            Compose Job Package — confirms a PUCK landed before composing.
 
 ---
 

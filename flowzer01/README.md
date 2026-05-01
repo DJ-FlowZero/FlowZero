@@ -55,6 +55,6 @@ Or: open a terminal and run `start meup` (runs `meup.bat`, which wraps `npm run 
 - **Gestalt** — full context field for a subject (profile + tokens + stickies)
 - **PUCK** — pruned, compiled, portable constraint surface exported for AI priming
 - **BioLogic** — explicit behavioral operating system made machine-readable via Flow Calibration
-- **CCML** — 5-primitive markup: `[token]` `{type}` `::` `<flag>` `//note`
+- **CCML** — 7-primitive markup: `[token]` `{type}` `::` `<flag>` `//note` `@trigger` `#tag`
 
 Full glossary: `public/fz_txt/FZ_88_App_Glossary.txt`

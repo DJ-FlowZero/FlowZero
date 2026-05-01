@@ -317,3 +317,142 @@ Key slides: Die Möglichkeit für Funkenflug (slide 4), Konkrete Ideen (slide 5)
 Der Differentiator / KinTwin (slide 6), Warum FunkenFlug jetzt (slide 7).
 
 ---
+
+# IN-APP EXPLAIN TEXTS (2026-05-01)
+# Source: fz_md/ help docs rendered in HelpModal — verbatim copy for MAP coverage
+# These are the live user-facing explanations of the three primary app functions.
+# Edit the source files in fz_md/ via MD Edit — this section is a read-only mirror
+# for cold reconstruction and AI priming. Update this section when help docs change.
+
+---
+
+## [HELP] FlowSet Index — What is a FlowSet?
+
+A FlowSet is always three files.
+
+Every person, place, or entity in FlowZero is represented as a FlowSet — three
+linked files that travel together:
+
+  fzXXXX.json         Profile — label/value pairs
+                       Stable facts: name, constraints, preferences, background
+
+  fzXXXX_token.json   Flexicon — local meaning handles
+                       Personal vocabulary: [Mitch], [Leo206], [Wednesday mode]
+
+  fzXXXX_sticky.json  Sticky — runtime modifiers
+                       What is different right now: situation, flags, active incidents
+
+These three are the three primitives of FlowZero context. They are always created
+together because they are meaningless in isolation — a Profile without Stickies
+is a CV, not a Gestalt.
+
+The FlowSet → Gestalt chain:
+  FlowSet → Gestalt → Prune → PUCK → Prime → Prompt → Loop
+
+A FlowSet is the stored unit. A Gestalt is what you get when you compile a FlowSet
+at a chosen visibility level — the full rendered context field. The Show Gestalt
+button does exactly this.
+
+What FlowSet Index does:
+  [Create FlowSet] — generates the next available profile number and writes all
+    three blank files directly to Gestalt/. The index is updated immediately.
+    No staging, no publish step.
+  Save Changes — persists edits to realName, description, and tag fields in the index.
+
+FlowSet numbering:
+  fz0000–fz0099   person profiles (real people)
+  fz9999          system/loop/AI entity
+  fz10000+        places, objects, environments, non-person entities
+
+After creating a FlowSet:
+  Open Profile Edit, Flexicon Edit, and Sticky Edit to populate the three files.
+  Each editor saves independently with timestamped backups. The new FlowSet is
+  immediately available in all dropdowns — no restart needed.
+
+---
+
+## [HELP] Create PUCK
+
+PUCK = Portable Use Case Knowledge — a pruned, portable constraint packet
+compiled from your Gestalt.
+
+A PUCK is what you hand to an AI, a colleague, or a tool at the start of a task.
+Instead of re-explaining yourself every session, you drop the PUCK and the receiver
+has exactly what they need — no more, no less.
+
+Workflow:
+  1. Select a Profile
+     Choose which person's Gestalt to pull from. The dropdown lists all profiles.
+
+  2. Set Visibility
+     Public  — Only public-flagged rows. Safe to share openly.
+     Private — Public + private rows. For trusted collaborators.
+     Secret  — All rows. Full personal context.
+
+  3. Select rows
+     Each tab (Profile / Tokens / Stickies) shows the filtered rows. Tick only the
+     rows relevant to the task — a PUCK should be pruned, not dumped.
+
+  4. Include Flow Config (optional)
+     Adds your Flow Calibration parameters — reasoning style, communication
+     preferences, working modes.
+
+  5. Export PUCK
+     Downloads a .txt file — plain text, readable by any AI or human cold,
+     no tools required. Also saved to PUCK Library.
+
+Tips:
+  - Less is more. A PUCK with 5 precise rows outperforms one with 50 noisy rows.
+  - Stickies are the most powerful layer for short-term task context — use them
+    for "what's different right now."
+  - Public visibility = safe to paste into any AI chat.
+    Private/Secret = internal use only.
+  - PUCKs land in the PUCK Library once saved — reuse them in Job Package Composer.
+
+---
+
+## [HELP] Compose Job Package
+
+A Job Package is a composite PUCK — multiple people's context combined with a
+task brief, ready to hand to any AI or executor.
+
+Use this when a task involves more than one person's constraints, or when you want
+to attach a standing brief to a set of PUCKs before sending them upstream.
+
+Workflow:
+  1. Write a Job Brief (optional)
+     Free text — the task, the context, the ask. Sits at the top of the composite.
+     Examples:
+       "Plan a surprise birthday dinner for Mitch. He's vegetarian, dislikes loud venues."
+       "Draft a project proposal for the Leo apartment job. Budget-conscious."
+       "Prep a team brief for the Monday planning session — include CHRIS and fz0001."
+
+  2. Select PUCKs
+     Check one or more PUCKs from the library. Each selected PUCK's content is
+     included as a named block.
+
+  3. Generate Composite
+     Downloads a single .txt structured as:
+
+       === COMPOSITE PUCK ===
+       Generated: YYYY-MM-DD
+
+       --- JOB BRIEF ---
+       [your brief]
+
+       --- PUCK: Name ---
+       [PUCK content]
+
+       --- PUCK: Name ---
+       [PUCK content]
+
+Tips:
+  - The composite is plain text — paste directly into any AI chat as the opening
+    context block.
+  - Order matters if the AI reads top-to-bottom: put most important constraints first.
+  - PUCKs are additive — if two people have conflicting constraints, note priority
+    in the Job Brief.
+  - You can generate multiple composites for the same task at different visibility
+    levels (public brief vs. private brief).
+
+---

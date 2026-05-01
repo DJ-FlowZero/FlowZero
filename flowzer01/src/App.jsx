@@ -132,6 +132,42 @@ function TrafficLightIndicator({ mode }) {
     </div>
   );
 }
+// Minimal markdown renderer (subset — headings, bold, lists, tables, blockquote, hr)
+const C_MD = { primary: '#15396a', border: '#c8d8ef', bg: '#f4f8ff' };
+function renderMd(md) {
+  const lines = md.split('\n');
+  let html = '', inList = false, inTable = false;
+  for (let i = 0; i < lines.length; i++) {
+    const raw = lines[i];
+    let line = raw
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g,'<em>$1</em>')
+      .replace(/`(.+?)`/g,`<code style="background:#f3f4f6;padding:1px 5px;border-radius:3px;font-size:0.88em">$1</code>`);
+    if (inList  && !/^\s*[-*]\s/.test(raw)) { html += '</ul>'; inList  = false; }
+    if (inTable && !/^\|/.test(raw))         { html += '</table>'; inTable = false; }
+    if      (/^### /.test(raw)) { html += `<h3 style="margin:10px 0 4px;color:${C_MD.primary}">${line.replace(/^### /,'')}</h3>`; }
+    else if (/^## /.test(raw))  { html += `<h2 style="margin:16px 0 6px;color:${C_MD.primary};border-bottom:1px solid ${C_MD.border};padding-bottom:4px">${line.replace(/^## /,'')}</h2>`; }
+    else if (/^# /.test(raw))   { html += `<h1 style="margin:0 0 12px;color:${C_MD.primary};font-size:1.4em">${line.replace(/^# /,'')}</h1>`; }
+    else if (/^---$/.test(raw)) { html += `<hr style="border:none;border-top:1px solid ${C_MD.border};margin:12px 0">`; }
+    else if (/^> /.test(raw))   { html += `<blockquote style="border-left:4px solid ${C_MD.primary};padding:6px 14px;margin:10px 0;color:#374151;background:${C_MD.bg};border-radius:0 6px 6px 0">${line.replace(/^&gt; /,'')}</blockquote>`; }
+    else if (/^\s*[-*]\s/.test(raw)) {
+      if (!inList) { html += '<ul style="margin:6px 0;padding-left:22px">'; inList = true; }
+      html += `<li style="margin:3px 0">${line.replace(/^\s*[-*]\s/,'')}</li>`;
+    }
+    else if (/^\|/.test(raw)) {
+      if (!inTable) { html += `<table style="border-collapse:collapse;margin:10px 0;font-size:0.9em;width:100%">`; inTable = true; }
+      if (/^\|[-| :]+\|/.test(raw)) continue;
+      const cells = raw.split('|').filter((_,j,a)=>j>0&&j<a.length-1);
+      html += `<tr>${cells.map((c,ci)=>`<td style="border:1px solid ${C_MD.border};padding:6px 12px;${ci===0?`font-weight:600;background:${C_MD.bg}`:''}">${c.trim()}</td>`).join('')}</tr>`;
+    }
+    else if (raw.trim()==='') { html += '<div style="height:6px"></div>'; }
+    else { html += `<p style="margin:3px 0;line-height:1.7">${line}</p>`; }
+  }
+  if (inList)  html += '</ul>';
+  if (inTable) html += '</table>';
+  return html;
+}
 // Reusable button with FZ style
 function FzButton({ children, onClick, style = {}, ...props }) {
   const baseStyle = {
@@ -163,6 +199,20 @@ function FzDisplayDate({ style = {}, className = '' }) {
   });
   return <span style={style} className={className}>{dateString}</span>;
 }
+// Reusable ? help button
+function HelpBtn({ onClick, title }) {
+  return (
+    <button
+      onClick={onClick}
+      title={title}
+      style={{
+        width: 24, height: 24, borderRadius: '50%', border: '1.5px solid #15396a',
+        background: '#eaf1fa', color: '#15396a', fontWeight: 700, fontSize: '0.82em',
+        cursor: 'pointer', padding: 0, lineHeight: '22px', textAlign: 'center', flexShrink: 0,
+      }}
+    >?</button>
+  );
+}
 import Jedit from "./Jedit";
 import TokenEdit from "./TokenEdit";
 import StickyEdit from "./StickyEdit";
@@ -173,6 +223,8 @@ import GestaltViewer from "./GestaltViewer";
 import CalibrateFlow from "./CalibrateFlow";
 import PuckLibrary from "./PuckLibrary";
 import JobPackageComposer from "./JobPackageComposer";
+import MdFileEditor from "./MdFileEditor";
+import HelpModal from "./HelpModal";
 // ===============================
 // CONFIG / CONSTANTS
 // ===============================
@@ -247,6 +299,7 @@ function App() {
   const [showTokenEdit, setShowTokenEdit] = useState(false)
   const [showStickyEdit, setShowStickyEdit] = useState(false)
   const [showTextFileBackandSave, setShowTextFileBackandSave] = useState(false)
+  const [showMdEditor, setShowMdEditor] = useState(false)
   const [showIndexEdit, setShowIndexEdit] = useState(false)
   const [showPuckLibrary, setShowPuckLibrary] = useState(false)
   const [showJobPackage, setShowJobPackage] = useState(false)
@@ -254,6 +307,10 @@ function App() {
   const [showPuck, setShowPuck] = useState(false)
   const [uiMode, setUiMode] = useState('public');
   const [backendLive, setBackendLive] = useState(null);
+  const [helpPath, setHelpPath] = useState(null);
+  const [showTopHelp, setShowTopHelp] = useState(false);
+  const [topHelpMd, setTopHelpMd] = useState(null);
+  const [helpVisible, setHelpVisible] = useState(false);
 
   // Poll backend health
   useEffect(() => {
@@ -273,6 +330,7 @@ function App() {
   const [profileOptions, setProfileOptions] = useState([]);
   const [selectedProfile, setSelectedProfile] = useState('');
   const [gestaltVisibility, setGestaltVisibility] = useState('secret');
+  const [uiStrings, setUiStrings] = useState(null);
 
   // Load profile options for Gestalt
   useEffect(() => {
@@ -345,6 +403,26 @@ function App() {
       })
   }, [])
 
+  useEffect(() => {
+    fetch('/App_UI_ext.json')
+      .then(r => r.json())
+      .then(data => setUiStrings(typeof data === 'object' && data !== null ? data : {}))
+      .catch(() => setUiStrings({}));
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/txt/load?fetchPath=' + encodeURIComponent('fz_md/FZ_help_AppOverview.md'))
+      .then(r => r.json())
+      .then(d => setTopHelpMd(d.status === 'ok' ? d.content : null))
+      .catch(() => setTopHelpMd(null));
+  }, []);
+
+  const uiStr = key => {
+    if (!uiStrings) return '\u2026';
+    const e = uiStrings[key];
+    return (e && typeof e.value === 'string' && e.value.trim()) ? e.value : '\u26a0 Load Error';
+  };
+
   return (
     <div style={{position: 'relative', minHeight: 80}}>
       {/* Status indicators fixed in top right of viewport */}
@@ -356,34 +434,79 @@ function App() {
       <div className="fz_container">
         <FzUI label="fz_00_headline" as="h1" mode={uiMode} style={{margin: 0}} />
       </div>
-      {/* UI Mode Selector */}
-      <div style={{marginTop: 24, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 12}}>
+      {/* ── Top controls: UI Mode · Application Overview · Onscreen Help ── */}
+      <div style={{marginTop: 24, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap'}}>
         <span style={{fontWeight: 'bold'}}>UI Mode:</span>
         <select value={uiMode} onChange={e => setUiMode(e.target.value)} style={{fontSize: '1em', padding: '4px 12px'}}>
           <option value="public">Public</option>
           <option value="private">Private</option>
           <option value="secret">Secret</option>
         </select>
+        <div style={{width: 1, height: 22, background: '#c8d8ef'}} />
+        <button
+          onClick={() => setShowTopHelp(prev => !prev)}
+          title="Application workflow overview"
+          style={{
+            padding: '4px 14px', fontSize: '0.88em',
+            border: '1.5px solid #15396a', borderRadius: 14,
+            background: showTopHelp ? '#15396a' : '#eaf1fa',
+            color: showTopHelp ? '#fff' : '#15396a',
+            fontWeight: 600, cursor: 'pointer',
+          }}
+        >Application Overview</button>
+        <div style={{width: 1, height: 22, background: '#c8d8ef'}} />
+        <span style={{fontWeight: 'bold', fontSize: '0.9em'}}>Onscreen Help</span>
+        <button
+          onClick={() => setHelpVisible(true)}
+          style={{
+            padding: '3px 12px', fontSize: '0.85em',
+            border: `1.5px solid #15396a`, borderRadius: '14px 0 0 14px',
+            background: helpVisible ? '#15396a' : '#eaf1fa',
+            color: helpVisible ? '#fff' : '#15396a',
+            fontWeight: 600, cursor: 'pointer',
+          }}
+        >On</button>
+        <button
+          onClick={() => setHelpVisible(false)}
+          style={{
+            padding: '3px 12px', fontSize: '0.85em',
+            border: '1.5px solid #15396a', borderLeft: 'none', borderRadius: '0 14px 14px 0',
+            background: !helpVisible ? '#15396a' : '#eaf1fa',
+            color: !helpVisible ? '#fff' : '#15396a',
+            fontWeight: 600, cursor: 'pointer',
+          }}
+        >Off</button>
       </div>
-      <div style={{marginTop: 40, display: 'flex', gap: 16, flexWrap: 'wrap'}}>
-        {!showJedit && (
-          <FzButton onClick={() => setShowJedit(true)}>Profile Edit</FzButton>
-        )}
-        {!showTokenEdit && (
-          <FzButton onClick={() => setShowTokenEdit(true)}>Token Edit</FzButton>
-        )}
-        {!showStickyEdit && (
-          <FzButton onClick={() => setShowStickyEdit(true)}>Sticky Edit</FzButton>
-        )}
-        {!showTextFileBackandSave && (
-          <FzButton onClick={() => setShowTextFileBackandSave(true)}>Text File Edit</FzButton>
-        )}
-        {!showIndexEdit && (
-          <FzButton onClick={() => setShowIndexEdit(true)}>Index Edit</FzButton>
-        )}
+      {/* Inline workflow overview — toggles with Show Help */}
+      {showTopHelp && (
+        <div style={{
+          margin: '0 0 18px 0', padding: '18px 24px',
+          background: '#f4f8ff', border: '1.5px solid #c8d8ef',
+          borderRadius: 10, fontSize: '0.93em', lineHeight: 1.65,
+          maxWidth: 760,
+        }}
+          dangerouslySetInnerHTML={{ __html: topHelpMd
+            ? renderMd(topHelpMd)
+            : '<p style="color:#888">Help content unavailable — backend may be offline.</p>'
+          }}
+        />
+      )}
+      {/* ── Row 1: FlowSet Index (start here — creates the FlowSet) ── */}
+      <div style={{marginTop: 40, display: 'flex', gap: 8, alignItems: 'center'}}>
+        <FzButton onClick={() => setShowIndexEdit(prev => !prev)}>{uiStr('fz_btn_flowset_index')}</FzButton>
+        {helpVisible && <HelpBtn onClick={() => setHelpPath('fz_md/FZ_help_IndexEdit.md')} title="About FlowSet Definition" />}
       </div>
-      {/* PUCK Workflow row: Show Config → Show Gestalt → Create PUCK */}
-      <div style={{marginTop: 16, display: 'flex', gap: 12, alignItems: 'center'}}>
+      {/* ── Row 2: FlowSet member editors ── */}
+      <div style={{marginTop: 12, display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center'}}>
+        <FzButton onClick={() => setShowJedit(prev => !prev)}>{uiStr('fz_btn_profile_edit')}</FzButton>
+        {helpVisible && <HelpBtn onClick={() => setHelpPath('fz_md/FZ_help_ProfileEdit.md')} title="About Profile Editor" />}
+        <FzButton onClick={() => setShowTokenEdit(prev => !prev)}>{uiStr('fz_btn_flexicon_edit')}</FzButton>
+        {helpVisible && <HelpBtn onClick={() => setHelpPath('fz_md/FZ_help_FlexiconEdit.md')} title="About Flexicon Editor" />}
+        <FzButton onClick={() => setShowStickyEdit(prev => !prev)}>{uiStr('fz_btn_sticky_edit')}</FzButton>
+        {helpVisible && <HelpBtn onClick={() => setHelpPath('fz_md/FZ_help_StickyEdit.md')} title="About Sticky Editor" />}
+      </div>
+      {/* ── Row 3: View / review tools ── */}
+      <div style={{marginTop: 12, display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap'}}>
         <button
           onClick={() => setShowCalibrateFlow(prev => !prev)}
           style={{
@@ -391,9 +514,8 @@ function App() {
             border: '3px solid #15396a', background: '#15396a',
             color: '#fff', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer'
           }}
-        >
-          Show Config
-        </button>
+        >{uiStr('fz_btn_calibrate_flow')}</button>
+        {helpVisible && <HelpBtn onClick={() => setHelpPath('fz_md/FZ_help_CalibrateFlow.md')} title="About Flow Calibration" />}
         <button
           onClick={() => setShowGestalt(true)}
           style={{
@@ -401,9 +523,11 @@ function App() {
             border: '3px solid #15396a', background: '#15396a',
             color: '#fff', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer'
           }}
-        >
-          Show Gestalt
-        </button>
+        >{uiStr('fz_btn_show_gestalt')}</button>
+        {helpVisible && <HelpBtn onClick={() => setHelpPath('fz_md/FZ_help_GestaltViewer.md')} title="About Gestalt Viewer" />}
+      </div>
+      {/* ── Row 4: PUCK creation / job packaging ── */}
+      <div style={{marginTop: 12, display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap'}}>
         <button
           onClick={() => setShowPuck(prev => !prev)}
           style={{
@@ -411,30 +535,37 @@ function App() {
             border: '3px solid #15396a', background: '#e3eefd',
             color: '#15396a', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer'
           }}
-        >
-          Create PUCK
-        </button>
+        >{uiStr('fz_btn_create_puck')}</button>
+        {helpVisible && <HelpBtn onClick={() => setHelpPath('fz_md/FZ_help_CreatePuck.md')} title="About Create PUCK" />}
         <button
           onClick={() => setShowPuckLibrary(prev => !prev)}
           style={{
             padding: '8px 18px', fontSize: '1em',
             border: '3px solid #15396a', background: '#e3eefd',
-            color: '#15396a', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer'
+            color: '#15396a', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer',
+            marginLeft: 8
           }}
-        >
-          PUCK Library
-        </button>
+        >{uiStr('fz_btn_puck_library')}</button>
+        {helpVisible && <HelpBtn onClick={() => setHelpPath('fz_md/FZ_help_PuckLibrary.md')} title="About PUCK Library" />}
         <button
           onClick={() => setShowJobPackage(prev => !prev)}
           style={{
             padding: '8px 18px', fontSize: '1em',
             border: '3px solid #15396a', background: '#e3eefd',
-            color: '#15396a', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer'
+            color: '#15396a', borderRadius: 8, fontWeight: 'bold', cursor: 'pointer',
+            marginLeft: 8
           }}
-        >
-          Compose Job Package
-        </button>
+        >{uiStr('fz_btn_compose_job')}</button>
+        {helpVisible && <HelpBtn onClick={() => setHelpPath('fz_md/FZ_help_JobPackage.md')} title="About Compose Job Package" />}
       </div>
+      {/* ── Row 5: File editors ── */}
+      <div style={{marginTop: 12, display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center'}}>
+        <FzButton onClick={() => setShowTextFileBackandSave(prev => !prev)}>{uiStr('fz_btn_text_file_edit')}</FzButton>
+        {helpVisible && <HelpBtn onClick={() => setHelpPath('fz_md/FZ_help_TextFileEdit.md')} title="About Text File Editor" />}
+        <FzButton onClick={() => setShowMdEditor(prev => !prev)}>{uiStr('fz_btn_md_edit')}</FzButton>
+        {helpVisible && <HelpBtn onClick={() => setHelpPath('fz_md/FZ_help_MdEdit.md')} title="About MD Editor" />}
+      </div>
+      <HelpModal fetchPath={helpPath} onClose={() => setHelpPath(null)} />
       <GestaltModal
         open={showGestalt}
         onClose={() => setShowGestalt(false)}
@@ -466,11 +597,11 @@ function App() {
           <PuckLibrary />
         </div>
       )}
-      {/* Toggleable IndexEdit (now below buttons) */}
+      {/* Toggleable FlowSet Index */}
       {showIndexEdit && (
         <div style={{marginTop: 40, marginBottom: 32}}>
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-            <span style={{fontWeight: 'bold', fontSize: '1.1em'}}>Index Edit</span>
+            <span style={{fontWeight: 'bold', fontSize: '1.1em'}}>FlowSet Index</span>
             <button onClick={() => setShowIndexEdit(false)} style={{marginBottom: 8, padding: '4px 12px'}}>Close</button>
           </div>
           <IndexEdit />
@@ -488,7 +619,7 @@ function App() {
       {showTokenEdit && (
         <div style={{marginTop: 40, marginBottom: 32}}>
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-            <span style={{fontWeight: 'bold', fontSize: '1.1em'}}>Token Edit</span>
+            <span style={{fontWeight: 'bold', fontSize: '1.1em'}}>Flexicon Edit</span>
             <button onClick={() => setShowTokenEdit(false)} style={{marginBottom: 8, padding: '4px 12px'}}>Close</button>
           </div>
           <TokenEdit />
@@ -501,6 +632,16 @@ function App() {
             <button onClick={() => setShowStickyEdit(false)} style={{marginBottom: 8, padding: '4px 12px'}}>Close</button>
           </div>
           <StickyEdit />
+        </div>
+      )}
+      {/* Toggleable MdFileEditor */}
+      {showMdEditor && (
+        <div style={{marginTop: 40, marginBottom: 32}}>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+            <span style={{fontWeight: 'bold', fontSize: '1.1em'}}>MD Edit</span>
+            <button onClick={() => setShowMdEditor(false)} style={{marginBottom: 8, padding: '4px 12px'}}>Close</button>
+          </div>
+          <MdFileEditor />
         </div>
       )}
       {/* Toggleable TextFileBackandSave */}

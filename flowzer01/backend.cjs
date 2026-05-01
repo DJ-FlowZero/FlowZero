@@ -17,7 +17,6 @@ try {
   console.warn('[Config] Could not load FZ_GPATH from config.json, using default:', e);
 }
 const GESTALT_DIR = path.join(PUBLIC_DIR, FZ_GPATH);
-const NEWSTATE_DIR = path.join(PUBLIC_DIR, 'NewState');
 const FILENAME = 'text_text.txt';
 
 // Resolves a client-supplied filename safely within a base directory.
@@ -37,27 +36,47 @@ function safeFilePath(base, filename) {
 app.post('/api/save-profile', (req, res) => {
   try {
     const { filename, content } = req.body;
-    if (!filename) {
-      return res.status(400).json({ status: 'error', message: 'Missing filename.' });
-    }
+    if (!filename) return res.status(400).json({ status: 'error', message: 'Missing filename.' });
     const profilePath = safeFilePath(GESTALT_DIR, filename);
-    if (!profilePath) {
-      return res.status(400).json({ status: 'error', message: 'Invalid filename.' });
-    }
-    const backupPath = profilePath + '.bck';
+    if (!profilePath) return res.status(400).json({ status: 'error', message: 'Invalid filename.' });
+    const backupDir = path.join(GESTALT_DIR, 'backups');
+    if (!fs.existsSync(backupDir)) fs.mkdirSync(backupDir, { recursive: true });
     if (fs.existsSync(profilePath)) {
-      try {
-        fs.copyFileSync(profilePath, backupPath);
-      } catch (err) {
-        console.error('[Profile Backup] Backup failed:', err);
-      }
+      const ts = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+      fs.copyFileSync(profilePath, path.join(backupDir, `${filename}.bck.${ts}`));
+      const all = fs.readdirSync(backupDir).filter(f => f.startsWith(filename + '.bck.')).sort();
+      if (all.length > 10) all.slice(0, all.length - 10).forEach(f => fs.unlinkSync(path.join(backupDir, f)));
     }
     fs.writeFileSync(profilePath, content || '', 'utf8');
-    res.json({ status: 'ok', message: 'Profile saved to NewState (backup created if previous version existed)', timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19) });
+    const backups = getBackupList(backupDir, filename);
+    const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    res.json({ status: 'ok', message: `Saved at ${ts}`, backups });
   } catch (err) {
     console.error('[Profile Save] Write error:', err);
     res.status(500).json({ status: 'error', message: 'Failed to save profile.' });
   }
+});
+
+// GET /api/profile/backups?filename=fz0000.json
+app.get('/api/profile/backups', (req, res) => {
+  const { filename } = req.query;
+  if (!filename || /[\\/]/.test(filename))
+    return res.status(400).json({ status: 'error', message: 'Invalid filename.' });
+  const backupDir = path.join(GESTALT_DIR, 'backups');
+  res.json({ status: 'ok', backups: getBackupList(backupDir, filename) });
+});
+
+// GET /api/profile/restore?filename=fz0000.json&file=fz0000.json.bck.2026-05-01T12-00-00
+app.get('/api/profile/restore', (req, res) => {
+  const { filename, file } = req.query;
+  if (!filename || !file || /[\\/]/.test(filename) || /[\\/]/.test(file))
+    return res.status(400).json({ status: 'error', message: 'Invalid parameters.' });
+  const backupDir = path.join(GESTALT_DIR, 'backups');
+  const backupPath = path.join(backupDir, file);
+  if (!path.resolve(backupPath).startsWith(path.resolve(backupDir) + path.sep))
+    return res.status(400).json({ status: 'error', message: 'Invalid backup path.' });
+  if (!fs.existsSync(backupPath)) return res.status(404).json({ status: 'error', message: 'Backup not found.' });
+  res.json({ status: 'ok', content: fs.readFileSync(backupPath, 'utf8') });
 });
 
 // Endpoint to refresh (publish) a profile file — confirms it exists in Gestalt dir
@@ -110,24 +129,84 @@ app.post('/api/save-text', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// Endpoint to refresh (publish) a text file from NewState staging to Gestalt dir
-app.post('/api/refresh-text', (req, res) => {
-  const file = req.body.filename || FILENAME;
-  const safeStaged = safeFilePath(NEWSTATE_DIR, file);
-  const safeDest = safeFilePath(GESTALT_DIR, file);
-  if (!safeStaged || !safeDest) {
-    return res.status(400).json({ status: 'error', message: 'Invalid filename.' });
-  }
-  if (!fs.existsSync(safeStaged)) {
-    return res.status(404).json({ status: 'error', message: 'No staged file found in NewState.' });
-  }
-  const backupPath = safeDest + '.bck';
-  if (fs.existsSync(safeDest)) {
-    try { fs.copyFileSync(safeDest, backupPath); } catch {}
-  }
-  fs.copyFileSync(safeStaged, safeDest);
-  res.json({ status: 'ok', message: 'File refreshed from NewState to Gestalt.' });
+// ─── TXT editor: load / save / restore with timestamped backups ───────────
+// fetchPath format: "fz_txt/FZ_99.txt"  or  "Gestalt/fz_text_3working.txt"
+// Backups land in a backups/ subfolder next to the source file.
+function resolveTxtPath(fetchPath) {
+  if (!fetchPath || typeof fetchPath !== 'string') return null;
+  const sep = fetchPath.indexOf('/');
+  if (sep < 0) return null;
+  const dirSegment = fetchPath.slice(0, sep);
+  const filename   = fetchPath.slice(sep + 1);
+  if (/[\\/]/.test(filename)) return null;           // no traversal in filename
+  let baseDir;
+  if      (dirSegment === 'fz_txt')  baseDir = path.join(PUBLIC_DIR, 'fz_txt');
+  else if (dirSegment === 'Gestalt') baseDir = GESTALT_DIR;
+  else if (dirSegment === 'fz_md')   baseDir = path.join(PUBLIC_DIR, 'fz_md');
+  else return null;
+  const filePath  = path.resolve(baseDir, filename);
+  const backupDir = path.join(baseDir, 'backups');
+  if (!filePath.startsWith(path.resolve(baseDir) + path.sep)) return null;
+  return { filePath, filename, backupDir };
+}
+
+function getBackupList(backupDir, filename) {
+  if (!fs.existsSync(backupDir)) return [];
+  return fs.readdirSync(backupDir)
+    .filter(f => f.startsWith(filename + '.bck.'))
+    .sort().reverse().slice(0, 10);
+}
+
+// GET /api/txt/load?fetchPath=fz_txt/FZ_99_DailyBlog.txt
+app.get('/api/txt/load', (req, res) => {
+  const r = resolveTxtPath(req.query.fetchPath);
+  if (!r) return res.status(400).json({ status: 'error', message: 'Invalid path.' });
+  if (!fs.existsSync(r.filePath)) return res.status(404).json({ status: 'error', message: 'File not found.' });
+  const content = fs.readFileSync(r.filePath, 'utf8');
+  const backups = getBackupList(r.backupDir, r.filename);
+  res.json({ status: 'ok', content, backups });
 });
+
+// POST /api/txt/save  { fetchPath, content }
+app.post('/api/txt/save', (req, res) => {
+  try {
+    const { fetchPath, content } = req.body;
+    if (!fetchPath || content === undefined)
+      return res.status(400).json({ status: 'error', message: 'Missing fetchPath or content.' });
+    const r = resolveTxtPath(fetchPath);
+    if (!r) return res.status(400).json({ status: 'error', message: 'Invalid path.' });
+    if (!fs.existsSync(r.backupDir)) fs.mkdirSync(r.backupDir, { recursive: true });
+    if (fs.existsSync(r.filePath)) {
+      const ts = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+      fs.copyFileSync(r.filePath, path.join(r.backupDir, `${r.filename}.bck.${ts}`));
+      // Prune — keep last 10 per file
+      const all = fs.readdirSync(r.backupDir).filter(f => f.startsWith(r.filename + '.bck.')).sort();
+      if (all.length > 10) all.slice(0, all.length - 10).forEach(f => fs.unlinkSync(path.join(r.backupDir, f)));
+    }
+    fs.writeFileSync(r.filePath, content, 'utf8');
+    const backups = getBackupList(r.backupDir, r.filename);
+    const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    res.json({ status: 'ok', message: `Saved at ${ts}`, backups });
+  } catch (err) {
+    console.error('[Txt Save] Error:', err);
+    res.status(500).json({ status: 'error', message: 'Failed to save.' });
+  }
+});
+
+// GET /api/txt/restore?fetchPath=fz_txt/FZ_99.txt&file=FZ_99.txt.bck.2026-05-01T14-30-00
+app.get('/api/txt/restore', (req, res) => {
+  const r = resolveTxtPath(req.query.fetchPath);
+  if (!r) return res.status(400).json({ status: 'error', message: 'Invalid path.' });
+  const backupFile = req.query.file;
+  if (!backupFile || /[\\/]/.test(backupFile))
+    return res.status(400).json({ status: 'error', message: 'Invalid backup filename.' });
+  const backupPath = path.join(r.backupDir, backupFile);
+  if (!path.resolve(backupPath).startsWith(path.resolve(r.backupDir) + path.sep))
+    return res.status(400).json({ status: 'error', message: 'Invalid backup path.' });
+  if (!fs.existsSync(backupPath)) return res.status(404).json({ status: 'error', message: 'Backup not found.' });
+  res.json({ status: 'ok', content: fs.readFileSync(backupPath, 'utf8') });
+});
+// ──────────────────────────────────────────────────────────────────────────
 
 // Endpoint to list .txt files available for editing (from Gestalt and fz_txt dirs)
 app.get('/api/list-txt-files', (req, res) => {
@@ -144,6 +223,38 @@ app.get('/api/list-txt-files', (req, res) => {
       .forEach(f => results.push({ name: f, fetchPath: `fz_txt/${f}` }));
   } catch {}
   res.json(results);
+});
+
+// Endpoint to list .md files available for editing
+app.get('/api/list-md-files', (req, res) => {
+  const FZ_MD_DIR  = path.join(PUBLIC_DIR, 'fz_md');
+  const FZ_TXT_DIR = path.join(PUBLIC_DIR, 'fz_txt');
+  const results = [];
+  try {
+    fs.readdirSync(FZ_MD_DIR)
+      .filter(f => f.endsWith('.md'))
+      .sort()
+      .forEach(f => results.push({ name: f, fetchPath: `fz_md/${f}` }));
+  } catch {}
+  try {
+    fs.readdirSync(FZ_TXT_DIR)
+      .filter(f => f.endsWith('.md'))
+      .forEach(f => results.push({ name: f, fetchPath: `fz_txt/${f}` }));
+  } catch {}
+  res.json(results);
+});
+
+app.get('/api/list-fz-files', (req, res) => {
+  try {
+    const files = fs.readdirSync(GESTALT_DIR);
+    const numbers = files
+      .map(f => { const m = f.match(/^fz(\d{4,})\.json$/); return m ? parseInt(m[1], 10) : null; })
+      .filter(n => n !== null);
+    res.json({ numbers });
+  } catch (err) {
+    console.error('[list-fz-files] Error:', err);
+    res.status(500).json({ status: 'error', message: 'Failed to list files.' });
+  }
 });
 
 app.get('/api/health', (req, res) => {

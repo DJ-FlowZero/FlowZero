@@ -10,28 +10,43 @@ FlowZero App Structure (custom project files and directories)
 Top-level Directories:
 - src/                # All React frontend source code (custom)
 - public/             # Static assets, config, and all user data (custom structure)
-- public/Gestalt/     # All profile, token, sticky, and index files (custom, not standard Vite)
-- public/fz_txt/      # App documentation, code plans, and editable .txt files (custom)
-- public/NewState/    # Staging area for new/edited files before publishing (custom)
-- public/fz_PUCK_data/   # Exported PUCK files (custom)
-- public/Recyclebin/  # Old/archived profile files (custom)
+- public/Gestalt/     # All FlowSet member files and index (custom, not standard Vite)
+- public/Gestalt/backups/   # Timestamped backups of all Gestalt JSON files (auto-managed)
+- public/fz_txt/      # App documentation, code plans, and editable .txt files (MAP artifact store)
+- public/fz_txt/backups/    # Timestamped backups of fz_txt files (auto-managed)
+- public/fz_md/       # Markdown content: marketing, help docs, presentations, stakeholder-facing output
+- public/fz_md/backups/     # Timestamped backups of fz_md files (auto-managed)
+- public/fz_PUCK_data/   # Exported PUCK files and fz_puck_index.json (custom)
 
 Key Custom Files (not standard in Vite/React):
 - backend.cjs, backend.js         # Node/Express backend for file ops (custom)
-- App.jsx, Jedit.jsx, IndexEdit.jsx, TokenEdit.jsx, StickyEdit.jsx, PuckCreator.jsx, GestaltViewer.jsx, PuckCreatorWrapper.jsx, TextFileBackandSave.jsx, CalibrateFlow.jsx, profileFileUtil.js, userIndexUtil.js  # Custom React components/utilities
+- App.jsx, Jedit.jsx, IndexEdit.jsx, TokenEdit.jsx, StickyEdit.jsx, PuckCreator.jsx, GestaltViewer.jsx, PuckCreatorWrapper.jsx, TextFileBackandSave.jsx, MdFileEditor.jsx, HelpModal.jsx, CalibrateFlow.jsx, profileFileUtil.js, userIndexUtil.js  # Custom React components/utilities
+- App.jsx also contains: HelpBtn (reusable ? circle button), renderMd() (inline markdown renderer for App Overview panel), uiStr() helper, and helpVisible/showTopHelp/topHelpMd state
+- public/App_UI_ext.json                         # Externalized UI strings (button labels, header text); all fz_btn_* keys
 - public/config.json              # App config (FZ_GPATH controls Gestalt directory)
 - public/Gestalt/fz_profile_index.json   # Main profile index
 - public/Gestalt/fzXXXX.json, *_token.json, *_sticky.json  # User profile data
 - public/Gestalt/FZ_Flow_Config.json    # 18 BioLogic behavioral parameters (v0.2)
-- public/Gestalt/FZ_PUCK_loader_readme.txt  # PUCK loader doc prepended to every export
 - public/fz_txt/FZ_01_AI_ServCon.txt, FZ_02_Appdocu.txt, FZ_03_AppStructure.txt, FZ_04_CodePlan.txt, FZ_05_UseCases.txt, FZ_06_CCML_Spec.txt, FZ_88_App_Glossary.txt, FZ_99_DailyBlog.txt  # Project docs (MAP artifacts)
-- public/Loop_PUCK_FZ.json        # REMOVED — file no longer exists on disk. Was a Loop-specific PUCK config. Superseded by standard PUCK export workflow.
+- public/fz_md/FZ_10_ProductPitch.md                # Product pitch (rendered marketing content)
+- public/fz_md/FZ_help_AppOverview.md            # Application Overview panel (top-bar toggle)
+- public/fz_md/FZ_help_IndexEdit.md              # FlowSet Definition ? help
+- public/fz_md/FZ_help_ProfileEdit.md            # Profile Editor ? help
+- public/fz_md/FZ_help_FlexiconEdit.md           # Flexicon Editor ? help
+- public/fz_md/FZ_help_StickyEdit.md             # Sticky Editor ? help
+- public/fz_md/FZ_help_CalibrateFlow.md          # Flow Calibration ? help
+- public/fz_md/FZ_help_GestaltViewer.md          # Gestalt Viewer ? help
+- public/fz_md/FZ_help_CreatePuck.md             # Create PUCK ? help
+- public/fz_md/FZ_help_PuckLibrary.md            # PUCK Library ? help
+- public/fz_md/FZ_help_JobPackage.md             # Compose Job Package ? help
+- public/fz_md/FZ_help_TextFileEdit.md           # Text File Editor ? help
+- public/fz_md/FZ_help_MdEdit.md                 # MD Editor ? help
 - public/zipUP2LLM.bat, backup_backend.bat, meup.bat  # Utility scripts (custom)
 
 Not Standard in Vite/React:
-- All Gestalt, fz_txt, NewState, fz_PUCK_data, Recyclebin directories and their contents
+- All Gestalt, fz_txt, fz_md, fz_PUCK_data directories and their contents
 - All backend Node/Express code (backend.cjs, backend.js)
-- All profile management, PUCK creation, and text file editing logic
+- All FlowSet management, PUCK creation, and text file editing logic
 
 Standard Vite/React files (not listed):
 - node_modules/, dist/, package.json, vite.config.js, index.html, etc.
@@ -41,16 +56,65 @@ Standard Vite/React files (not listed):
 
 Data Model Overview
 ------------------
-- fz_profile_index.json: Array of profile/group index entries (realName, profileId, fileName, description, type, tag, etc.)
-- fzXXXX.json: { profile: [ { label, value, flag, todo, ... } ] }
-- fzXXXX_token.json: { FZ_Tokens: [ { Token, Meaning, Usage, flag, ... } ] }
-- fzXXXX_sticky.json: { sticky: [ { stickytype, note, links, flag, ... } ] }
-- FZ_Flow_Config.json: { version, date, params: [ { id, label, description, options: [3], value } ], notes }
-  - 18 params covering: response_length, default_mode, challenge_level, artifact_gate,
+- fz_profile_index.json:
+    Array<{ realName: string, profileId: string, fileName: string,
+            description: string, type: string, tag: string }>
+    Canonical source: public/Gestalt/fz_profile_index.json
+
+- fzXXXX.json:
+    { profile: Array<{ label: string, value: string, flag: string, todo: string }> }
+
+- fzXXXX_token.json:
+    { FZ_Tokens: Array<{ Token: string, Meaning: string, Usage: string, flag: string }> }
+    Note: CCML {type} has no dedicated storage field — treated as implicit in the Token string.
+    Note: @trigger and #tag are CCML primitives 6 & 7 (specced in FZ_06_CCML_Spec.txt §6–7)
+          but have no storage mapping in V1 — reserved for future implementation.
+
+- fzXXXX_sticky.json:
+    { sticky: Array<{ stickytype: string, note: string, links: string, flag: string }> }
+
+- FZ_Flow_Config.json:
+    { version: string, date: string,
+      params: Array<{ id: string, label: string, description: string,
+                      options: [string, string, string], value: string }>,
+      notes: string }
+    18 params: response_length, default_mode, challenge_level, artifact_gate,
     explanation_depth, ambiguity_handling, scope_discipline, coding_strictness,
     confidence_display, session_close, initiative_level, tone_register,
     formatting_style, error_recovery, context_decay, limitation_acknowledgment,
     vocabulary_anchoring, context_priority
+
+- fz_puck_index.json:
+    Array<{ name: string, sourceProfiles: string[], visibility: string,
+            date: string, description: string, filename: string }>
+    Canonical source: public/fz_PUCK_data/fz_puck_index.json
+    Managed via: /api/save-puck-index (POST, full overwrite)
+    Note: filename is the bare filename in fz_PUCK_data/ — e.g. PUCK_export_fz0000.txt
+
+- config.json:
+    { FZ_GPATH: string }   ← path to Gestalt directory (relative to public/)
+    Required keys: FZ_GPATH. Future reserved key: FZ_CCML_VERSION (not yet used).
+    Canonical source: public/config.json. Do not add runtime state here.
+
+Shared Chrome Pattern (all editors)
+- Every editor (Profile/Token/Sticky/TXT/MD) shares the same visual chrome:
+  - unsaved pill (amber) when draft !== last-saved
+  - status bar (green = ok, red = error) with 8s auto-clear
+  - ↺ Reload button — re-fetches from server, discards local draft
+  - Save button (enabled only when dirty) — writes to server via /api/save-profile or /api/txt/save
+  - Backup/Version History panel — expandable list of last 10 timestamped backups; Restore loads backup into draft
+- Backups: timestamped format filename.bck.YYYY-MM-DDTHH-MM-SS in a backups/ subdirectory next to the source file
+- Palette constant C = { primary, border, bg, ok, okBg, err, errBg, dirty, dirtyBg } shared across components
+
+Help / In-App Documentation (2026-05-01)
+- HelpModal.jsx: reusable overlay. Accepts fetchPath prop (e.g. fz_md/FZ_help_CreatePuck.md), loads and renders markdown, closes on backdrop click or Escape.
+- HelpBtn: reusable ? circle button component in App.jsx. Renders a 24px circle with a ? glyph; accepts onClick and title props.
+- helpVisible: boolean state in App.jsx. Controls whether all ? buttons are shown. Default = false (clean UI). Toggled by Onscreen Help [On][Off] in the top bar.
+- All 11 toolbar buttons have a corresponding ? HelpBtn gated by {helpVisible && <HelpBtn .../>}.
+- Application Overview: top-bar pill button loads FZ_help_AppOverview.md and renders it inline below the top bar (toggle). Uses renderMd() local to App.jsx.
+- renderMd(): minimal inline markdown renderer in App.jsx (headings, bold, lists, tables, blockquote, hr). Same pattern as HelpModal.jsx — kept local, not imported.
+- 13 MD help files in fz_md/ (full list above). All editable via MD Editor without code changes. Help content and UI are fully decoupled.
+- Top bar (left to right): UI Mode [Public/Private/Secret] | Application Overview (pill toggle) | Onscreen Help [On][Off].
 
 Key Utilities
 -------------
@@ -59,27 +123,62 @@ Key Utilities
   - fetchUserIndex()     → reads fz_profile_index.json, returns profile array
   - getFZ_GPATH()        → internal helper only; reads config.json FZ_GPATH. Do NOT call directly from components.
 
-Key Workflows
+Key Workflows (FlowSet → Gestalt → PUCK → Job Package chain)
 -------------
-1. Profile/Group Creation: Use IndexEdit to create a new group/profile, which generates new fzXXXX.json, *_token.json, *_sticky.json in NewState/.
-2. Editing: Use Jedit, TokenEdit, StickyEdit, or TextFileBackandSave to modify data.
-3. Calibrate Flow: Use the Calibrate Flow panel (Show Config button) to edit the 18 BioLogic behavioral params in FZ_Flow_Config.json.
-4. Review Gestalt: Use Show Gestalt (modal) to preview a profile's full combined context at a given visibility level.
-5. Publishing: Use IndexEdit to publish new/edited files from NewState/ to Gestalt/ and update fz_profile_index.json.
-6. PUCK Export: Use Create PUCK to select rows from profile/token/sticky by visibility, optionally include the Flow Calibration block, and download as a .txt file ready for AI session priming. The export format is: loader readme + flow block (optional) + JSON data.
-7. Backup/Restore: All saves create .bck files; Recyclebin/ holds old versions for manual recovery.
+1. Create FlowSet: Use FlowSet Index → [Create FlowSet]. Writes Profile + Flexicon + Sticky files to Gestalt/ immediately. Index updated atomically.
+2. Edit Members: Use Profile Edit (stable facts), Flexicon Edit (meaning handles), Sticky Edit (runtime modifiers) — all save directly to Gestalt/ via /api/save-profile with timestamped backups.
+3. Calibrate Flow: Use Show Config to edit the 18 BioLogic behavioral params in FZ_Flow_Config.json. These can be optionally included in any PUCK export.
+4. Review Gestalt: Use Show Gestalt (modal) to preview the compiled FlowSet at a chosen visibility level (Public/Private/Secret).
+5. Create PUCK: Use Create PUCK to select rows from the compiled Gestalt, optionally include Flow Calibration, and export as a .txt file. PUCK is saved to PUCK Library (fz_puck_index.json) automatically.
+6. PUCK Library: Review, edit descriptions, and download individual saved PUCKs. ↺ Refresh re-reads the server index.
+7. Compose Job Package: Write a job brief + select one or more PUCKs → generates a CompositePUCK .txt file ready to prime any AI cold.
+8. Text Docs: Use Text File Edit (TextFileBackandSave) for .txt files in fz_txt/ or Gestalt/. MD Edit (MdFileEditor) for .md files in fz_md/ — Raw/Preview toggle, same backup chrome.
+9. Backup/Restore: All saves create timestamped .bck files in backups/ subdirectories. Version history panel in each editor allows restore to any of the last 10.
 
 PUCK Export Structure
 ---------------------
-[FZ_PUCK_loader_readme.txt content]
----
-FLOW CALIBRATION          ← only if user checks "Include Flow Calibration"
-(v0.2 · date)
-param: value
-...
----
----
-{ profile: [...], FZ_Tokens: [...], sticky: [...] }   ← selected rows as JSON
+The PUCK header is drawn from FZ_PUCK_loader_readme.txt (Gestalt/FZ_PUCK_loader_readme.txt).
+That file is a template/instructions document for PUCK importers — it describes field limits,
+field definitions, and import instructions. It is NOT a data file. Content summary:
+  - File Structure: JSON shape { profile: [...], FZ_Tokens: [...], sticky: [...] }
+  - Field Limits: max 16 label types per profile, max 64 records, max 64 tokens, max 16 stickies
+  - Field Definitions: label (string, required), value (string, required), flag (public|private|secret)
+  - Versioning: PUCK schema version + compatibility notes
+  - Import Instructions: steps for receiving systems to parse and validate
+For reconstruction: include the readme file in Gestalt/ or generate the header inline from the
+FZ_03 spec below. Both produce equivalent output for V1 purposes.
+
+Full PUCK export format (V1):
+Line 1:    === FLOWZERO PUCK ===
+Line 2:    Profile: [realName] (profileId)
+Line 3:    Visibility: [Public|Private|Secret]
+Line 4:    Generated: YYYY-MM-DDTHH:MM:SS
+Line 5:    Source: FlowZero V1 · fz_txt/FZ_03_AppStructure.txt
+Line 6:    ---
+[If Flow Calibration included:]
+Line N:    === FLOW CALIBRATION ===
+           (v0.2 · date)
+           param_id: value
+           ...
+           ---
+[Selected rows as JSON — only user-checked rows, not all rows:]
+           { "profile": [...], "FZ_Tokens": [...], "sticky": [...] }
+
+Note: the JSON block contains ONLY user-selected rows. Row selection happens in PuckCreator.jsx
+before export. "Raw data dump" language in FZ_04 refers to the output not yet being shaped
+for different render targets (human vs. AI vs. machine) — not that all rows are exported.
+To change the header format: update PuckCreator.jsx and this spec in sync.
+
+CompositePUCK (Job Package) Structure
+--------------------------------------
+Line 1:    === COMPOSITE PUCK ===
+Line 2:    Generated: YYYY-MM-DD
+Line 3:    (blank)
+Line 4:    --- JOB BRIEF ---
+           [user-entered job brief text]
+Line N:    --- PUCK: [name] ---
+           [full PUCK file content]
+           (repeated per selected PUCK)
 
 ---
 
@@ -88,13 +187,16 @@ MAP Munchhausen Architecture Principle (Onboarding & Recovery)
 
 Onboarding a New Developer
 - Prerequisites: Node.js, npm, VS Code (recommended), Git
-- Clone repo, run `npm install`, then `npm run dev` to start backend/frontend
-- See FZ_Appdocu.txt and this file for architecture, code plan, and workflows
+- Clone repo, run `npm install`, then `npm run dev` (or `start meup`) to start backend/frontend
+- See FZ_02_Appdocu.txt and this file for architecture, code plan, and workflows
+- Backend runs on port 3001 (Express). Frontend on port 5173 (Vite). Both started by meup.bat.
 
 Recovery/Restore Instructions
-- To restore any .json or .txt file, copy the corresponding .bck file (in NewState/, Gestalt/, or fz_txt/) to the original filename
-- To recover deleted/overwritten profiles, copy from Recyclebin/ to Gestalt/
+- To restore any .json or .txt file, open the editor for that file and use Version History → Restore
+- Backups are in backups/ subdirectories: Gestalt/backups/, fz_txt/backups/, fz_md/backups/
+- Backup filename format: filename.bck.YYYY-MM-DDTHH-MM-SS (last 10 per file kept)
 - For full reset, re-clone repo and copy in latest Gestalt/ and fz_txt/ files
+- NewState/ directory: DELETED. Was a legacy staging area. Saves now go direct to Gestalt/ with timestamped backups.
 
 Migration Log & Major Refactor Steps
-- See FZ_CodePlan.txt for ongoing migration notes and planned refactors
+- See FZ_04_CodePlan.txt for ongoing migration notes and planned refactors

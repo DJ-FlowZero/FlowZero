@@ -1,21 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { createProfileFiles } from "./profileFileUtil";
-// Publish utility
-async function publishGroupFiles(profileNum) {
-  const files = [
-    `fz${profileNum}.json`,
-    `fz${profileNum}_token.json`,
-    `fz${profileNum}_sticky.json`
-  ];
-  for (const filename of files) {
-    await fetch('/api/refresh-text', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ filename })
-    });
-  }
-}
-
 
 import { fetchUserIndex } from "./userIndexUtil";
 
@@ -118,34 +102,25 @@ export default function IndexEdit() {
         }
       ]);
       setLastCreatedNum(nextNum);
-      setSaveStatus(`Created group: ${fileName}, ${tokenFile}, ${stickyFile}`);
-    } catch {
-      setSaveStatus("Error creating group files");
-    }
-  };
-
-  // Handler for publishing the most recently created group files
-  const handlePublishGroup = async () => {
-    if (!lastCreatedNum) {
-      setSaveStatus("No group to publish. Create a group first.");
-      return;
-    }
-    setSaveStatus("Publishing group files...");
-    try {
-      await publishGroupFiles(lastCreatedNum);
-      // Save updated fz_profile_index.json to backend (with backup)
-      const res = await fetch('/api/save-profile-index', {
+      // Save the updated profile index immediately
+      const idxRes = await fetch('/api/save-profile-index', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: JSON.stringify(indexData, null, 2) })
+        body: JSON.stringify({ content: JSON.stringify([...indexData, {
+          profileId,
+          fileName,
+          description: "New group profile",
+          realName: "",
+          type: "group",
+          subtype: "",
+          extra: ""
+        }], null, 2) })
       });
-      if (res.ok) {
-        setSaveStatus("Group files and profile index published to public.");
-      } else {
-        setSaveStatus("Group files published, but failed to update profile index.");
-      }
+      setSaveStatus(idxRes.ok
+        ? `Created: ${fileName}, ${tokenFile}, ${stickyFile} — index saved.`
+        : `Created: ${fileName} — index save failed, use Save Changes.`);
     } catch {
-      setSaveStatus("Error publishing group files");
+      setSaveStatus("Error creating group files");
     }
   };
 
@@ -154,13 +129,10 @@ export default function IndexEdit() {
 
   return (
     <div style={{ border: "1px solid #ccc", padding: 16, borderRadius: 8, maxWidth: 700 }}>
-      <h3>Edit fz_profile_index.json</h3>
+      <h3>FlowSet Index</h3>
       {saveStatus && <div style={{ color: "green", marginBottom: 8 }}>{saveStatus}</div>}
-      <button type="button" onClick={handleCreateGroup} style={{ marginBottom: 8, background: '#e0e0ff', padding: '6px 18px', borderRadius: 6 }}>
-        [Create Group]
-      </button>
-      <button type="button" onClick={handlePublishGroup} style={{ marginBottom: 16, background: '#d0ffd0', padding: '6px 18px', borderRadius: 6, marginLeft: 12 }}>
-        [Publish Group Files]
+      <button type="button" onClick={handleCreateGroup} style={{ marginBottom: 16, background: '#e0e0ff', padding: '6px 18px', borderRadius: 6 }}>
+        [Create FlowSet]
       </button>
       <form onSubmit={e => e.preventDefault()}>
         {/* Column Headings */}

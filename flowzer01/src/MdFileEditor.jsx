@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 
-// ── Shared palette (matches ProtoEditor) ────────────────────────────────────
+// ── Shared palette (matches TextFileBackandSave / ProtoEditor) ──────────────
 const C = {
   primary: '#15396a',
   border:  '#c8d8ef',
@@ -12,6 +12,48 @@ const C = {
   dirty:   '#92400e',
   dirtyBg: '#fef3c7',
 };
+
+// ── Minimal markdown renderer (no dependencies) ─────────────────────────────
+// Content is user-authored local files — dangerouslySetInnerHTML is acceptable here.
+function renderMd(md) {
+  const lines = md.split('\n');
+  let html = '';
+  let inList = false;
+  let inTable = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const raw = lines[i];
+    let line = raw
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g,     '<em>$1</em>')
+      .replace(/`(.+?)`/g, '<code style="background:#f3f4f6;padding:1px 5px;border-radius:3px;font-size:0.88em">$1</code>');
+
+    if (inList  && !/^\s*[-*]\s/.test(raw)) { html += '</ul>'; inList  = false; }
+    if (inTable && !/^\|/.test(raw))         { html += '</table>'; inTable = false; }
+
+    if      (/^### /.test(raw)) { html += `<h3 style="margin:10px 0 4px;color:${C.primary}">${line.replace(/^### /, '')}</h3>`; }
+    else if (/^## /.test(raw))  { html += `<h2 style="margin:14px 0 6px;color:${C.primary}">${line.replace(/^## /, '')}</h2>`; }
+    else if (/^# /.test(raw))   { html += `<h1 style="margin:16px 0 8px;color:${C.primary}">${line.replace(/^# /, '')}</h1>`; }
+    else if (/^---$/.test(raw)) { html += `<hr style="border:none;border-top:1px solid ${C.border};margin:12px 0">`; }
+    else if (/^> /.test(raw))   { html += `<blockquote style="border-left:3px solid ${C.primary};padding:4px 12px;margin:8px 0;color:#374151;background:${C.bg}">${line.replace(/^&gt; /, '')}</blockquote>`; }
+    else if (/^\s*[-*]\s/.test(raw)) {
+      if (!inList) { html += '<ul style="margin:6px 0;padding-left:22px">'; inList = true; }
+      html += `<li style="margin:2px 0">${line.replace(/^\s*[-*]\s/, '')}</li>`;
+    }
+    else if (/^\|/.test(raw)) {
+      if (!inTable) { html += `<table style="border-collapse:collapse;margin:8px 0;font-size:0.9em">`; inTable = true; }
+      if (/^\|[-| :]+\|/.test(raw)) continue;
+      const cells = raw.split('|').filter((_, j, a) => j > 0 && j < a.length - 1);
+      html += `<tr>${cells.map(c => `<td style="border:1px solid ${C.border};padding:4px 10px">${c.trim()}</td>`).join('')}</tr>`;
+    }
+    else if (raw.trim() === '') { html += '<div style="height:6px"></div>'; }
+    else { html += `<p style="margin:3px 0">${line}</p>`; }
+  }
+  if (inList)  html += '</ul>';
+  if (inTable) html += '</table>';
+  return html;
+}
 
 // ── Version history panel ───────────────────────────────────────────────────
 function VersionHistory({ backups, onRestore }) {
@@ -52,17 +94,18 @@ function VersionHistory({ backups, onRestore }) {
 }
 
 // ── Main component ──────────────────────────────────────────────────────────
-export default function TextFileBackandSave() {
-  const [txtFiles,    setTxtFiles]    = useState([]);
+export default function MdFileEditor() {
+  const [mdFiles,     setMdFiles]     = useState([]);
   const [loadingList, setLoadingList] = useState(true);
-  const [fetchPath,   setFetchPath]   = useState('');  // e.g. "fz_txt/FZ_99.txt"
-  const [filename,    setFilename]    = useState('');  // bare name for display
-  const [rawContent,  setRawContent]  = useState('');  // last saved/loaded state
-  const [draft,       setDraft]       = useState('');  // current edit state
+  const [fetchPath,   setFetchPath]   = useState('');
+  const [filename,    setFilename]    = useState('');
+  const [rawContent,  setRawContent]  = useState('');
+  const [draft,       setDraft]       = useState('');
   const [backups,     setBackups]     = useState([]);
   const [loading,     setLoading]     = useState(false);
   const [saving,      setSaving]      = useState(false);
   const [status,      setStatus]      = useState({ message: '', isError: false });
+  const [preview,     setPreview]     = useState(false);
 
   const dirty = draft !== rawContent;
 
@@ -73,15 +116,16 @@ export default function TextFileBackandSave() {
 
   // Load file list on mount
   useEffect(() => {
-    fetch('/api/list-txt-files')
+    fetch('/api/list-md-files')
       .then(r => r.json())
-      .then(data => { setTxtFiles(Array.isArray(data) ? data : []); setLoadingList(false); })
-      .catch(() => { setTxtFiles([]); setLoadingList(false); });
+      .then(data => { setMdFiles(Array.isArray(data) ? data : []); setLoadingList(false); })
+      .catch(() => { setMdFiles([]); setLoadingList(false); });
   }, []);
 
   const loadFile = useCallback((fp) => {
     if (!fp) return;
     setLoading(true);
+    setPreview(false);
     fetch(`/api/txt/load?fetchPath=${encodeURIComponent(fp)}`)
       .then(r => r.json())
       .then(data => {
@@ -101,7 +145,7 @@ export default function TextFileBackandSave() {
   const handleDropdownChange = (e) => {
     const fp = e.target.value;
     if (!fp) return;
-    const file = txtFiles.find(f => f.fetchPath === fp);
+    const file = mdFiles.find(f => f.fetchPath === fp);
     if (!file) return;
     if (dirty && !window.confirm('Unsaved changes — switch file anyway?')) return;
     setFetchPath(fp);
@@ -151,15 +195,14 @@ export default function TextFileBackandSave() {
       .catch(() => showStatus('⚠ Restore failed', true));
   };
 
-  const handleLocalFile = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    file.text().then(text => {
-      setDraft(text);
-      if (!filename) setFilename(file.name);
-      showStatus('Local file loaded — select a server file above, then Save to write it');
-    });
-  };
+  const tabBtn = (active, label, onClick) => (
+    <button onClick={onClick} style={{
+      padding: '3px 14px', borderRadius: 5, cursor: 'pointer', fontWeight: 600, fontSize: '0.85em',
+      border: `1px solid ${C.primary}`,
+      background: active ? C.primary : '#eaf1fa',
+      color:      active ? '#fff'    : C.primary,
+    }}>{label}</button>
+  );
 
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', maxWidth: 900 }}>
@@ -169,24 +212,19 @@ export default function TextFileBackandSave() {
         <label style={{ fontWeight: 700, color: C.primary, fontSize: '0.9em', flexShrink: 0 }}>File:</label>
         {loadingList ? (
           <span style={{ color: '#9ca3af', fontSize: '0.9em' }}>Loading list…</span>
-        ) : txtFiles.length === 0 ? (
-          <span style={{ color: C.err, fontSize: '0.9em' }}>No files — backend may need restart</span>
+        ) : mdFiles.length === 0 ? (
+          <span style={{ color: C.err, fontSize: '0.9em' }}>No .md files found — backend may need restart</span>
         ) : (
           <select value={fetchPath} onChange={handleDropdownChange} style={{
             flex: 1, minWidth: 220, fontSize: '0.9em', padding: '4px 8px',
             border: `1px solid ${C.border}`, borderRadius: 5,
           }}>
             <option value=''>— select —</option>
-            {txtFiles.map(f => (
+            {mdFiles.map(f => (
               <option key={f.fetchPath} value={f.fetchPath}>{f.name}</option>
             ))}
           </select>
         )}
-        <label style={{ fontSize: '0.82em', color: '#6b7280', cursor: 'pointer', flexShrink: 0 }}>
-          or local:&nbsp;
-          <input type='file' accept='.txt,.md,text/plain'
-            style={{ fontSize: '0.85em' }} onChange={handleLocalFile} />
-        </label>
       </div>
 
       {/* Action chrome: filename · dirty · status · Reload · Save */}
@@ -206,6 +244,14 @@ export default function TextFileBackandSave() {
           }}>
             unsaved
           </span>
+        )}
+
+        {/* Raw / Preview tabs inline */}
+        {fetchPath && (
+          <div style={{ display: 'flex', gap: 4, marginLeft: 4 }}>
+            {tabBtn(!preview, 'Raw',     () => setPreview(false))}
+            {tabBtn( preview, 'Preview', () => setPreview(true))}
+          </div>
         )}
 
         <div style={{ flex: 1 }} />
@@ -240,14 +286,23 @@ export default function TextFileBackandSave() {
         </button>
       </div>
 
-      {/* Edit area */}
-      {!fetchPath && !draft ? (
+      {/* Edit / Preview area */}
+      {!fetchPath ? (
         <div style={{
           padding: 32, color: '#9ca3af', fontSize: '0.92em', textAlign: 'center',
           border: `1px dashed ${C.border}`, borderRadius: 6,
         }}>
-          Select a file above to begin editing.
+          Select a .md file above to begin editing.
         </div>
+      ) : preview ? (
+        <div
+          dangerouslySetInnerHTML={{ __html: renderMd(draft) }}
+          style={{
+            minHeight: 400, padding: 20,
+            border: `1px solid ${C.border}`, borderRadius: 6,
+            background: '#fff', fontSize: '0.95em', lineHeight: 1.7,
+          }}
+        />
       ) : (
         <textarea
           value={draft}
@@ -275,4 +330,3 @@ export default function TextFileBackandSave() {
     </div>
   );
 }
-

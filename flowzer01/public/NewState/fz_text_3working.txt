@@ -1,6 +1,0 @@
-I now have a batchfile called meup.bat
-the command in the terminal at the beginning is
-
-start meup
-
-UPdated on Sunday 26 04

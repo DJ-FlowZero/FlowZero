@@ -1,8 +1,19 @@
 {
-  "fz_00_headline": { "value": "App Testing for FlowZero Systematik", "flag": "public" },
+  "fz_00_headline": { "value": "FlowZero Systematik Demo 1.0", "flag": "public" },
   "fz_01_footer_headline": { "value": "FlowZero Systematik", "flag": "secret" },
   "fz_02_footer_date": { "value": "Current Date:", "flag": "public" },
   "fz_03_secret_message": { "value": "Secret messages are visible.", "flag": "secret" },
   "fz_04_private_message": { "value": "Private messages are visible.", "flag": "private" },
-  "fz_05_public_message": { "value": "Public messages are visible.", "flag": "public" }
+  "fz_05_public_message": { "value": "Public messages are visible.", "flag": "public" },
+  "fz_btn_flowset_index":  { "value": "FlowSet Definition",        "flag": "public" },
+  "fz_btn_profile_edit":   { "value": "Profile Editor",         "flag": "public" },
+  "fz_btn_flexicon_edit":  { "value": "Flexicon Editor",        "flag": "public" },
+  "fz_btn_sticky_edit":    { "value": "Sticky Editor",          "flag": "public" },
+  "fz_btn_calibrate_flow": { "value": "Flow Calibration",       "flag": "public" },
+  "fz_btn_show_gestalt":   { "value": "Gestalt Viewer",         "flag": "public" },
+  "fz_btn_create_puck":    { "value": "Create PUCK",          "flag": "public" },
+  "fz_btn_puck_library":   { "value": "PUCK Library",         "flag": "public" },
+  "fz_btn_compose_job":    { "value": "Compose Job Package",  "flag": "public" },
+  "fz_btn_text_file_edit": { "value": "Text File Editor",       "flag": "public" },
+  "fz_btn_md_edit":        { "value": "MD Editor",              "flag": "public" }
 }

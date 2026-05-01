@@ -113,7 +113,7 @@ Next mode: refine Gestalt data, improve PUCK content, expand fz_puck_index.json,
 - fz_puck_index.json created in public/fz_PUCK_data/ with first entry (Chris Horak — Public).
 - PuckLibrary button added to Row 2, after Create PUCK, matching light blue style.
 - Save Index button: downloads updated fz_puck_index.json after description edits.
-- Note: Save Index still download-only — no backend endpoint yet. Manual file replace to persist.
+- [2026-05-01] Save Index upgraded: now POSTs to /api/save-puck-index (server write). Download-only workflow retired.
 
 ## Step 3: Compose Job Package ✓ COMPLETE (2026-04-29)
 - JobPackageComposer.jsx created: free-text job brief textarea + checkbox PUCK selection from library.
@@ -122,9 +122,11 @@ Next mode: refine Gestalt data, improve PUCK content, expand fz_puck_index.json,
 - Tested: Pia (fz0001) PUCK created manually, added to index. Cold AI read food constraints, social dynamics, friend graph correctly with no explanation from user.
 - Validation: refinement loop confirmed — result → refine brief/sticky/token/PUCK selection → better output next session.
 
-## Step 4: Backend Save Endpoints (outstanding)
+## Step 4: Backend Save Endpoints ✓ COMPLETE (2026-05-01)
 
-Three endpoints to add to backend.cjs. Pattern matches existing endpoints.
+/api/save-puck and /api/save-puck-index are implemented and live.
+/api/list-fz-files was implemented 2026-05-01 (was absent from backend.cjs despite this doc claiming otherwise — corrected by JITLAG sanity 2026-05-01 session 3).
+/api/list-puck-files is specced below as optional V1.1 — NOT yet implemented, NOT called from any component.
 All follow the error policy in FZ_02_Appdocu.txt (Error Handling Policy section).
 
 ### GET /api/list-fz-files
@@ -138,9 +140,9 @@ Degrades gracefully: IndexEdit falls back to index-only count if endpoint is abs
 
 Implementation note: use safeFilePath pattern — only read from GESTALT_DIR, no user-supplied paths.
 
-### POST /api/save-puck
+### POST /api/save-puck ✓ COMPLETE
 Writes a compiled PUCK .txt file to public/fz_PUCK_data/.
-Called from PuckCreator.jsx [Save to Library] button (not yet wired in UI).
+PuckCreator.jsx POSTs before download; shows ✓/⚠ status message for 12s.
 Backup existing file before overwrite (matching save-profile pattern).
 
   Request body: { "filename": "PUCK_export_fz0001.txt", "content": "<full PUCK text>" }
@@ -154,9 +156,9 @@ Backup existing file before overwrite (matching save-profile pattern).
 
 Target dir: path.join(PUBLIC_DIR, 'fz_PUCK_data'). Create dir if absent.
 
-### POST /api/save-puck-index
+### POST /api/save-puck-index ✓ COMPLETE
 Persists the updated fz_puck_index.json to public/fz_PUCK_data/.
-Replaces the current download-and-replace workflow in PuckLibrary.jsx [Save Index] button.
+Replaces the former download-and-replace workflow in PuckLibrary.jsx [Save Index] button — manual copy step eliminated.
 Path is hard-coded (no user-supplied path). Backup before overwrite.
 
   Request body: { "content": "<JSON string>" }
@@ -166,8 +168,7 @@ Path is hard-coded (no user-supplied path). Backup before overwrite.
   Error (400):    { "status": "error", "message": "Missing content." }
   Error (500):    { "status": "error", "message": "Failed to save PUCK index." }
 
-UI change required: PuckLibrary.jsx [Save Index] button — replace download trigger with
-fetch POST to /api/save-puck-index, show status message on response.
+UI change applied (2026-05-01): PuckLibrary.jsx [Save Index] POSTs to /api/save-puck-index and shows status message on response.
 
 ### GET /api/list-puck-files
 Scans fz_PUCK_data/ for .txt files. Returns filename list for UI enumeration.
@@ -277,6 +278,11 @@ Premature structuring of fluid preference data is a known failure mode.
 ## Compilation Target Separation
 
 The PUCK compiler currently exports a raw data dump.
+Clarification: row-selection IS implemented — the user picks which rows to include.
+"Raw data dump" here means the selected rows are output as-is (JSON), not yet shaped
+for a specific audience (human vs. AI vs. machine). This is a render target gap,
+not a row-selection gap. See FZ_02 Key Concepts for the V1 PUCK definition.
+
 Future requirement: the compiler needs to support named *render targets* — the same
 profile data compiled differently depending on intended use.
 
