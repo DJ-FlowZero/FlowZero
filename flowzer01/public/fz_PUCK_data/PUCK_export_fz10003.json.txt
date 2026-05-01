@@ -1,0 +1,178 @@
+PUCKloader_readme.txt
+=====================
+
+Purpose:
+--------
+This file provides instructions and metadata for any system or user importing a PUCK (Portable User Configuration Knowledge) file. It should always be included as the first section or file when generating or uploading a PUCK, to ensure consistent interpretation and integration.
+
+Contents:
+---------
+- File Structure: Describes the expected JSON structure and required fields for profiles, tokens, and stickies.
+- Field Limits: Specifies the maximum number of items (e.g., 16 profiles, 16 stickies, 64 tokens).
+- Field Definitions: Explains the meaning and expected format for each field (label, value, flag, etc.).
+- Versioning: Indicates the PUCK schema version and any compatibility notes.
+- Import Instructions: Steps for receiving systems to parse and validate the PUCK file.
+- Contact/Support: Where to get help or report issues with PUCK files.
+
+Template (edit as needed):
+-------------------------
+1. PUCK File Structure
+   - { "profile": [ ... ], "FZ_Tokens": [ ... ], "sticky": [ ... ] }
+2. Field Limits
+   - Max 16 label types per profile
+   - Max 64 records per profile
+   - Max 16 stickies per profile
+   - Max 64 tokens per PUCK
+3. Field Definitions
+   - label: string, required for profiles
+   - value: string, required for profiles
+   - flag: "public" | "private" | "secret"
+   - ... (add more as needed)
+4. Version: 1.0.0
+5. Import Instructions
+   - Always read this file first before parsing the PUCK JSON
+   - Validate field limits and required fields
+   - ... (add more as needed)
+6. Contact: [your contact or support info here]
+
+---
+Edit this file to update instructions as your PUCK format evolves.
+---
+FLOW CALIBRATION
+(v0.2 · 2026-04-28)
+Response Length: compress
+Default Interaction Mode: FrenchCafe
+Challenge Level: medium
+Artifact Generation Gate: ask always
+Explanation Depth: expert
+Ambiguity Handling: flag
+Scope Discipline: strict
+Coding Strictness: strict
+Confidence Display: always flag
+Session Close Style: clean stop
+Initiative Level: reactive only
+Tone Register: peer/collegial
+Formatting Style: minimal
+Error Recovery: flag and correct
+Context Decay Handling: flag when drifting
+Limitation Acknowledgment: direct / say so
+Vocabulary Anchoring: adopt HUM terms
+Context Priority: flag conflicts
+---
+
+---
+{
+  "profile": [
+    {
+      "label": "Keys",
+      "value": "Building Key Fob (1x)",
+      "flag": "",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "Key",
+      "subtype": "RFID",
+      "alias": "Leo206Key"
+    },
+    {
+      "label": "Keys",
+      "value": "Appartment door (2x)",
+      "flag": "",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "Key",
+      "subtype": "Regular Key",
+      "alias": "Leo206DoorKey"
+    },
+    {
+      "label": "Keys",
+      "value": "Garage Entrance",
+      "flag": "",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "Key",
+      "subtype": "RFID",
+      "alias": "Leo206GarageBarrier"
+    },
+    {
+      "label": "Garage",
+      "value": "SN076 Outside, near International School",
+      "flag": "public",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "Location",
+      "subtype": "",
+      "alias": "Leo206Parking"
+    },
+    {
+      "label": "Admin",
+      "value": "info@b2rem.de",
+      "flag": "public",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "address",
+      "subtype": "email",
+      "alias": "B2 Real Estate"
+    },
+    {
+      "label": "Realtor",
+      "value": "Ioannis Pegios",
+      "flag": "public",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "Person",
+      "subtype": "Realtor",
+      "alias": "Pegios Immobilien"
+    },
+    {
+      "label": "Keys",
+      "value": "Leo206 Storage",
+      "flag": "public",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "Key",
+      "subtype": "Padlock",
+      "alias": "Leo260Basement"
+    }
+  ],
+  "FZ_Tokens": [
+    {
+      "Token": "[LeoBasement]",
+      "Meaning": "Basement room 252  in Leopold 206",
+      "Usage": "We need to move [Mitch] to LeoBasement"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
+    }
+  ],
+  "sticky": [
+    {
+      "stickytype": "Contract",
+      "note": "Keys received on 30/4/2026",
+      "links": ""
+    },
+    {
+      "stickytype": "Contract",
+      "note": "Realtor Ioannis Pegios will handle handover",
+      "links": ""
+    },
+    {
+      "stickytype": "Directions",
+      "note": "Leo206 Basement. Floor -2, first door on the left, first left turn, end of hallway",
+      "links": "info@b2rem.de"
+    },
+    {
+      "stickytype": "",
+      "note": "",
+      "links": ""
+    }
+  ]
+}

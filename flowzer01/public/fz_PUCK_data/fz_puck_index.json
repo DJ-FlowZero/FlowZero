@@ -14,5 +14,13 @@
     "visibility": "secret",
     "date": "2026-04-29",
     "description": "Full PUCK for Pia. Includes profile, tokens (friends, food, household), and stickies."
+  },
+  {
+    "name": "Leo206 Appartment — Public",
+    "filename": "PUCK_export_fz10003.json.txt",
+    "sourceProfiles": "Leo206 Appartment (fz10003)",
+    "visibility": "public",
+    "date": "2026-05-01",
+    "description": ""
   }
 ]

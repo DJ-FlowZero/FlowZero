@@ -1,0 +1,81 @@
+{
+  "profile": [
+    {
+      "label": "Keys",
+      "value": "Building Key Fob (1x)",
+      "flag": "",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "Key",
+      "subtype": "RFID",
+      "alias": "Leo206Key"
+    },
+    {
+      "label": "Keys",
+      "value": "Appartment door (2x)",
+      "flag": "",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "Key",
+      "subtype": "Regular Key",
+      "alias": "Leo206DoorKey"
+    },
+    {
+      "label": "Keys",
+      "value": "Garage Entrance",
+      "flag": "",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "Key",
+      "subtype": "RFID",
+      "alias": "Leo206GarageBarrier"
+    },
+    {
+      "label": "Garage",
+      "value": "SN076 Outside, near International School",
+      "flag": "public",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "Location",
+      "subtype": "",
+      "alias": "Leo206Parking"
+    },
+    {
+      "label": "Admin",
+      "value": "info@b2rem.de",
+      "flag": "public",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "address",
+      "subtype": "email",
+      "alias": "B2 Real Estate"
+    },
+    {
+      "label": "Realtor",
+      "value": "Ioannis Pegios",
+      "flag": "public",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "Person",
+      "subtype": "Realtor",
+      "alias": "Pegios Immobilien"
+    },
+    {
+      "label": "Keys",
+      "value": "Leo206 Storage",
+      "flag": "public",
+      "todo": "",
+      "links": "",
+      "comment": "",
+      "type": "Key",
+      "subtype": "Padlock",
+      "alias": "Leo260Basement"
+    }
+  ]
+}

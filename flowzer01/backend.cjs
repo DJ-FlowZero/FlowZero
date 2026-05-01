@@ -146,8 +146,67 @@ app.get('/api/list-txt-files', (req, res) => {
   res.json(results);
 });
 
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// Endpoint to overwrite fz_puck_index.json (used by PUCK Library "Save Index")
+app.post('/api/save-puck-index', (req, res) => {
+  try {
+    const { content } = req.body;
+    if (!content) return res.status(400).json({ status: 'error', message: 'Missing content.' });
+    const PUCK_DIR = path.join(PUBLIC_DIR, 'fz_PUCK_data');
+    const indexPath = path.join(PUCK_DIR, 'fz_puck_index.json');
+    fs.writeFileSync(indexPath, content, 'utf8');
+    res.json({ status: 'ok' });
+  } catch (err) {
+    console.error('[Save PUCK Index] Error:', err);
+    res.status(500).json({ status: 'error', message: 'Failed to save index.' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);
+});
+
+// Endpoint to save a PUCK file to fz_PUCK_data/ and update fz_puck_index.json
+app.post('/api/save-puck', (req, res) => {
+  try {
+    const { filename, content, indexEntry } = req.body;
+    if (!filename || !content) {
+      return res.status(400).json({ status: 'error', message: 'Missing filename or content.' });
+    }
+    const PUCK_DIR = path.join(PUBLIC_DIR, 'fz_PUCK_data');
+    const puckPath = safeFilePath(PUCK_DIR, filename);
+    if (!puckPath) {
+      return res.status(400).json({ status: 'error', message: 'Invalid filename.' });
+    }
+    // Write the PUCK file
+    fs.writeFileSync(puckPath, content, 'utf8');
+
+    // Update fz_puck_index.json if an indexEntry was provided
+    if (indexEntry && typeof indexEntry === 'object') {
+      const indexPath = path.join(PUCK_DIR, 'fz_puck_index.json');
+      let entries = [];
+      if (fs.existsSync(indexPath)) {
+        try { entries = JSON.parse(fs.readFileSync(indexPath, 'utf8')); } catch {}
+      }
+      if (!Array.isArray(entries)) entries = [];
+      // Replace existing entry with same filename, or append
+      const existingIdx = entries.findIndex(e => e.filename === filename);
+      if (existingIdx >= 0) {
+        entries[existingIdx] = indexEntry;
+      } else {
+        entries.push(indexEntry);
+      }
+      fs.writeFileSync(indexPath, JSON.stringify(entries, null, 2), 'utf8');
+    }
+
+    res.json({ status: 'ok', message: 'PUCK saved and index updated.' });
+  } catch (err) {
+    console.error('[Save PUCK] Error:', err);
+    res.status(500).json({ status: 'error', message: 'Failed to save PUCK.' });
+  }
 });
 
 // Endpoint to save (stage and publish) fz_profile_index.json with backup

@@ -152,10 +152,39 @@ definition: A context-wearable semantic layer (Laboratory + collaboration). Reus
 
 ---
 
+term:       KinTwin
+definition: Funkenflug concept for a locally-verified peer with compatible niche skills
+            who can substitute, cover, or co-execute — "your work stunt double."
+            In FlowZero terms: a KinTwin match is a two-PUCK JobPUCK composition.
+            PersonA.puck + PersonB.puck + task sticky → AI determines compatibility
+            against actual constraints. A KinTwin relationship is expressed as a
+            [token]{person} with <private> visibility within a trusted community.
+            Alternate labels: WorkLifeDouble, WoLiDu.
+
+---
+
 term:       Loop
 definition: The AI alias in a [LOOP/HUM] session. Defined in ServCon
             (FZ_01_AI_ServCon.txt). Partner role — not assistant. Provides execution
             range; HUM provides positioning.
+
+---
+
+term:       Mesh-Brick
+definition: A local proximity broadcasting token or device that carries an anonymous
+            SWARM profile PUCK. Enables pull-based microjob discovery: relevance
+            matches between local opportunity broadcasts and the carrier's CCML-encoded
+            niche talent surface, without disclosing identity until the carrier engages.
+            Core principle: Context Before Identity.
+            Minimal viable implementation: the smartphone IS the Mesh-Brick.
+            The establishment's WiFi router is the proximity receiver — a FlowZero-
+            enabled captive portal replaces the standard "enter email" login screen.
+            Phone connects → portal receives anonymous PUCK → match evaluated →
+            opportunity surfaced on device → identity disclosed only on opt-in.
+            Protocol: standard WiFi captive portal redirect + lightweight FlowZero
+            web endpoint. No new hardware required for V1 of this concept.
+            Same artifact (PUCK), different receiver (physical layer vs. AI session).
+            See FZ_77_ProductMarketing.txt — Everyday Motivation / Son Scenario.
 
 ---
 
@@ -237,6 +266,21 @@ term:       SKA (Stammkunden-Affordance)
 definition: System behaves like it "knows your usual." Named after the German concept
             of a regular customer. Interaction quality that FlowZero aims to deliver
             by pre-loading context rather than requiring re-explanation each session.
+
+---
+
+term:       SWARM Economy
+definition: Systematic Work Allocation and Resource Management. A projected near-future
+            work model in which classical employment gives way to niche-talent
+            microjob ecosystems. Driven by three converging forces: neurodiversity
+            (explosive increase in ND populations entering the workforce),
+            hyper-automation (classical office careers becoming obsolete), and
+            home/remote work (decoupling talent from geography and schedule).
+            Contrasts with ZERO (Zero Employee Resource Optimization — the company
+            with no permanent employees). FlowZero's PUCK/CCML stack is directly
+            applicable as the context transmission layer for SWARM talent matching.
+            Source: SWARM Economy.pptx (Funkenflug pitch deck, 2026-04-30).
+            See FZ_77_ProductMarketing.txt — MicroJob Dating App scenario.
 
 ---
 

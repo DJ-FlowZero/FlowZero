@@ -1,0 +1,319 @@
+================================================================================
+FZ_77_ProductMarketing.txt | FlowZero Product Marketing — Concepts and Use Cases
+Version:  0.1
+Date:     2026-04-30
+Purpose:  Speculative use cases, illustrative scenarios, terminology, buzzwords,
+          and explain frames for presentations, pitches, and stakeholder communication
+Scope:    MAP artifact | Not implementation spec — framing and narrative layer
+================================================================================
+
+---
+
+# HOW TO USE THIS FILE
+
+This file captures ideas that are too speculative for FZ_05 (structured use cases)
+but too concrete to lose. It is the holding space for:
+  - Illustrative scenarios for presentations
+  - Domain extensions and partnership concepts
+  - Buzzwords and explain frames that resonate with specific audiences
+  - Named analogies that make the FlowZero value proposition legible to non-technical stakeholders
+
+Everything here is inferred applicability, not built functionality.
+Mark anything that moves to implementation as → FZ_05 (Use Cases) or → FZ_04 (CodePlan).
+
+---
+
+# EVERYDAY MOTIVATION — Why a Normal Person Builds a SWARM Profile
+
+---
+
+## The Brittle Retirement Problem
+
+Pension systems designed for lifelong employment in stable organisations are structurally
+unfit for SWARM economy participants. GenX, GenY (Millennials), GenZ, and GenAlpha will
+not have the continuous employment histories those systems assume. Gig income, portfolio
+careers, employment gaps, and neurodivergent work patterns all break the legacy model.
+
+The practical consequence: economic resilience must be self-built, not institutionally
+guaranteed. The SWARM profile is not a hobby — it is an asset class. The person who
+maintains a verified, portable niche talent profile owns something no algorithm can
+deprecate and no employer can revoke.
+
+FlowZero/CCML is the format in which that asset is encoded, maintained, and transmitted.
+
+---
+
+## The Son Scenario — Mesh-Brick Proximity Engagement
+
+Scenario: a young adult (GenZ/Alpha) carries a Mesh-Brick — a local proximity
+broadcasting token containing an anonymous SWARM profile PUCK. No identity disclosed.
+No platform account required. Just a compressed, CCML-encoded niche talent surface.
+
+They walk past a coffee shop. The shop's Mesh-Brick receiver broadcasts:
+  "Weekend barista cover needed — Saturday 08:00–14:00, standard rate."
+
+The Mesh-Brick detects relevance match against the anonymous PUCK:
+  [Barista]{skill} :: "certified, 3yr experience, latte art, manual espresso" <public>
+  [Availability]{role} :: "weekends available, short-notice ok" <public>
+
+A conversation initiates — optionally, anonymously, at the carrier's discretion.
+Identity is disclosed only on mutual engagement. Context precedes identity.
+The job finds the person. The person does not perform for the job.
+
+This is pull-based microjob discovery. The PUCK is the signal. The Mesh-Brick is
+the proximity broadcast medium. The CCML token is the match surface.
+
+### Minimal Viable Implementation — Developer Framing
+
+No custom hardware required at the minimal end. The smartphone IS the Mesh-Brick.
+
+The establishment's WiFi router is the proximity receiver. Instead of a standard
+captive portal ("enter email to connect"), a FlowZero-enabled router presents a
+FlowZero Check-In login:
+
+  Phone connects to establishment WiFi.
+  Router serves a FlowZero captive portal instead of a generic login screen.
+  User optionally broadcasts their anonymous public PUCK to the portal.
+  Portal matches PUCK against current local need (e.g. "weekend barista cover").
+  On match: opportunity notification surfaces on the phone.
+  Identity disclosed only on mutual opt-in.
+
+Protocol stack for implementation:
+  - WiFi association → captive portal redirect (standard, no new hardware)
+  - Captive portal = lightweight FlowZero receiver (web endpoint, reads PUCK JSON)
+  - PUCK delivery = user-initiated POST from phone browser or future companion app
+  - Match logic = server-side CCML token comparison against posted opportunity
+  - Result = a conversation prompt, not a form or a CV submission
+
+This is a Check-In at the physical layer. The PUCK primes the local system
+exactly as it primes an AI session — same artifact, different receiver.
+
+---
+
+## Why This Matters for Motivation
+
+The everyday person builds a SWARM profile not because they want to use an app —
+but because the alternative is economic invisibility in a world that no longer
+has stable institutional pathways to offer.
+
+The motivational arc per generation:
+
+  GenX    Already mid-career. Facing forced career pivots, corporate restructuring,
+          early-exit pressure. Niche talent is accumulated but invisible to new formats.
+          FlowZero encodes what they know before it becomes undocumented.
+
+  GenY    The first generation to fully inherit gig work. Many already have portfolio
+          careers. Missing: a portable format that travels between platforms and
+          doesn't require rebuilding from scratch on every new service.
+
+  GenZ    Native to remote/async/project-based work. ND rates higher.
+          LinkedIn feels performative and structurally misaligned.
+          The SWARM profile is native to how they already think about themselves.
+
+  GenAlpha Growing up with ambient AI. Will expect systems to know their context
+          without being asked repeatedly. The PUCK is the natural format for
+          how context is transmitted in the world they are entering.
+
+---
+
+## Buzzwords for This Frame
+
+  Mesh-Brick           — local proximity context broadcaster; anonymous PUCK carrier
+  SWARM Profile        — portable niche talent surface; the individual's economic asset
+  Pull-Based Discovery — the job finds you; context is the signal, not the application
+  Context Before Identity — relevance is established before personal disclosure
+  Economic Visibility  — the state of being findable by the right opportunity
+  Portfolio Resilience — self-built economic continuity in the absence of institutional guarantees
+  Niche Liquidity      — the ability to convert niche competence into income at short notice
+
+  Named: Gestalt Telepathy. The Gestalt speaks before you do. You decide whether to answer.
+
+  Tagline dialogue:
+    "Did you read my mind?"
+    "No — but I got your PUCK."
+
+---
+
+# EXPLAIN FRAMES
+
+---
+
+## TCP/IP for Human Context
+FlowZero as the contextual transport layer between humans, AI systems, services,
+and robots — analogous to what TCP/IP provided for data networks.
+Use when: talking to developers, infrastructure-minded stakeholders, platform builders.
+Core claim: just as TCP/IP made data portable across incompatible networks, CCML/PUCK
+makes human context portable across incompatible AI systems and platforms.
+
+---
+
+## The Check-In Inversion
+Digital 1.0: you logged into systems and repeated your information constantly.
+Digital 2.0: systems check in with you.
+Use when: consumer pitch, non-technical audience, media framing.
+Core claim: FlowZero shifts the burden of context from the person to the artifact.
+
+---
+
+## The Stammkunde Effect (Regular Customer Effect)
+A good local restaurant knows your usual. A new waiter doesn't — and you feel it.
+FlowZero gives any AI system the operational familiarity of a trusted regular-service
+partner, without requiring platform memory, fine-tuning, or a long relationship.
+Use when: hospitality, retail, care sector, consumer audience.
+Linked term: SKA (Stammkunden-Affordance), FA (Familiarity Affordance).
+
+---
+
+## Ephemeral-Local vs. Persistent-General
+Platform memory (cloud, account-bound, vendor-controlled) = persistent-general.
+FlowZero PUCK = ephemeral-local. Loads on demand, dissolves after use.
+Use when: privacy-sensitive audiences, ND communities, professional handover contexts.
+Core claim: some context has no appropriate server home. It belongs with the person.
+
+---
+
+## The Handover Threshold
+"If I have to explain it, it's easier to do it myself."
+This is the emotional market signal FlowZero addresses. The Handover Threshold is
+the point where explanation cost exceeds execution cost. FlowZero makes context do
+the explaining — once, portably, for any AI, any language.
+Use when: care sector, professional services, team handovers, dispatch scenarios.
+
+---
+
+## The Signal Economy Inversion — Context for Success
+Digital 1.0 "dress for success": signal competence through appearance.
+  Resume. Clothes. Titles. Institutional markers.
+  A human-readable compatibility signal — but cosmetic. Easy to fake.
+  The question: How do I look?
+
+Digital 2.0: contextual legibility.
+  The question: What can I do? Under what constraints? In what context? For whom?
+  That is an operational signal, not a cosmetic one. Much harder to fake.
+
+Old signal economy:
+  dress → CV → title → brand affiliation
+
+New signal economy:
+  PUCK → tokens → constraints → availability → trust links
+
+Old model: identity first, capability inferred.
+New model: capability first, identity optional.
+
+Your work clothes become structured context. Your competence surface. Not your costume.
+
+Tagline: "Digital 1.0: Dress for success. Digital 2.0: Context for success."
+
+Use when: investor pitch, SWARM economy framing, ND talent contexts, media narrative.
+Linked frames: Context Before Identity, Check-In Inversion, SuperPower (below).
+
+---
+
+## Your Superpower, Not Your Job Title
+Standard recruitment asks: what is your job title? what are your qualifications?
+FlowZero/CCML asks: what is your token? what does it mean? what is its context?
+This makes niche, non-standard, neurodivergent talent legible to systems that
+would otherwise default to keyword matching against schema-conforming profiles.
+Use when: SWARM economy, ND talent, alternative work models, Funkenflug context.
+
+---
+
+# SPECULATIVE USE CASES
+
+---
+
+## MICROJOB DATING APP — Funkenflug / SWARM Economy Extension
+
+### Background
+Funkenflug is a German-market social platform oriented around "dating" as a metaphor
+for authentic human connection — low-pressure, event-based, long-term aligned.
+The SWARM Economy (Systematic Work Allocation and Resource Management) is a projected
+near-future work model in which classical employment gives way to niche-talent
+microjob ecosystems driven by three converging forces:
+  - Neurodiversity (explosive increase in ND populations entering the workforce)
+  - Hyper-automation (classical office careers becoming obsolete)
+  - Home/Remote work (decoupling talent from geography and schedule)
+
+### The Problem
+ND talent (autism spectrum, ADHD, etc.) are expert within their niche but incompatible
+with standard 8-hour employment formats, office culture, and generic recruitment schemas.
+LinkedIn and Indeed are keyword systems built for the old model.
+The explanation cost of conveying niche competence in a generic format exceeds what
+most ND individuals will tolerate. The talent is real. The interface is wrong.
+
+### FlowZero Role
+CCML and the PUCK provide the context transmission layer between niche talent and
+the moments when that talent is needed. Funkenflug already holds the trust
+infrastructure, the community, and the event-based connection model.
+FlowZero provides the structured context artifact that makes microjob matching
+possible without requiring people to perform themselves in recruitment formats.
+
+### Primitive Mapping — SuperPower Profile as PUCK
+
+  [TubeAmpRepair]{skill} :: "Telefunken/Mullard valves, vintage hi-fi restoration,
+                             not solid-state, workshop-only" <public>
+  [WebSprint]{skill}     :: "full site from brief in 24h, React/Vite, no CMS,
+                             fixed scope only" <public>
+  [BeltDesign]{skill}    :: "leather goods from upcycled materials, commission-only,
+                             min 2 weeks lead time" <public>
+  [Availability]{role}   :: "project-based only, max 3 days/week, async-first,
+                             no recurring meetings" <public> //not available August
+
+### KinTwin Matching as JobPUCK Composition
+KinTwin (Funkenflug concept): a locally-verified peer with compatible niche skills
+who can substitute, cover, or co-execute. "Your work stunt double."
+
+A KinTwin match is a two-PUCK JobPUCK composition:
+  PersonA.puck + PersonB.puck + task sticky → AI answers "can B cover for A?"
+
+Task sticky example:
+  stickytype: "fault" :: "web project needs cover, Thursday–Friday, 24h turnaround,
+                          React, fixed scope, client already briefed" <public>
+
+AI reads both PUCKs and the task sticky. Answers with reasoning against actual
+constraints, not inferred keyword proximity.
+
+### The Trust Layer
+Funkenflug's "locally verified, real references" model maps to FlowZero visibility:
+  <public>   — visible to any platform user (name, superpower, availability)
+  <private>  — visible within the Funkenflug community (detailed constraints, KinTwin links)
+  <secret>   — visible to owner only (rates, personal limits, not for sharing)
+
+The "Wer-kennt-Wen" (who knows whom) recommendation layer is a relationship token
+network. A KinTwin relationship expressed as a token:
+  [KinTwin_Marta]{person} :: "web designer, same niche, verified 3 collabs,
+                              covers async, local Munich" <private>
+
+### The SOBA Transaction (KinTwin Cover)
+When a KinTwin covers a job: SOBA in pure form.
+One person defines the task intent. The twin executes.
+The PUCK is the handover artifact. The task sticky is the brief.
+No long explanation required — the twin checks in with the PUCK and acts.
+
+### Differentiation vs. LinkedIn / Indeed
+Not a recruitment platform. No permanent public profile exposure.
+No algorithmic ranking. No keyword schema conformance required.
+Context loads at the point of matching and dissolves. Ephemeral-local by design.
+Trust is community-verified, not crowd-rated. Relational weight > volume of reviews.
+
+### Buzzwords for Pitch Deck
+  SWARM Economy        — the macro context (systematic work allocation & resource mgmt)
+  KinTwin              — work stunt double; niche-matched, locally verified peer
+  SuperPower Profile   — CCML-structured niche competence card; replaces job title
+  Check-In             — temporary contextual onboarding; AI/platform gets your context
+  Niche Resonance      — match quality based on constraints, not keyword overlap
+  Tribal Trust Layer   — community-verified context vs. anonymous crowd rating
+  WorkLifeDouble       — alternate KinTwin label; the person who can be you at work
+
+### Critical Gap (acknowledged, not in V1 scope)
+ND talent is the population least likely to self-construct a PUCK.
+Assisted onboarding — superpower interview, voice capture, profile scaffolding
+from conversation — is a prerequisite for Funkenflug integration.
+This is the V2 input layer. See FZ_04_CodePlan.txt Future Development section.
+
+### Source Material
+SWARM Economy.pptx — Funkenflug pitch deck, ingested 2026-04-30
+Key slides: Die Möglichkeit für Funkenflug (slide 4), Konkrete Ideen (slide 5),
+Der Differentiator / KinTwin (slide 6), Warum FunkenFlug jetzt (slide 7).
+
+---

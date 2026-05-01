@@ -70,5 +70,15 @@
     "type": "group",
     "subtype": "",
     "tag": "Property"
+  },
+  {
+    "profileId": "P10003",
+    "fileName": "fz10003.json",
+    "description": "Toby Appartment 7th floor",
+    "realName": "Leo206 Appartment",
+    "type": "group",
+    "subtype": "",
+    "extra": "",
+    "tag": "Property"
   }
 ]

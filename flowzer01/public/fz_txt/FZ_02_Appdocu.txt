@@ -346,6 +346,62 @@ Errors: returns empty array silently if directories are unreadable.
 
 ---
 
+### GET /api/health
+Liveness probe. Called by App.jsx BackendStatusIndicator on a 15-second poll to show
+green/red backend status in the top-right corner of the UI.
+
+No request body.
+
+Success response (200):
+  { "status": "ok" }
+
+---
+
+### POST /api/save-puck
+Writes a PUCK .txt file to public/fz_PUCK_data/ and upserts fz_puck_index.json.
+Called by PuckCreator.handleExport immediately before the browser download.
+
+Request body:
+  {
+    "filename":   "PUCK_export_fz0001.json.txt",
+    "content":    "<full PUCK text>",
+    "indexEntry": { "name": "...", "filename": "...", "sourceProfiles": "...",
+                    "visibility": "...", "date": "YYYY-MM-DD", "description": "" }
+  }
+
+  filename    required  Bare filename; path separators rejected (safeFilePath guard).
+  content     required  Full PUCK text to write.
+  indexEntry  optional  If provided, replaces existing entry with same filename in index
+                        or appends a new entry. Object must match the index schema.
+
+Success response (200):
+  { "status": "ok", "message": "PUCK saved and index updated." }
+
+Error responses:
+  400  { "status": "error", "message": "Missing filename or content." }
+  400  { "status": "error", "message": "Invalid filename." }
+  500  { "status": "error", "message": "Failed to save PUCK." }
+
+---
+
+### POST /api/save-puck-index
+Overwrites fz_puck_index.json in its entirety. Called by PuckLibrary "Save Index" button.
+Path is hard-coded to public/fz_PUCK_data/fz_puck_index.json — no filename parameter.
+
+Request body:
+  { "content": "<serialized JSON string of index array>" }
+
+  content  required  Full serialized JSON array to write.
+
+Success response (200):
+  { "status": "ok" }
+
+Error responses:
+  400  { "status": "error", "message": "Missing content." }
+  500  { "status": "error", "message": "Failed to save index." }
+
+---
+
 ### GET /api/list-fz-files  ← NOT YET IMPLEMENTED
 Called by IndexEdit.jsx to get existing fzXXXX.json numbers for safe profile numbering.
 Frontend degrades gracefully if this endpoint is absent (falls back to index-only count).

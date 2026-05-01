@@ -81,6 +81,28 @@ function GestaltModal({ open, onClose, gestaltText, profileOptions, selectedProf
     </div>
   );
 }
+// BackendStatusIndicator: polls /api/health every 15s, shows green/red dot
+function BackendStatusIndicator({ live }) {
+  const color = live === true ? '#22c55e' : live === false ? '#ef4444' : '#aaa';
+  const label = live === true ? 'Backend live' : live === false ? 'Backend offline' : 'Checking backend…';
+  return (
+    <div title={label} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+      <span style={{
+        display: 'inline-block',
+        width: 12,
+        height: 12,
+        borderRadius: '50%',
+        background: color,
+        boxShadow: live === true ? '0 0 5px #22c55e88' : 'none',
+        flexShrink: 0
+      }} />
+      <span style={{ fontSize: '0.78em', fontWeight: 600, color, letterSpacing: 0.2 }}>
+        {live === true ? 'Live' : live === false ? 'Offline' : '…'}
+      </span>
+    </div>
+  );
+}
+
 // TrafficLightIndicator: shows a colored circle for UI mode
 function TrafficLightIndicator({ mode }) {
   let emoji = '🟢';
@@ -231,6 +253,19 @@ function App() {
   const [showCalibrateFlow, setShowCalibrateFlow] = useState(false)
   const [showPuck, setShowPuck] = useState(false)
   const [uiMode, setUiMode] = useState('public');
+  const [backendLive, setBackendLive] = useState(null);
+
+  // Poll backend health
+  useEffect(() => {
+    const check = () => {
+      fetch('/api/health', { signal: AbortSignal.timeout(2000) })
+        .then(r => r.ok ? setBackendLive(true) : setBackendLive(false))
+        .catch(() => setBackendLive(false));
+    };
+    check();
+    const id = setInterval(check, 15000);
+    return () => clearInterval(id);
+  }, []);
 
   // Gestalt state
   const [showGestalt, setShowGestalt] = useState(false);
@@ -312,8 +347,9 @@ function App() {
 
   return (
     <div style={{position: 'relative', minHeight: 80}}>
-      {/* Traffic light indicator fixed in top right of viewport */}
-      <div style={{position: 'fixed', top: 16, right: 24, zIndex: 2000}}>
+      {/* Status indicators fixed in top right of viewport */}
+      <div style={{position: 'fixed', top: 16, right: 24, zIndex: 2000, display: 'flex', alignItems: 'center', gap: 10}}>
+        <BackendStatusIndicator live={backendLive} />
         <TrafficLightIndicator mode={uiMode} />
       </div>
       {/* Header/title section */}

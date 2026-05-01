@@ -8,12 +8,16 @@ export default function PuckLibrary() {
   const [error, setError] = useState("");
   const [saveStatus, setSaveStatus] = useState("");
 
-  useEffect(() => {
-    fetch(PUCK_INDEX_URL)
+  const fetchEntries = () => {
+    setLoading(true);
+    setError("");
+    fetch(PUCK_INDEX_URL + '?_=' + Date.now())
       .then(r => { if (!r.ok) throw new Error("Not found"); return r.json(); })
       .then(data => { setEntries(Array.isArray(data) ? data : []); setLoading(false); })
       .catch(() => { setError("Could not load fz_puck_index.json"); setLoading(false); });
-  }, []);
+  };
+
+  useEffect(() => { fetchEntries(); }, []);
 
   const handleFieldChange = (idx, key, value) => {
     setEntries(prev => {
@@ -23,15 +27,22 @@ export default function PuckLibrary() {
     });
   };
 
-  const handleSave = () => {
-    const blob = new Blob([JSON.stringify(entries, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "fz_puck_index.json";
-    a.click();
-    URL.revokeObjectURL(a.href);
-    setSaveStatus("Downloaded fz_puck_index.json — replace file in public/fz_PUCK_data/ to persist.");
-    setTimeout(() => setSaveStatus(""), 6000);
+  const handleSave = async () => {
+    try {
+      const res = await fetch('/api/save-puck-index', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: JSON.stringify(entries, null, 2) })
+      });
+      if (res.ok) {
+        setSaveStatus('✓ Index saved');
+      } else {
+        setSaveStatus('⚠ Backend error — not saved');
+      }
+    } catch {
+      setSaveStatus('⚠ Backend offline — not saved');
+    }
+    setTimeout(() => setSaveStatus(''), 5000);
   };
 
   const handleDownloadPuck = (filename) => {
@@ -107,9 +118,14 @@ export default function PuckLibrary() {
         </div>
       ))}
 
-      <button type="button" onClick={handleSave} style={{ marginTop: 8, marginLeft: 8 }}>
-        Save Index
-      </button>
+      <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
+        <button type="button" onClick={handleSave} style={{ padding: '4px 14px', borderRadius: 5, border: '1px solid #15396a', background: '#15396a', color: '#fff', fontWeight: 600, cursor: 'pointer', fontSize: '0.92em' }}>
+          Save Index
+        </button>
+        <button type="button" onClick={fetchEntries} style={{ padding: '4px 14px', borderRadius: 5, border: '1px solid #15396a', background: '#eaf1fa', color: '#15396a', fontWeight: 600, cursor: 'pointer', fontSize: '0.92em' }}>
+          ↺ Refresh
+        </button>
+      </div>
     </div>
   );
 }

@@ -2,11 +2,11 @@
   {
     "realName": "Chris Horak",
     "profileId": "P0000",
-    "description": "Main profile for Choirshark",
+    "description": "Main Choirshark Priofile",
     "fileName": "fz0000.json",
     "type": "person",
     "subtype": "family and friends",
-    "extra": "Person"
+    "tag": "Person"
   },
   {
     "realName": "Pia Hultqvist",
@@ -15,7 +15,7 @@
     "fileName": "fz0001.json",
     "type": "person",
     "subtype": "family and friends",
-    "extra": "Person"
+    "tag": "Person"
   },
   {
     "realName": "CatchAll Basket",
@@ -24,7 +24,7 @@
     "fileName": "fz9999.json",
     "type": "CatchAll",
     "subtype": "Generic",
-    "extra": "CatchAll"
+    "tag": "CatchAll"
   },
   {
     "realName": "Dachau MyPlace",
@@ -33,7 +33,7 @@
     "fileName": "fz0002.json",
     "type": "location",
     "subtype": "storage room",
-    "extra": "Real Estate"
+    "tag": "Real Estate"
   },
   {
     "realName": "Practice Room Allach",
@@ -42,7 +42,7 @@
     "description": "Practice Room Allach / Music Gear",
     "type": "location",
     "subtype": "storage room",
-    "extra": "Real Estate"
+    "tag": "Real Estate"
   },
   {
     "realName": "Saporta Basement",
@@ -51,15 +51,24 @@
     "description": "Saporta Basement / Appartment",
     "type": "location",
     "subtype": "storage room",
-    "extra": "Real Estate"
+    "tag": "Real Estate"
   },
   {
-    "realName": "Zentner Mahjong 6th Floor",
+    "realName": "Parvin ",
     "profileId": "P10001",
     "fileName": "fz10001.json",
     "description": "Zentner Mahjong 6th Floor.",
     "type": "person",
     "subtype": "person",
-    "extra": "person"
+    "tag": "person"
+  },
+  {
+    "profileId": "P10002",
+    "fileName": "fz10002.json",
+    "description": "Kermit Car File",
+    "realName": "Kermit Car File",
+    "type": "group",
+    "subtype": "",
+    "tag": "Property"
   }
 ]

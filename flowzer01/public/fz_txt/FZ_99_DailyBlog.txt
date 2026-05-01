@@ -1,3 +1,9 @@
+01-05-2026 PUCK SAVE LOOP CLOSED — PuckCreator now writes to the server. Root cause of the gap: handleExport only triggered a browser download — the PUCK never landed in fz_PUCK_data/ or the index. Fixed: new POST /api/save-puck endpoint writes the .txt file and upserts fz_puck_index.json atomically. PuckCreator POSTs before the download, shows a ✓/⚠ status message for 12s. The Library now reads what was actually saved, not a stale local copy.
+01-05-2026 PUCK LIBRARY SERVER SAVE — Save Index now POSTs to /api/save-puck-index (server write) instead of downloading a JSON blob the user had to manually replace. The old workflow had a manual copy step that was invisible and fragile. Eliminated. Added ↺ Refresh button so the user can pull the latest index without reopening the panel. Cache-buster (?_=timestamp) added to the index fetch so stale browser caching never hides a new PUCK entry.
+01-05-2026 BACKEND STATUS INDICATOR — Added a live/offline dot to the top-right corner of the app. Polls /api/health every 15s. Green + "Live" when backend responds; red + "Offline" when it doesn't. Motivation: the backend must be running manually (node backend.cjs) — users had no visible signal when it was down. Silent failures on Save Index and Export looked like bugs. Now the status is always visible before any action is taken.
+01-05-2026 LEO206 APARTMENT PROFILE (fz10003) created and validated. Profile, token, and sticky files added to Gestalt/. PUCK exported and added to PUCK Library. CompositePUCK generated with a live test job brief. First non-person Gestalt entity in the system — confirms the profile/token/sticky model is entity-generic, not person-specific.
+01-05-2026 Live test: composed a Job Package for the Leo206 apartment profile (fz10003). Uploaded to GPT with a single bare question — "How do I get more keys for my son's apartment?" — no context, no backstory. GPT returned a 99% useful recommendation cold. The PUCK did all the explanation work upfront. Handover threshold crossed without the user lifting a finger.
+01-05-2026 The killer feature of FlowZero is not PUCK storage or profile editing — it is CCML. When a user can express intent in a single tagged line ([son][apartment] //lost keys ::action) and the AI already holds the context, the explanation cost drops to zero. CCML is the compression layer that makes human-to-AI handover instant. Everything else in the stack exists to make CCML work.
 26-04-2026 Today I learned that having a proper directory structure is a killer feature before your actually write a single line of code
 27-04-2026 Today I dedicated the model needs a defined service level contract which needs to be refreshed to keep the gyroscope of collaboration spinning. The file is called FZ_01_AI_ServCon.txt
 27-04-2026 not outsourcing string and path dependencies to config files is a huge load later source of bugs and effort
@@ -30,3 +36,37 @@
   Remediation applied in this session: FZ_02 updated with full API contract (all endpoints, request/response shapes, error codes) and error handling policy. FZ_04 Steps 4 & 5 expanded to implementation-ticket level. Test scope table added. Future development section added (encryption, auth, server-enforced visibility, XCML, Predictive Context, Flow Mode, machine Check-In protocol).
   Post-fix verdict: fz_txt/ is now MAP-complete for spec generation. A cold reader can reconstruct the system, implement outstanding features, and understand architectural boundaries without touching the code.
   Lesson: documentation debt compounds faster than code debt. A stale primitive count is a contradiction that poisons the whole spec. Catch it early — or build the JITLAG sanity test into the session close ritual.
+30-04-2026 GESTALT TELEPATHY — the long game of Context Before Identity.
+  Thought experiment: job fair, trade show, Burning Man, 2031. The venue is Mesh-Brick enabled.
+  Your public PUCK broadcasts silently from your phone. No name. No face. No title. Just constraints.
+  The venue's matching layer runs continuous CCML comparison across every PUCK in the room.
+  Not keyword search — constraint intersection. When match confidence crosses threshold, both parties
+  get a blip: "There is someone here worth a conversation. Room C, table 7, next 20 minutes."
+  Neither party knows who the other is. They know only that the system found geometric fit.
+  That is the trust seed — not a recommendation, not a rating. A verified structural match.
+  The human trust protocol then runs exactly like blind dating: anonymous first contact,
+  mutual opt-in to disclose one layer at a time. Either party walks away, no data trail.
+  Burning Man variant: the community already runs on gift economy and trust-before-transaction.
+  A PUCK broadcast there isn't job-seeking — it's "here is what I can contribute, here is what
+  I genuinely need, here is what I won't do." The matching layer surfaces mutual-aid resonance pairs.
+  The inversion that makes this different from every existing system: LinkedIn leads with identity
+  and asks you to infer fit. This model leads with constraint fit and withholds identity until
+  fit is confirmed. The algorithm doesn't recommend people. It finds structural matches and steps back.
+  The PUCK is the only thing that crosses the wire before consent. Everything else is human.
+  Named: Gestalt Telepathy. The Gestalt speaks before you do. You decide whether to answer.
+30-04-2026 THE SIGNAL ECONOMY INVERSION — Context for Success.
+  Digital 1.0 "dress for success" meant: signal competence through appearance.
+  Resume. Clothes. Title. Brand affiliation. Institutional markers.
+  A human-readable compatibility signal — but cosmetic. Easy to fake. Hard to verify.
+  The question was always: How do I look?
+  Digital 2.0 shifts the signal entirely. The question becomes:
+    What can I do? Under what constraints? In what context? For whom?
+  That is an operational signal, not a cosmetic one. Much harder to fake.
+  Old signal economy: dress → CV → title → brand affiliation.
+  New signal economy: PUCK → tokens → constraints → availability → trust links.
+  Maps cleanly to "Context Before Identity":
+    Old model: identity first, capability inferred.
+    New model: capability first, identity optional.
+  Especially sharp in gig work, micro-contracting, specialist niches, AI-mediated labour.
+  Your "work clothes" become structured context. Your competence surface. Not your costume.
+  Tagline: Digital 1.0: Dress for success. Digital 2.0: Context for success.

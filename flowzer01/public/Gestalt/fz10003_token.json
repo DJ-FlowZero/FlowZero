@@ -1,0 +1,14 @@
+{
+  "FZ_Tokens": [
+    {
+      "Token": "[LeoBasement]",
+      "Meaning": "Basement room 252  in Leopold 206",
+      "Usage": "We need to move [Mitch] to LeoBasement"
+    },
+    {
+      "Token": "[new_token]",
+      "Meaning": "",
+      "Usage": ""
+    }
+  ]
+}

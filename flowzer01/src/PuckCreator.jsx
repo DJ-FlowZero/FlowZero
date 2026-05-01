@@ -7,6 +7,7 @@ export default function PuckCreator() {
   const [visibility, setVisibility] = useState("secret");
   const [includeFlowConfig, setIncludeFlowConfig] = useState(false);
   const [flowConfig, setFlowConfig] = useState(null);
+  const [exportStatus, setExportStatus] = useState("");
   const [puckState, setPuckState] = useState({
     profileData: [],
     tokenData: [],
@@ -193,11 +194,44 @@ export default function PuckCreator() {
     }
     // Combine loader text, flow calibration, and PUCK JSON
     const combined = loaderText + flowBlock + '\n---\n' + JSON.stringify(exportObj, null, 2);
+    const filename = `PUCK_export_${selectedProfile}.txt`;
+
+    // Save PUCK to server so JobPackageComposer can find it
+    const profileEntry = userIndex.find(u => u.fileName === selectedProfile);
+    const realName = profileEntry?.realName || selectedProfile.replace('.json', '');
+    const visLabel = visibility.charAt(0).toUpperCase() + visibility.slice(1);
+    const date = new Date().toISOString().slice(0, 10);
+    const indexEntry = {
+      name: `${realName} — ${visLabel}`,
+      filename,
+      sourceProfiles: `${realName} (${selectedProfile.replace('.json', '')})`,
+      visibility,
+      date,
+      description: ""
+    };
+    try {
+      const saveRes = await fetch('/api/save-puck', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename, content: combined, indexEntry })
+      });
+      const data = await saveRes.json().catch(() => ({}));
+      if (saveRes.ok) {
+        setExportStatus('✓ Saved to PUCK Library');
+      } else {
+        setExportStatus(`⚠ Save failed: ${data.message || saveRes.status}`);
+      }
+    } catch (err) {
+      setExportStatus(`⚠ ${err.message || 'Backend offline'}`);
+    }
+    setTimeout(() => setExportStatus(''), 12000);
+
+    // Also trigger browser download as local copy
     const blob = new Blob([combined], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `PUCK_export_${selectedProfile}.txt`;
+    a.download = filename;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -326,6 +360,11 @@ export default function PuckCreator() {
           </span>
         )}
       </div>
+      {exportStatus && (
+        <span style={{ fontSize: '0.9em', marginRight: 12, color: exportStatus.startsWith('✓') ? 'green' : '#b45309', fontWeight: 'bold' }}>
+          {exportStatus}
+        </span>
+      )}
       <button
         onClick={handleExport}
         disabled={puckState.selectedProfileRows.length + puckState.selectedTokenRows.length + puckState.selectedStickyRows.length === 0}
